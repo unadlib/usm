@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "noEmit": true,
+        "strict": true,
+        "allowJs": true,
+        "types" : [
+            "jest"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

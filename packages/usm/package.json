@@ -1,0 +1,53 @@
+{
+  "name": "usm",
+  "version": "0.0.1",
+  "description": "Universal state module",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "watch": "jest --watch",
+    "start": "babel-node index.ts --extensions '.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unadlib/usm.git"
+  },
+  "keywords": [
+    "Universal",
+    "state",
+    "module"
+  ],
+  "author": "unadlib",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/unadlib/usm/issues"
+  },
+  "homepage": "https://github.com/unadlib/usm#readme",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/jest": "^23.3.13",
+    "jest": "^23.0.0",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.2.4"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}

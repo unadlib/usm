@@ -1,0 +1,11 @@
+{
+  "name": "usm-ng",
+  "version": "0.0.1",
+  "description": "Universal state module - usm for angular",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "unadlib",
+  "license": "MIT"
+}

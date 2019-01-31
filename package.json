@@ -1,0 +1,38 @@
+{
+  "name": "usm",
+  "version": "0.0.1",
+  "description": "Universal state module",
+  "main": "index.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unadlib/usm.git"
+  },
+  "keywords": [
+    "Universal",
+    "state",
+    "module"
+  ],
+  "author": "unadlib",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/unadlib/usm/issues"
+  },
+  "homepage": "https://github.com/unadlib/usm#readme",
+  "devDependencies": {
+    "commitizen": "^3.0.5",
+    "cz-conventional-changelog": "^2.1.0",
+    "lerna": "^2.11.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
