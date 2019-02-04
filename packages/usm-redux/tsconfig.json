@@ -2,12 +2,12 @@
     "compilerOptions": {
         "target": "esnext",
         "moduleResolution": "node",
+        "experimentalDecorators": true,
         "esModuleInterop": true,
         "noEmit": true,
         "strict": true,
         "allowJs": true,
         "types" : [
-            "jest",
             "node"
         ]
     },
