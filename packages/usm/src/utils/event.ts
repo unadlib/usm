@@ -1,5 +1,3 @@
-import { type } from "os";
-
 const __DEV__ = process.env.NODE_ENV === 'development';
 
 type Callback = {

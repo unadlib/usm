@@ -11,6 +11,11 @@ export type ModuleInstance = InstanceType<typeof Module>;
 export type Properties<T = any> = {
   [P in string]?: T;
 }
+
+export type Attribute<T = any> = {
+  [P in string]: T;
+}
+
 type Params = {
   modules: ModuleInstance[],
 }
@@ -21,15 +26,15 @@ const DEFAULT_PROPERTY = {
   writable: false,
 };
 
-interface Callback<T = undefined> {
-  (params: T): void;
+interface Callback<T = undefined, S = void> {
+  (params: T): S;
 };
 
 export type ActionTypes = InstanceType<typeof Enum>;
 
 interface Module {
-  _reducersMaps: Properties<Callback<ActionTypes>>;
-  __proto__: StaticModule;
+  _reducersMaps: Attribute<Callback<ActionTypes, Reducer>>;
+  __proto__: Proto<StaticModule>;
   __init__: boolean;
   __reset__: boolean;
   _modules: ModuleInstance[];
@@ -37,7 +42,7 @@ interface Module {
   _arguments: Arguments;
   _status: string;//
   _subscribe(callback: Callback): void;
-  _actionTypes: ActionTypes|undefined;
+  _actionTypes: string[]|undefined;
   _getState(): Properties<any>;
   _dispatch: Dispatch;
   onStateChange(): void;
@@ -50,9 +55,16 @@ export interface Action {
   type: string[]|string,
 }
 
+type Proto<T> = {
+  constructor: T;
+};
+
+
 type StaticModule = {
-  _getModuleKey(): void;
-  boot(): void;
+  _getModuleKey(module: ModuleInstance): string;
+  boot(proto: StaticModule, module: ModuleInstance): void;
+  combineReducers(reducers: Properties<Reducer>): Reducer;
+  createStore(reducer: Reducer): any;
 }
 
 type Arguments = {
@@ -75,7 +87,7 @@ class Module implements Module {
     this._makeInstance(params);
   }
 
-  private _handleArgs(...args:[]): Params {
+  private _handleArgs(...args:Params[]): Params {
     return args[0];
   }
   
@@ -118,7 +130,7 @@ class Module implements Module {
     return this._proto.combineReducers(reducers);
   }
 
-  _moduleWillInitialize() {
+  private _moduleWillInitialize() {
     // return this._getState();
   }
 
@@ -146,7 +158,7 @@ class Module implements Module {
     return !this.__init__ && Object.values(this._modules).every(module => module.ready);
   }
 
-  private _onStateChange() {
+  _onStateChange() {
     if (typeof this.onStateChange === 'function') {
       this.onStateChange();
     }
@@ -266,21 +278,22 @@ class Module implements Module {
     return module.constructor.name.toLowerCase();
   }
 
-  public static create(config) {
+  public static create(...args:[]) {
     const RootModule = this;
-    const rootModule = new RootModule(config);
+    const rootModule = new RootModule(...args);
     const proto = rootModule.__proto__.constructor;
     proto.boot(proto, rootModule);
     return rootModule;
   }
 
-  public static boot(proto: Module, module: ModuleInstance) {
+  public static boot(proto: StaticModule, module: ModuleInstance) {
     if (typeof module._modules === 'object') {
       const flattenModules = flatten(module);
       Object.assign(module._modules, flattenModules);
     }
     module.setStore(proto.createStore(module.reducers));
   }
+  
 
   public bootstrap() {
     this._proto.boot(this._proto, this);
@@ -351,7 +364,7 @@ class Module implements Module {
   }
 
   public getActionTypes() {
-    return this._actionTypes || [];
+    return this._actionTypes;
   }
 
   public getReducers(actionTypes: ActionTypes, initialValue: State<any> = {}) {
