@@ -1,15 +1,15 @@
-import Module, { action, state } from '../src';
+import Module from '../src/core/module';
 
 class Index extends Module {  
-  @state list = [{todo: "Learn typescript"}]
-  @state list1 = [{todo: "Learn typescript"}]
+  list = [{todo: "Learn typescript"}]
+  list1 = [{todo: "Learn typescript"}]
 
-  @action
   add(todo: object, state?: any) {
-    state.list.push(todo);
+    this.list.push(todo);
   }
 
   async moduleDidInitialize() {
+    console.log('moduleDidInitialize');
     this.add({todo: 'Learn C++'});
   }
 }
@@ -24,10 +24,9 @@ const phone = Phone.create({
   modules: [index]
 });
 
-phone.store.subscribe(() => {
-  console.log('[store.subscribe]', phone._modules.index.list, phone.ready, phone._modules.index.ready);
-});
-
+// phone.store.subscribe(() => {
+//   console.log('[store.subscribe]', phone._modules.index.list);
+// });
 
 setTimeout(() => {
   console.log(phone._modules.index.status, phone.status);

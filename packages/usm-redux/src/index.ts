@@ -1,6 +1,6 @@
-import Module from 'usm';
 import produce from 'immer';
 import { createStore, combineReducers } from 'redux';
+import Module from './core/module';
 
 Module.combineReducers = combineReducers;
 Module.createStore = createStore;

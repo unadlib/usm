@@ -1,11 +1,9 @@
 import getActionTypes from './actionTypes';
 import moduleStatuses from './moduleStatuses';
-import Enum, { PropertyKey } from '../utils/enum';
-import { getModuleStatusReducer, State, Reducer } from './reducers';
+import Enum from '../utils/enum';
+import { Reducer } from './reducers';
 import flatten from '../utils/flatten';
 import event from '../utils/event';
-
-const __DEV__ = process.env.NODE_ENV === 'development';
 
 export type ModuleInstance = InstanceType<typeof Module>;
 export type Properties<T = any> = {
@@ -45,10 +43,11 @@ interface Module {
   _actionTypes: string[]|undefined;
   _getState(): Properties<any>;
   _dispatch: Dispatch;
-  onStateChange(): void;
   _onStateChange(): void;
   parentModule: ModuleInstance;
   getState(): Properties;
+  onStateChange?(): void;
+  setStore?(store: Store): void;
 }
 
 export interface Action {
@@ -118,20 +117,15 @@ class Module implements Module {
   }
 
   private get _isListening() {
-    return typeof this.onStateChange === 'function';
+    return typeof this.onStateChange === 'function' && typeof this._subscribe === 'function';
   }
 
   private get _proto() {
     return this.__proto__.constructor;
   }
 
-  private get _reducers() {
-    const reducers = this._getReducers(this.actionTypes, {});
-    return this._proto.combineReducers(reducers);
-  }
-
   private _moduleWillInitialize() {
-    // return this._getState();
+
   }
 
   private async _initialize() {
@@ -169,41 +163,6 @@ class Module implements Module {
     }
   }
 
-  private _setStore(store: Store) {
-    if (this._store) return;
-    Object.defineProperty(this, '_store', {
-      ...DEFAULT_PROPERTY,
-      value: store,
-    });
-    const {
-      subscribe,
-      getState,
-      dispatch,
-    } = this._store;
-    if (
-      __DEV__ &&
-      typeof subscribe !== 'function' ||
-      typeof getState !== 'function' ||
-      typeof dispatch !== 'function'
-    ) {
-      console.warn(`${this.constructor.name} Module did't correctly set custom 'Store'.`);
-    }
-    Object.defineProperties(this, {
-      _dispatch: {
-        ...DEFAULT_PROPERTY,
-        value: dispatch,
-      },
-      _getState: {
-        ...DEFAULT_PROPERTY,
-        value: !this.parentModule || !this.getState ? getState : this.getState,
-      },
-      _subscribe: {
-        ...DEFAULT_PROPERTY,
-        value: subscribe,
-      }
-    });
-  }
-
   private _initModule() {
     if (this._isListening) {
       this._subscribe(this._onStateChange.bind(this));
@@ -213,7 +172,10 @@ class Module implements Module {
     this._initialize();
     Object.values(this._modules).forEach(module => {
       module.parentModule = this;
-      module.setStore(this._store);
+      if (typeof module.setStore === 'function') {
+        module.setStore(this._store);
+      }
+      module._initModule();
     });
   }
 
@@ -249,27 +211,6 @@ class Module implements Module {
     }
   }
 
-  private _getReducers(actionTypes: ActionTypes, initialValue: State<any>) {
-    const reducers = this.getReducers(actionTypes, initialValue);
-    const subReducers: Properties<Reducer> = Object
-      .entries(this._modules)
-      .reduce((reducers, [key, module]) => (
-        Object.assign(reducers, { [key]: module.reducers })
-      ), {});
-    return {
-      __$$default$$__: (state: any) => null,
-      ...reducers,
-      ...subReducers,
-      ...this._getStatusReducer(actionTypes, initialValue),
-    };
-  }
-
-  private _getStatusReducer(actionTypes: ActionTypes, initialValue: State<any>) {
-    return this._isListening ? {
-      status: getModuleStatusReducer(actionTypes, initialValue.status),
-    } : {};
-  }
-
   private _getActionTypes() {
     return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
@@ -291,7 +232,10 @@ class Module implements Module {
       const flattenModules = flatten(module);
       Object.assign(module._modules, flattenModules);
     }
-    module.setStore(proto.createStore(module.reducers));
+    if (typeof module.setStore === 'function') {
+      module.setStore(proto.createStore(module.reducers));
+    }
+    module._initModule();
   }
   
 
@@ -301,11 +245,6 @@ class Module implements Module {
 
   public resetModule() {
     this._resetModule();
-  }
-
-  public setStore(store: Store) {
-    this._setStore(store);
-    this._initModule();
   }
 
   public dispatch(action: Action) {
@@ -332,17 +271,6 @@ class Module implements Module {
     return this._getActionTypes();
   }
 
-  public get reducers() {
-    return this._reducers;
-  }
-
-  public get store() {
-    if (!this._store) {
-      throw new Error(`${this.constructor.name} Module has not been initialized...`);
-    }
-    return this._store;
-  }
-
   public get state() {
     return this._getState();
   }
@@ -366,16 +294,6 @@ class Module implements Module {
   public getActionTypes() {
     return this._actionTypes;
   }
-
-  public getReducers(actionTypes: ActionTypes, initialValue: State<any> = {}) {
-    return (this._actionTypes || []).reduce((map: Properties<Reducer>, name: PropertyKey) => {
-      map[name] = this._reducersMaps[name](actionTypes);
-      return map;
-    }, {});
-  }
-
-  // When define `onStateChange`, this module status will use reducer. 
-  // public onStateChange() {}
 
   public moduleWillInitialize() {}
 
