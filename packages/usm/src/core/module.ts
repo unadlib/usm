@@ -53,6 +53,7 @@ interface Module {
   onStateChange?(): void;
   setStore?(store: Store): void;
   readonly reducers: Reducer;
+  readonly store: Store;
 }
 
 export interface Action {
