@@ -1,9 +1,13 @@
 import getActionTypes from './actionTypes';
 import moduleStatuses from './moduleStatuses';
 import Enum from '../utils/enum';
-import { Reducer } from './reducers';
 import flatten from '../utils/flatten';
 import event from '../utils/event';
+
+export type State<T> = T;
+export interface Reducer {
+  (state: State<any>, action: Action): State<any>;
+}
 
 export type ModuleInstance = InstanceType<typeof Module>;
 export type Properties<T = any> = {
@@ -15,7 +19,8 @@ export type Attribute<T = any> = {
 }
 
 type Params = {
-  modules: ModuleInstance[],
+  getState?(): Properties;
+  modules: ModuleInstance[];
 }
 
 const DEFAULT_PROPERTY = {
@@ -31,14 +36,13 @@ interface Callback<T = undefined, S = void> {
 export type ActionTypes = InstanceType<typeof Enum>;
 
 interface Module {
-  _reducersMaps: Attribute<Callback<ActionTypes, Reducer>>;
   __proto__: Proto<StaticModule>;
   __init__: boolean;
   __reset__: boolean;
-  _modules: ModuleInstance[];
+  _modules: Attribute<ModuleInstance>;
   _store: Store;
-  _arguments: Arguments;
-  _status: string;//
+  _arguments: Params;
+  _status: string;
   _subscribe(callback: Callback): void;
   _actionTypes: string[]|undefined;
   _getState(): Properties<any>;
@@ -48,6 +52,7 @@ interface Module {
   getState(): Properties;
   onStateChange?(): void;
   setStore?(store: Store): void;
+  readonly reducers: Reducer;
 }
 
 export interface Action {
@@ -66,10 +71,6 @@ type StaticModule = {
   createStore(reducer: Reducer): any;
 }
 
-type Arguments = {
-  getState(): Properties;
-}
-
 interface Dispatch {
   (action: Action): void;
 };
@@ -81,13 +82,12 @@ type Store = {
 };
 
 class Module implements Module {
-  constructor(...args:[]) {
-    const params: Params = this._handleArgs(...args);
-    this._makeInstance(params);
+  constructor(params: Params, ...args:[]) {
+    this._makeInstance(this._handleArgs(params, ...args));
   }
 
-  private _handleArgs(...args:Params[]): Params {
-    return args[0];
+  private _handleArgs(params: Params, ...args:[]): Params {
+    return params;
   }
   
   private _makeInstance(params: Params) {
@@ -116,11 +116,11 @@ class Module implements Module {
     }
   }
 
-  private get _isListening() {
+  protected get _isListening() {
     return typeof this.onStateChange === 'function' && typeof this._subscribe === 'function';
   }
 
-  private get _proto() {
+  protected get _proto() {
     return this.__proto__.constructor;
   }
 
@@ -219,9 +219,9 @@ class Module implements Module {
     return module.constructor.name.toLowerCase();
   }
 
-  public static create(...args:[]) {
+  public static create(params: Params, ...args:[]) {
     const RootModule = this;
-    const rootModule = new RootModule(...args);
+    const rootModule = new RootModule(params, ...args);
     const proto = rootModule.__proto__.constructor;
     proto.boot(proto, rootModule);
     return rootModule;

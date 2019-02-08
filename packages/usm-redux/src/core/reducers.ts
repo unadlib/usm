@@ -1,10 +1,4 @@
-import moduleStatuses from './moduleStatuses';
-import { Action, ActionTypes } from './module';
-
-export interface Reducer {
-  (state: State<any>, action: Action): State<any>;
-}
-export type State<T> = T;
+import { ActionTypes, Reducer, State, moduleStatuses } from 'usm';
 
 export function getModuleStatusReducer<T>(types: ActionTypes, initialValue: T): Reducer {
   return (state = initialValue || moduleStatuses.initial, { type }): State<any> => {

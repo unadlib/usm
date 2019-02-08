@@ -1,6 +1,5 @@
-import BaseModule from 'usm';
-import Enum, { PropertyKey } from '../utils/enum';
-import { getModuleStatusReducer, State, Reducer } from './reducers';
+import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer } from 'usm';
+import { getModuleStatusReducer } from './reducers';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
@@ -9,64 +8,22 @@ export type Properties<T = any> = {
   [P in string]?: T;
 }
 
-export type Attribute<T = any> = {
-  [P in string]: T;
-}
-
-type Params = {
-  modules: ModuleInstance[],
-}
-
 const DEFAULT_PROPERTY = {
   configurable: false,
   enumerable: false,
   writable: false,
 };
 
-interface Callback<T = undefined, S = void> {
-  (params: T): S;
-};
-
-export type ActionTypes = InstanceType<typeof Enum>;
+export type Attribute<T = any> = {
+  [P in string]: T;
+}
 
 interface Module {
   _reducersMaps: Attribute<Callback<ActionTypes, Reducer>>;
-  __proto__: Proto<StaticModule>;
-  __init__: boolean;
-  __reset__: boolean;
-  _modules: ModuleInstance[];
-  _store: Store;
-  _arguments: Arguments;
-  _status: string;//
-  _subscribe(callback: Callback): void;
-  _actionTypes: string[]|undefined;
-  _getState(): Properties<any>;
-  _dispatch: Dispatch;
-  onStateChange(): void;
-  _onStateChange(): void;
-  parentModule: ModuleInstance;
-  getState(): Properties;
 }
-
-export interface Action {
-  type: string[]|string,
-}
-
-type Proto<T> = {
-  constructor: T;
+interface Callback<T = undefined, S = void> {
+  (params: T): S;
 };
-
-
-type StaticModule = {
-  _getModuleKey(module: ModuleInstance): string;
-  boot(proto: StaticModule, module: ModuleInstance): void;
-  combineReducers(reducers: Properties<Reducer>): Reducer;
-  createStore(reducer: Reducer): any;
-}
-
-type Arguments = {
-  getState(): Properties;
-}
 
 interface Dispatch {
   (action: Action): void;
@@ -78,13 +35,13 @@ type Store = {
   dispatch: Dispatch;
 };
 
-class Module extends BaseModule {
-  private get _reducers() {
+class Module extends BaseModule implements Module {
+  protected get _reducers() {
     const reducers = this._getReducers(this.actionTypes, {});
     return this._proto.combineReducers(reducers);
   }
 
-  private _setStore(store: Store) {
+  protected _setStore(store: Store) {
     if (this._store) return;
     Object.defineProperty(this, '_store', {
       ...DEFAULT_PROPERTY,
@@ -119,7 +76,7 @@ class Module extends BaseModule {
     });
   }
 
-  private _getReducers(actionTypes: ActionTypes, initialValue: State<any>) {
+  protected _getReducers(actionTypes: ActionTypes, initialValue: State<any>) {
     const reducers = this.getReducers(actionTypes, initialValue);
     const subReducers: Properties<Reducer> = Object
       .entries(this._modules)
@@ -134,7 +91,7 @@ class Module extends BaseModule {
     };
   }
 
-  private _getStatusReducer(actionTypes: ActionTypes, initialValue: State<any>) {
+  protected _getStatusReducer(actionTypes: ActionTypes, initialValue: State<any>) {
     return this._isListening ? {
       status: getModuleStatusReducer(actionTypes, initialValue.status),
     } : {};
