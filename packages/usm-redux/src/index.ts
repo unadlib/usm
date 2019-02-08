@@ -1,11 +1,7 @@
 import produce from 'immer';
-import { createStore, combineReducers } from 'redux';
-import Module from './core/module';
+import Module, { ModuleInstance } from './core/module';
 
-Module.combineReducers = combineReducers;
-Module.createStore = createStore;
-
-function state(target, name, descriptor){
+function state(target, name: string, descriptor: any){
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   target._reducersMaps = target._reducersMaps || {};
@@ -22,9 +18,18 @@ function state(target, name, descriptor){
   };
 }
 
-function action(target, name, descriptor) {
+type Descriptor<T> = {
+  value?: T;
+  get?(): T;
+  set?(): void;
+  configurable: boolean;
+  enumerable: boolean;
+  writable: boolean;
+}
+
+function action(target, name: string, descriptor: any) {
   const fn = descriptor.value;
-  descriptor.value = function (...args) {
+  descriptor.value = function (...args:[]) {
     const states = produce(this.state, fn.bind(this, ...args));
     this._dispatch({
       type: Object.keys(this.state).map(key => this.actionTypes[key]),

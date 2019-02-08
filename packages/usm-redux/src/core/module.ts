@@ -1,4 +1,5 @@
 import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer } from 'usm';
+import { createStore, combineReducers } from 'redux';
 import { getModuleStatusReducer } from './reducers';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
@@ -39,6 +40,14 @@ class Module extends BaseModule implements Module {
   protected get _reducers() {
     const reducers = this._getReducers(this.actionTypes, {});
     return this._proto.combineReducers(reducers);
+  }
+
+  protected static combineReducers(reducers) {
+    return combineReducers(reducers);
+  }
+
+  protected static createStore(reducer: Reducer) {
+    return createStore(reducer);
   }
 
   protected _setStore(store: Store) {

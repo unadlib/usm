@@ -1,8 +1,7 @@
 import Module, { action, state } from '../src';
 
-class Index extends Module {  
-  @state list = [{todo: "Learn typescript"}]
-  @state list1 = [{todo: "Learn typescript"}]
+class TodoList extends Module {  
+  @state list = [{todo: "Learn Typescript"}]
 
   @action
   add(todo: object, state?: any) {
@@ -10,25 +9,26 @@ class Index extends Module {
   }
 
   async moduleDidInitialize() {
+    console.log('moduleDidInitialize');
     this.add({todo: 'Learn C++'});
   }
 }
 
 
-class Phone extends Module{}
-const index = new Index({
+class Index extends Module{}
+const todoList = new TodoList({
   modules: [],
 });
 
-const phone = Phone.create({
-  modules: [index]
+const index = Index.create({
+  modules: [todoList]
 });
 
-phone.store.subscribe(() => {
-  console.log('[store.subscribe]', phone._modules.index.list, phone.ready, phone._modules.index.ready);
+index.store.subscribe(() => {
+  console.log('[store.subscribe]', index._modules.todolist.list, todoList.ready);
 });
 
 
 setTimeout(() => {
-  console.log(phone._modules.index.status, phone.status);
+  console.log(index._modules.todolist.ready, index.ready);
 },1000);

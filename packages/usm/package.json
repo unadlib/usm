@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch",
-    "start": "babel-node test/index.ts --extensions '.ts'"
+    "watch": "jest --watch"
   },
   "repository": {
     "type": "git",
