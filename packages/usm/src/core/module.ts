@@ -56,7 +56,8 @@ interface Module {
 }
 
 export interface Action {
-  type: string[]|string,
+  type: string[]|string;
+  states?: Properties;
 }
 
 type Proto<T> = {

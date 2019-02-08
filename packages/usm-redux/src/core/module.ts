@@ -1,5 +1,5 @@
 import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer } from 'usm';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, ReducersMapObject } from 'redux';
 import { getModuleStatusReducer } from './reducers';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
@@ -26,7 +26,7 @@ interface Callback<T = undefined, S = void> {
   (params: T): S;
 };
 
-interface Dispatch {
+export interface Dispatch {
   (action: Action): void;
 };
 
@@ -42,7 +42,7 @@ class Module extends BaseModule implements Module {
     return this._proto.combineReducers(reducers);
   }
 
-  protected static combineReducers(reducers) {
+  protected static combineReducers(reducers: ReducersMapObject<{}, any>) {
     return combineReducers(reducers);
   }
 

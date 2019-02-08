@@ -10,5 +10,5 @@ export {
   State,
   Action,
   ActionTypes,
-  moduleStatuses
+  moduleStatuses,
 }
