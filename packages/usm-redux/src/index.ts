@@ -1,28 +1,11 @@
 import produce from 'immer';
-import { ActionTypes } from 'usm';
-import Module, { ModuleInstance, Dispatch } from './core/module';
+import Module, { ModuleInstance } from './core/module';
 
-type Properties<T = any> = {
-  [P in string]?: T;
+interface Descriptor<T> extends TypedPropertyDescriptor<T> {
+  initializer(): T;
 }
 
-type Descriptor<T> = {
-  value: T;
-  get?(): T;
-  set?(): void;
-  configurable: boolean;
-  enumerable: boolean;
-  writable: boolean;
-  state: Properties;
-  _dispatch: Dispatch;
-  actionTypes: ActionTypes;
-};
-
-interface func {
-  (...args:[]): any;
-}
-
-function state(target: ModuleInstance, name: string, descriptor: any){
+function state(target: ModuleInstance, name: string, descriptor: Descriptor<any>) {
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   target._reducersMaps = target._reducersMaps || {};
@@ -38,9 +21,9 @@ function state(target: ModuleInstance, name: string, descriptor: any){
   };
 }
 
-function action(target: ModuleInstance, name: string, descriptor: Descriptor<func>) {
+function action(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
-  descriptor.value = function (...args:[]) {
+  descriptor.value = function (this: ModuleInstance, ...args:[]) {
     const states = produce(this.state, fn.bind(this, ...args));
     this._dispatch({
       type: Object.keys(this.state).map(key => this.actionTypes[key]),
