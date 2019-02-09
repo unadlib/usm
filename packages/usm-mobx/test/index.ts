@@ -1,6 +1,6 @@
 import { autorun } from 'mobx';
 import Module, { action, state } from '../src';
-// TODO store, state[key], recursive for observable subitem
+// TODO store, state[key], recursive for observable subitem in mobx4
 class TodoList extends Module {  
   @state list = [{todo: "Learn Typescript"}]
 
@@ -24,5 +24,5 @@ const index = Index.create({
 });
 
 autorun(function() {
-  console.log(index._modules.todoList.list.length, todoList.ready);
+  console.log(index._modules.todoList.list, todoList.ready);
 });
