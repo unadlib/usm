@@ -1,3 +1,4 @@
+import { autorun } from 'mobx';
 import Module, { action, state } from '../src';
 
 class TodoList extends Module {  
@@ -24,6 +25,6 @@ const index = Index.create({
   modules: [todoList]
 });
 
-index.store.subscribe(() => {
+autorun(function() {
   console.log(index._modules.todoList.list.length, todoList.ready);
 });

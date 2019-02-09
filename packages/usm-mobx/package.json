@@ -4,11 +4,21 @@
   "description": "Universal state module - usm for mobx",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "babel-node test/index.ts --extensions '.ts' --ignore=' ' --root-mode upward"
   },
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "mobx": "^5.9.0"
+    "mobx": "^5.9.0",
+    "usm": "^0.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-typescript": "^7.1.0"
   }
 }
