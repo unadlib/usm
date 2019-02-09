@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "unadlib",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "mobx": "^5.9.0"
+  }
 }

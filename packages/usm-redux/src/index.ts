@@ -1,16 +1,19 @@
 import produce from 'immer';
 import Module, { ModuleInstance } from './core/module';
 
+interface StateFactory {
+  (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
+}
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
 }
 
-function state(target: ModuleInstance, name: string, descriptor: Descriptor<any>) {
+function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   target._reducersMaps = target._reducersMaps || {};
-  target._reducersMaps[name] = (types, initialValue = descriptor.initializer.call(target)) =>
-  (_state = initialValue, { type, states }) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
+  target._reducersMaps[name] = (types, initialValue = descriptor ? descriptor.initializer.call(target) : undefined) =>
+    (_state = initialValue, { type, states }) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
   const get = function(this: ModuleInstance) {
     return this.state[name];
   };
@@ -32,7 +35,7 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   };
   return descriptor;
 }
-
+const state: StateFactory = createState;
 export {
   Module as default,
   state,
