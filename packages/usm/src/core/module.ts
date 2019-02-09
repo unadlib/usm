@@ -218,7 +218,8 @@ class Module implements Module {
   }
 
   private static _getModuleKey(module: ModuleInstance) {
-    return module.constructor.name.toLowerCase();
+    const { name } = module.constructor;
+    return name[0].toLowerCase() + name.slice(1);
   }
 
   public static create(params: Params, ...args:[]) {

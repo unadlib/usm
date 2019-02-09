@@ -25,10 +25,5 @@ const index = Index.create({
 });
 
 index.store.subscribe(() => {
-  console.log('[store.subscribe]', index._modules.todolist.state.list, todoList.ready);
+  console.log('[store.subscribe]', index._modules.todoList.state.list, todoList.ready);
 });
-
-
-setTimeout(() => {
-  console.log(index._modules.todolist.ready, index.ready);
-},1000);
