@@ -1,6 +1,6 @@
 import { autorun } from 'mobx';
 import Module, { action, state } from '../src';
-// TODO store, state[key]
+// TODO store, state[key], recursive for observable subitem
 class TodoList extends Module {  
   @state list = [{todo: "Learn Typescript"}]
 
