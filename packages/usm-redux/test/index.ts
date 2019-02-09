@@ -16,9 +16,7 @@ class TodoList extends Module {
 
 
 class Index extends Module{}
-const todoList = new TodoList({
-  modules: [],
-});
+const todoList = new TodoList();
 
 const index = Index.create({
   modules: [todoList]

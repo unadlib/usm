@@ -21,18 +21,14 @@ class Index extends Module {}
 
 describe('single module create', () => {
   test('check `create` function', () => {
-    const todoList = TodoList.create({
-      modules: [],
-    });
+    const todoList = TodoList.create();
     expect(todoList.ready).toBeFalsy();
     setTimeout(() => {
       expect(todoList.ready).toBeTruthy();
     });
   });
   test('check create a instance & bootstrap', () => {
-    const todoList = new TodoList({
-      modules: [],
-    });
+    const todoList = new TodoList();
     todoList.bootstrap();
     expect(todoList.ready).toBeFalsy();
     setTimeout(() => {
@@ -43,9 +39,7 @@ describe('single module create', () => {
 
 describe('parent-child set modules', () => {
   test('check `create` function', () => {
-    const todoList = new TodoList({
-      modules: [],
-    });
+    const todoList = new TodoList();
     const index = Index.create({
       modules: [todoList]
     });

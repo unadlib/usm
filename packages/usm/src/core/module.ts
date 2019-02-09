@@ -84,11 +84,14 @@ type Store = {
 };
 
 class Module implements Module {
-  constructor(params: Params, ...args:[]) {
+  constructor(params?: Params, ...args:[]) {
     this._makeInstance(this._handleArgs(params, ...args));
   }
 
-  private _handleArgs(params: Params, ...args:[]): Params {
+  private _handleArgs(params?: Params, ...args:[]): Params {
+    if (typeof params === 'undefined') return {
+      modules:[]
+    }
     return params;
   }
   
@@ -222,7 +225,7 @@ class Module implements Module {
     return name[0].toLowerCase() + name.slice(1);
   }
 
-  public static create(params: Params, ...args:[]) {
+  public static create(params?: Params, ...args:[]) {
     const RootModule = this;
     const rootModule = new RootModule(params, ...args);
     const proto = rootModule.__proto__.constructor;

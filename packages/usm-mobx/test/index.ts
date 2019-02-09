@@ -1,6 +1,6 @@
 import { autorun } from 'mobx';
 import Module, { action, state } from '../src';
-
+// TODO store, state[key]
 class TodoList extends Module {  
   @state list = [{todo: "Learn Typescript"}]
 
@@ -17,9 +17,7 @@ class TodoList extends Module {
 
 
 class Index extends Module{}
-const todoList = new TodoList({
-  modules: [],
-});
+const todoList = new TodoList();
 
 const index = Index.create({
   modules: [todoList]
