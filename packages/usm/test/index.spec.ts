@@ -18,6 +18,8 @@ class TodoList extends Module {
 }
 
 class Index extends Module {}
+class Home extends Module {}
+class Other extends Module {}
 
 describe('single module create', () => {
   test('check `create` function', () => {
@@ -46,6 +48,25 @@ describe('parent-child set modules', () => {
     expect(index.ready).toBeFalsy();
     setTimeout(() => {
       expect(index.ready).toBeTruthy();
+    });
+  });
+  test('check `create` function for deep submodules', () => {
+    const todoList = new TodoList();
+    const index = new Index({
+      modules: [todoList]
+    });
+    const other = new Other({
+      modules: [todoList]
+    });
+    const home = new Home({
+      modules: [index, other]
+    });
+    expect(index.ready).toBeFalsy();
+    setTimeout(() => {
+      expect(todoList.ready).toBeTruthy();
+      expect(index.ready).toBeTruthy();
+      expect(home.ready).toBeTruthy();
+      expect(other.ready).toBeTruthy();
     });
   });
 });
