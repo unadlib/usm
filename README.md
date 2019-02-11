@@ -1,5 +1,4 @@
 # usm
-Universal state module
 
 Using USM to develop a modular application system, it can directly support React/Vue/Angular.
 
@@ -22,7 +21,7 @@ Using USM to develop a modular application system, it can directly support React
 It's an universal JavaScript code.
 ```js
 class TodoList extends Module {
-  @state list = [{item: "Learn Typescript"}]
+  @state list = [{item: 'Learn Typescript'}]
 
   @action
   add(todo, state) {

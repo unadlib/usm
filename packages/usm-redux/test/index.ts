@@ -1,7 +1,7 @@
 import Module, { action, state } from '../src';
 
 class TodoList extends Module {  
-  @state list = [{todo: "Learn Typescript"}]
+  @state list = [{todo: 'Learn Typescript'}]
 
   @action
   add(todo: object, state?: any) {
