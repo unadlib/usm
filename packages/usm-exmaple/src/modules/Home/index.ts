@@ -1,4 +1,4 @@
-import Module from 'usm-redux';
+import Module, { action, state } from '../../module';
 
 export default class Home extends Module {
   async moduleDidInitialize() {

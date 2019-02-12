@@ -1,4 +1,4 @@
-import Module from 'usm-redux';
+import Module, { action, state } from '../../module';
 import { getMainService } from '../../services/MainService';
 
 export default class Services extends Module {

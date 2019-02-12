@@ -1,5 +1,4 @@
-import Module, { action, state } from 'usm-redux';
-
+import Module, { action, state } from '../../module';
 
 export default class Input extends Module {
   @state input = '';

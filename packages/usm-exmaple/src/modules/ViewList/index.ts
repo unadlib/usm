@@ -1,4 +1,4 @@
-import Module, { action, state } from 'usm-redux';
+import Module, { action, state } from '../../module';
 
 interface Todo {
   item: string;
