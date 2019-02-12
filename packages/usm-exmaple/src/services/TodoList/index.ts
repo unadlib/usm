@@ -10,4 +10,9 @@ export default class TodoList extends Module {
   add(todo: Todo) {
     this.list.push(todo);
   }
+
+  async fetch() {
+    // @ts-ignore
+    return this.list;
+  }
 }

@@ -11,6 +11,7 @@ export default class Input extends Module {
 
   @action
   async add() {
+    // @ts-ignore
     await this._modules.interaction.services.add({ item: this.input });
     this.change('');
   }

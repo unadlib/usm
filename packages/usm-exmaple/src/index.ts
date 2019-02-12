@@ -2,14 +2,14 @@ import Module from 'usm';
 import Home from './modules/Home';
 import Input from './modules/Input';
 import ViewList from './modules/ViewList';
-import Interaction from './modules/Interaction';
+import Services from './modules/Services';
 
-const interaction = new Interaction();
+const services = new Services();
 const input = new Input({
-  modules: [interaction],
+  modules: [services],
 });
 const viewList = new ViewList({
-  modules: [interaction],
+  modules: [services],
 });
 
 const home = Home.create({
@@ -26,7 +26,7 @@ home.store.subscribe(() => {
 setTimeout(() => {
   console.log(
     home.ready,
-    home._modules.interaction.ready,
+    home._modules.services.ready,
     home._modules.viewList.ready,
     home._modules.input.ready,
   );
