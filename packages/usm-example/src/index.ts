@@ -19,7 +19,7 @@ const home = Home.create({
   ]
 });
 
-home.store.subscribe(() => {
+home.store && home.store.subscribe(() => {
   console.log(home.ready);
 });
 

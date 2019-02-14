@@ -2,11 +2,11 @@
 
 Using USM to develop a modular application system, it can directly support React/Vue/Angular.
 
-## Support State Management Libraries/Frameworks
+## Support
 
 | Libraries/Frameworks   | None  | Redux  | MobX    | Vuex    | Angular2+ |
 | :--------------------- | :---: | :----: | :-----: | :-----: | :-------: |
-| Support                | Yes   | Yes    | Ongoing | Pending | Pending   |
+| Status                 | ✅    | ✅      | Ongoing | Pending | Pending   |
 
 ## Features
 
