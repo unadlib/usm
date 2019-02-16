@@ -24,5 +24,6 @@ const index = Index.create({
 });
 
 autorun(function() {
+  // @ts-ignore
   console.log(index.modules.todoList.list, todoList.ready);
 });

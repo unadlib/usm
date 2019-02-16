@@ -26,8 +26,8 @@ home.store && home.store.subscribe(() => {
 setTimeout(() => {
   console.log(
     home.ready,
-    home._modules.services.ready,
-    home._modules.viewList.ready,
-    home._modules.input.ready,
+    home.modules.services.ready,
+    home.modules.viewList.ready,
+    home.modules.input.ready,
   );
 });
