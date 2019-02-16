@@ -66,11 +66,11 @@ type Proto<T> = {
 };
 
 
-type StaticModule = {
+export type StaticModule = {
   _getModuleKey(module: ModuleInstance): string;
   boot(proto: StaticModule, module: ModuleInstance): void;
   combineReducers(reducers: Properties<Reducer>): Reducer;
-  createStore(reducer: Reducer): any;
+  createStore<T = Reducer>(option: T): any;
   _generateStore(proto: StaticModule, module: ModuleInstance): Store;
 }
 

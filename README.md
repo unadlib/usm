@@ -6,7 +6,7 @@ Using USM to develop a modular application system, it can directly support React
 
 | Libraries/Frameworks   | None  | Redux  | MobX    | Vuex    | Angular2+ |
 | :--------------------- | :---: | :----: | :-----: | :-----: | :-------: |
-| Status                 | ✅    | ✅      | Ongoing | Pending | Pending   |
+| Status                 | ✅    | ✅      | ✅      | ✅      | Pending   |
 
 ## Features
 
@@ -42,3 +42,10 @@ import Module, { action, state } from 'usm-mobx';
 ```
 
 Done.
+
+## TODO
+
+- [ ] support MobX `@computed`
+- [ ] support Vuex `getters`
+- [ ] add `reselect` for `usm-redux`
+- [ ] support `Angular2+`

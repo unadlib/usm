@@ -1,10 +1,18 @@
-import Module from './core';
+import Module, { VuexModule } from './core';
 
-type ModuleInstance = InstanceType<typeof Module>;
+type ModuleInstance = InstanceType<typeof Module> & VuexModule;
 
-function state(target: ModuleInstance, name: string, descriptor?: TypedPropertyDescriptor<any>) {
+interface Descriptor<T> extends TypedPropertyDescriptor<T> {
+  initializer(): T;
+}
+
+interface StateFactory {
+  (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
+}
+
+function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
   target._state = target._state || {};
-  target._state[name] = descriptor.initializer.call(target);
+  target._state[name] = descriptor ? descriptor.initializer.call(target) : undefined;
   const get = function(this: ModuleInstance) {
     return this.state[name];
   };
@@ -25,11 +33,13 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   descriptor.value = function (this: ModuleInstance, ...args:[]) {
+    // @ts-ignore
     return this.store.commit(this.actionTypes[name], ...args);
   }
   return descriptor;
 }
 
+const state: StateFactory = createState;
 
 export {
   Module as default,

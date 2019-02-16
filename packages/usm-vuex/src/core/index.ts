@@ -1,14 +1,21 @@
-import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer } from 'usm';
-import { Store } from 'vuex';
+import Vuex, { Store, StoreOptions } from 'vuex';
+import Vue from 'vue';
+import BaseModule, { Properties, StaticModule } from 'usm';
 
 const DEFAULT_PROPERTY = {
   configurable: false,
   enumerable: false,
   writable: false,
 };
+type ModuleInstance = InstanceType<typeof Module>;
 
-export default class Module extends BaseModule {
-  protected _setStore(_store) {
+export type VuexModule =  {
+  setStore(store: StoreOptions<any>): void;
+  _mutations?: Properties;
+  _state?: Properties;
+}
+export default class Module extends BaseModule implements VuexModule {
+  protected _setStore(_store: StoreOptions<any>) {
     if (this._store) return;
     Object.defineProperties(this,  {
       _store:{
@@ -19,23 +26,26 @@ export default class Module extends BaseModule {
   }
 
   public get mutations() {
+    // @ts-ignore
     return typeof this._mutations === 'undefined' ? {} : Object.entries(this._mutations).reduce((map, [name, fn]) =>
       Object.assign(map, {[this.actionTypes[name]]: fn})
     , {});
   }
 
-  public static _generateStore(proto, module) {
+  public static _generateStore(proto: StaticModule, module: ModuleInstance) {
+    Vue.use(Vuex);
     return proto.createStore(module);
   }
 
-  protected _getState() {
+  public _getState() {
+    // @ts-ignore
     return this._state;
   }
 
-  protected static createStore(instance) {
+  protected static createStore(instance: ModuleInstance): StoreOptions<any> {
     return new Store(instance);
   }
-
+  // @ts-ignore
   public setStore(store) {
     this._setStore(store);
   }

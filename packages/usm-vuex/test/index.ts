@@ -1,8 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
 import Module, { state, action } from '../src';
-
-Vue.use(Vuex);
 
 class TodoList extends Module {  
   @state list = [{todo: 'Learn Typescript'}]
@@ -27,5 +23,6 @@ const index = Index.create({
 });
 
 index.store.subscribe(() => {
+  // @ts-ignore
   console.log(index.modules.todoList.list, todoList.ready);
 });

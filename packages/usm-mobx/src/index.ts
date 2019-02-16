@@ -1,6 +1,6 @@
 import { observable, action as mobxAction } from 'mobx';
 import Module from 'usm';
-
+// TODO impelement store for mobx
 function action(target: Object, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   descriptor.value = function (...args:[]) {
