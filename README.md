@@ -37,8 +37,10 @@ class TodoList extends Module {
 Using different interface llibrary
 ```js
 import Module, { action, state } from 'usm-redux';
-// or, etc.
+// or
 import Module, { action, state } from 'usm-mobx';
+// or, etc.
+import Module, { action, state } from 'usm-vuex';
 ```
 
 Done.
