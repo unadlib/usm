@@ -24,5 +24,5 @@ const index = Index.create({
 });
 
 autorun(function() {
-  console.log(index._modules.todoList.list, todoList.ready);
+  console.log(index.modules.todoList.list, todoList.ready);
 });

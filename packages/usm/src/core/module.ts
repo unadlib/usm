@@ -71,6 +71,7 @@ type StaticModule = {
   boot(proto: StaticModule, module: ModuleInstance): void;
   combineReducers(reducers: Properties<Reducer>): Reducer;
   createStore(reducer: Reducer): any;
+  _generateStore(proto: StaticModule, module: ModuleInstance): Store;
 }
 
 interface Dispatch {
@@ -239,9 +240,13 @@ class Module implements Module {
       Object.assign(module._modules, flattenModules);
     }
     if (typeof module.setStore === 'function') {
-      module.setStore(proto.createStore(module.reducers));
+      module.setStore(proto._generateStore(proto, module));
     }
     module._initModule();
+  }
+
+  public static _generateStore(proto: StaticModule, module: ModuleInstance) {
+    return proto.createStore(module.reducers);
   }
   
 
@@ -295,6 +300,10 @@ class Module implements Module {
 
   public get resetting() {
     return this.status === moduleStatuses.resetting;
+  }
+
+  public get modules() {
+    return this._modules;
   }
 
   public getActionTypes() {

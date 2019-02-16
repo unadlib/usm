@@ -1,4 +1,8 @@
-import Module, { action, state } from '../src';
+import Vue from 'vue';
+import Vuex from 'vuex';
+import Module, { state, action } from '../src';
+
+Vue.use(Vuex);
 
 class TodoList extends Module {  
   @state list = [{todo: 'Learn Typescript'}]
