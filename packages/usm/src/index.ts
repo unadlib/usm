@@ -1,4 +1,4 @@
-import { ModuleInstance } from './core/module';
+import Module, { ModuleInstance } from './core/module';
 
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
@@ -35,6 +35,7 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
 const state: StateFactory = createState;
 
 export {
+  Module as default,
   action,
   state
 }
