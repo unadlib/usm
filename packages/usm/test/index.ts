@@ -1,4 +1,4 @@
-import Module, { action, state } from '../src';
+import Module, { state, action } from '../';
 
 class TodoList extends Module {  
   @state list = [{todo: 'Learn Typescript'}]
@@ -15,13 +15,15 @@ class TodoList extends Module {
 }
 
 
-class Index extends Module {}
+class Index extends Module{}
 const todoList = new TodoList();
 
 const index = Index.create({
   modules: [todoList]
 });
 
-index.store.subscribe(() => {
-  console.log(index.modules.todoList.state.list, todoList.ready);
-});
+// TODO store.subscribe
+// index.store.subscribe(() => {
+//   // @ts-ignore
+//   console.log(index.modules.todoList.list, todoList.ready);
+// });

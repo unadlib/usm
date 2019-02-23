@@ -9,6 +9,11 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "yarn start-usm && yarn start-usm-redux && yarn start-usm-mobx && yarn start-usm-vuex",
+    "start-usm": "lerna run start --scope usm --stream",
+    "start-usm-redux": "lerna run start --scope usm-redux --stream",
+    "start-usm-mobx": "lerna run start --scope usm-mobx --stream",
+    "start-usm-vuex": "lerna run start --scope usm-vuex --stream",
     "commit": "yarn git-cz"
   },
   "repository": {

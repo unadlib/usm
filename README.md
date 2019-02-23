@@ -6,7 +6,7 @@ Using USM to develop a modular application system, it can directly support React
 
 | Libraries/Frameworks   | None  | Redux  | MobX    | Vuex    | Angular2+ |
 | :--------------------- | :---: | :----: | :-----: | :-----: | :-------: |
-| Status                 | ✅    | ✅      | ✅      | ✅      | ✅         |
+| Status                 | ✅    | ✅     | ✅     | ✅      | ✅        |
 
 ## Features
 
@@ -14,14 +14,14 @@ Using USM to develop a modular application system, it can directly support React
 - Unified Lifecycle
 - Optional Event System
 - Native Module Minimize Version
-- Support React/Vue/Angular
+- Support Redux/MobX/Vuex/Angular
 
 ## Usage
 
 It's an universal JavaScript code.
 ```js
 class TodoList extends Module {
-  @state list = [{item: 'Learn Typescript'}]
+  @state list = [{text: 'Learn Typescript'}]
 
   @action
   add(todo, state) {
@@ -29,18 +29,21 @@ class TodoList extends Module {
   }
 
   async moduleDidInitialize() {
-    this.add({item: 'Learn C++'});
+    this.add({text: 'Learn C++'});
   }
 }
 ```
 
-Using different interface llibrary
+Using different interface llibrary.
 ```js
+import Module, { action, state } from 'usm';
+// using Native Module/Angular
 import Module, { action, state } from 'usm-redux';
-// or
+// using Redux
 import Module, { action, state } from 'usm-mobx';
-// or, etc.
+// using MobX
 import Module, { action, state } from 'usm-vuex';
+// using Vuex
 ```
 
 Done.
@@ -50,3 +53,4 @@ Done.
 - [ ] support MobX `@computed`
 - [ ] support Vuex `getters`
 - [ ] add `reselect` for `usm-redux`
+- [ ] universal middleware

@@ -35,7 +35,7 @@ interface Callback<T = undefined, S = void> {
 
 export type ActionTypes = InstanceType<typeof Enum>;
 
-interface Module {
+interface Module extends Properties {
   __proto__: Proto<StaticModule>;
   __init__: boolean;
   __reset__: boolean;
@@ -45,9 +45,9 @@ interface Module {
   _status: string;
   _subscribe(callback: Callback): void;
   _actionTypes: string[]|undefined;
-  _getState(): Properties<any>;
-  _dispatch: Dispatch;
+  _dispatch(action: Action): void;
   _onStateChange(): void;
+  _state?: Properties;
   parentModule: ModuleInstance;
   getState(): Properties;
   onStateChange?(): void;
@@ -85,13 +85,16 @@ type Store = {
 };
 
 class Module implements Module {
-  constructor(params?: Params, ...args:[]) {
-    this._makeInstance(this._handleArgs(params, ...args));
+  constructor(...args: any[]) {
+    this._makeInstance(this._handleArgs(...args));
   }
 
-  private _handleArgs(params?: Params, ...args:[]): Params {
-    if (typeof params === 'undefined') return {
-      modules:[]
+  private _handleArgs(...args: any[]): Params {
+    const params: Params = args[0];
+    if (typeof params === 'undefined') {
+      return {
+        modules:[]
+      };
     }
     return params;
   }
@@ -105,6 +108,8 @@ class Module implements Module {
           [key]: module,
         });
       }, {});
+    const key = this._proto._getModuleKey(this);
+    const getState = params.getState || (() => (this._store.getState.call(this)[key]));
     Object.defineProperties(this, {
       _arguments: {
         ...DEFAULT_PROPERTY,
@@ -113,17 +118,17 @@ class Module implements Module {
       _modules: {
         ...DEFAULT_PROPERTY,
         value: modulesMapping,
-      }
+      },
+      _status: {
+        ...DEFAULT_PROPERTY,
+        writable: true,
+        value: moduleStatuses.initial,
+      },
+      getState: {
+        ...DEFAULT_PROPERTY,
+        value: getState,
+      },
     });
-    const key = this._proto._getModuleKey(this);
-    this.getState = this._arguments.getState || (() => (this._store.getState.call(this)[key]));
-    if (!this._isListening) {
-      this._status = moduleStatuses.initial;
-    }
-  }
-
-  protected get _isListening() {
-    return typeof this.onStateChange === 'function' && typeof this._subscribe === 'function';
   }
 
   protected get _proto() {
@@ -170,11 +175,7 @@ class Module implements Module {
   }
 
   private _initModule() {
-    if (this._isListening) {
-      this._subscribe(this._onStateChange.bind(this));
-    } else {
-      event.on('module', this._onStateChange.bind(this));
-    }
+    event.on('module', this._onStateChange.bind(this));
     this._initialize();
     Object.values(this._modules).forEach(module => {
       module.parentModule = this;
@@ -217,6 +218,10 @@ class Module implements Module {
     }
   }
 
+  protected _getState() {
+    return this._state;
+  }
+
   private _getActionTypes() {
     return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
@@ -226,9 +231,9 @@ class Module implements Module {
     return name[0].toLowerCase() + name.slice(1);
   }
 
-  public static create(params?: Params, ...args:[]) {
+  public static create(...args: any[]) {
     const RootModule = this;
-    const rootModule = new RootModule(params, ...args);
+    const rootModule = new RootModule(...args);
     const proto = rootModule.__proto__.constructor;
     proto.boot(proto, rootModule);
     return rootModule;
@@ -259,7 +264,7 @@ class Module implements Module {
   }
 
   public dispatch(action: Action) {
-    if (!this._isListening && typeof action.type === 'string') {
+    if (typeof action.type === 'string') {
       const index = [
         this.actionTypes.init,
         this.actionTypes.reset,
@@ -283,11 +288,11 @@ class Module implements Module {
   }
 
   public get state() {
-    return this._getState();
+    return this._getState() || {};
   }
 
   public get status() {
-    return this._isListening ? this.state.status : this._status;
+    return this._status;
   }
 
   public get pending() {

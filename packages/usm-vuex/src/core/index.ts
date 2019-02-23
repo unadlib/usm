@@ -35,12 +35,7 @@ export default class Module extends BaseModule implements VuexModule {
   public static _generateStore(proto: StaticModule, module: ModuleInstance) {
     Vue.use(Vuex);
     return proto.createStore(module);
-  }
-
-  public _getState() {
-    // @ts-ignore
-    return this._state;
-  }
+  }  
 
   protected static createStore(instance: ModuleInstance): StoreOptions<any> {
     return new Store(instance);

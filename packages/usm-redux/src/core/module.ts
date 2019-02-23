@@ -1,6 +1,5 @@
 import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer } from 'usm';
 import { createStore, combineReducers, ReducersMapObject } from 'redux';
-import { getModuleStatusReducer } from './reducers';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
@@ -8,12 +7,6 @@ export type ModuleInstance = InstanceType<typeof Module>;
 export type Properties<T = any> = {
   [P in string]?: T;
 }
-
-const DEFAULT_PROPERTY = {
-  configurable: false,
-  enumerable: false,
-  writable: false,
-};
 
 export type Attribute<T = any> = {
   [P in string]: T;
@@ -31,7 +24,7 @@ export interface Dispatch {
 };
 
 type Store = {
-  subscribe(call: Callback): void;
+  subscribe(callback: Callback): void;
   getState(): Properties;
   dispatch: Dispatch;
 };
@@ -52,37 +45,27 @@ class Module extends BaseModule implements Module {
 
   protected _setStore(store: Store) {
     if (this._store) return;
-    Object.defineProperty(this, '_store', {
-      ...DEFAULT_PROPERTY,
-      value: store,
-    });
-    const {
-      subscribe,
-      getState,
-      dispatch,
-    } = this._store;
+    this._store = store;
     if (
       __DEV__ &&
-      typeof subscribe !== 'function' ||
-      typeof getState !== 'function' ||
-      typeof dispatch !== 'function'
+      typeof this._store.subscribe !== 'function' ||
+      typeof this._store.getState !== 'function' ||
+      typeof this._store.dispatch !== 'function'
     ) {
       console.warn(`${this.constructor.name} Module did't correctly set custom 'Store'.`);
     }
-    Object.defineProperties(this, {
-      _dispatch: {
-        ...DEFAULT_PROPERTY,
-        value: dispatch,
-      },
-      _getState: {
-        ...DEFAULT_PROPERTY,
-        value: !this.parentModule || !this.getState ? getState : this.getState,
-      },
-      _subscribe: {
-        ...DEFAULT_PROPERTY,
-        value: subscribe,
-      }
-    });
+  }
+
+  public _dispatch(action: Action) {
+    return this._store.dispatch(action);
+  }
+
+  public _subscribe(callback: Callback) {
+    return this._store.subscribe(callback);
+  }
+
+  public _getState() {
+    return !this.parentModule || !this.getState ? this._store.getState() : this.getState();
   }
 
   protected _getReducers(actionTypes: ActionTypes, initialValue: State<any>) {
@@ -96,14 +79,7 @@ class Module extends BaseModule implements Module {
       __$$default$$__: (state: any) => null,
       ...reducers,
       ...subReducers,
-      ...this._getStatusReducer(actionTypes, initialValue),
     };
-  }
-
-  protected _getStatusReducer(actionTypes: ActionTypes, initialValue: State<any>) {
-    return this._isListening ? {
-      status: getModuleStatusReducer(actionTypes, initialValue.status),
-    } : {};
   }
 
   public setStore(store: Store) {

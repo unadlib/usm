@@ -1,7 +1,6 @@
 import produce from 'immer';
 import Module, { ModuleInstance } from './core/module';
 
-// TODO support `symbol` key.
 interface StateFactory {
   (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
 }
@@ -36,7 +35,9 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   };
   return descriptor;
 }
+
 const state: StateFactory = createState;
+
 export {
   Module as default,
   state,
