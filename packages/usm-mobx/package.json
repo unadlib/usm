@@ -1,6 +1,6 @@
 {
   "name": "usm-mobx",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Universal state module - usm for mobx",
   "main": "dist/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "mobx": "^5.9.0",
-    "usm": "^1.0.0-alpha.2"
+    "usm": "^1.0.0-alpha.3"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
