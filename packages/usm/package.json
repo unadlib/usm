@@ -1,13 +1,14 @@
 {
   "name": "usm",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.1",
   "description": "Universal state module",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "watch": "jest --watch",
     "start": "babel-node test/index.ts --extensions '.ts' --ignore=' ' --root-mode upward",
-    "build": "babel src --out-dir dist"
+    "clean": "rm -rf dist",
+    "build": "babel src --out-dir dist --extensions '.ts' --root-mode upward"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/unadlib/usm#readme",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.3.0",

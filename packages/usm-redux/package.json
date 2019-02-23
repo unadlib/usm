@@ -1,18 +1,20 @@
 {
   "name": "usm-redux",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.1",
   "description": "Universal state module - usm for redux",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node test/index.ts --extensions '.ts' --ignore=' ' --root-mode upward"
+    "start": "babel-node test/index.ts --extensions '.ts' --ignore=' ' --root-mode upward",
+    "clean": "rm -rf dist",
+    "build": "babel src --out-dir dist --extensions '.ts' --root-mode upward"
   },
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
     "immer": "^1.12.1",
     "redux": "^4.0.1",
-    "usm": "^0.0.1"
+    "usm": "^1.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
