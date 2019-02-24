@@ -54,3 +54,5 @@ Done.
 - [ ] support Vuex `getters`
 - [ ] add `reselect` for `usm-redux`
 - [ ] universal middleware
+- [ ] support MobX =< 4 verion for `usm-mobx`
+- [ ] `store.subscribe` on `usm`
