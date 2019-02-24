@@ -8,9 +8,25 @@ class TodoList extends Module {
     state.list.push(todo);
   }
 
+  async moduleWillInitialize() {
+    console.log('moduleWillInitialize', { resetting: this.resetting, ready: this.ready, pending: this.pending });
+  }
+
+  async moduleWillInitializeSuccess() {
+    console.log('moduleWillInitializeSuccess', { resetting: this.resetting, ready: this.ready, pending: this.pending });
+  }
+
   async moduleDidInitialize() {
-    console.log('moduleDidInitialize');
+    console.log('moduleDidInitialize', { resetting: this.resetting, ready: this.ready, pending: this.pending });
     this.add({todo: 'Learn C++'});
+  }
+
+  async moduleWillReset() {
+    console.log('moduleWillReset', { resetting: this.resetting, ready: this.ready, pending: this.pending });
+  }
+
+  async moduleDidReset() {
+    console.log('moduleDidReset', { resetting: this.resetting, ready: this.ready, pending: this.pending });
   }
 }
 
@@ -22,6 +38,9 @@ const index = Index.create({
   modules: [todoList]
 });
 
+setTimeout(() => {
+  index.resetModule();
+},100);
 // TODO store.subscribe
 // index.store.subscribe(() => {
 //   // @ts-ignore

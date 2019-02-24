@@ -203,8 +203,8 @@ class Module implements Module {
     await this._initialize();
     this.__init__ = false;
     this.__reset__ = true;
-    await this._moduleDidInitialize();
     await this._moduleDidReset();
+    await this._moduleDidInitialize();
   }
 
   private _moduleResetCheck() {
