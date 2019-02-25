@@ -1,6 +1,6 @@
 {
   "name": "usm",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "Universal state module",
   "main": "dist/index.js",
   "scripts": {
