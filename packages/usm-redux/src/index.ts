@@ -1,4 +1,5 @@
 import produce from 'immer';
+import { event, Event } from 'usm';
 import Module, { ModuleInstance } from './core/module';
 
 interface StateFactory {
@@ -41,5 +42,7 @@ const state: StateFactory = createState;
 export {
   Module as default,
   state,
-  action
+  action,
+  event,
+  Event,
 }

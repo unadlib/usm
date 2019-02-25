@@ -1,4 +1,5 @@
 import { observable, action as mobxAction } from 'mobx';
+import { event, Event } from 'usm';
 import Module, { ModuleInstance } from './core/module';
 
 function action(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
@@ -26,5 +27,7 @@ function state(target: ModuleInstance, name: string, descriptor?: TypedPropertyD
 export {
   Module as default,
   action,
-  state
+  state,
+  event,
+  Event,
 }

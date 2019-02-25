@@ -1,7 +1,14 @@
-import Module, { state, action } from './src';
+import Module, {
+  state,
+  action,
+  event,
+  Event
+} from './src';
 
 export {
   Module as default,
   action,
-  state
+  state,
+  event,
+  Event
 }

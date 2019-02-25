@@ -1,6 +1,6 @@
 # usm
 
-Using USM to develop a modular application system, it can directly support React/Vue/Angular.
+Using `USM` to develop a modular application system. **USM can help you make more concise and intuitive OOP when using some state library**, it can directly support Redux/MobX/Vuex/Angular.
 
 ## Support
 
@@ -11,10 +11,10 @@ Using USM to develop a modular application system, it can directly support React
 ## Features
 
 - Universal State Management
-- Unified Lifecycle
+- Standardized module lifecycle
 - Optional Event System
-- Native Module Minimize Version
-- Support Redux/MobX/Vuex/Angular
+- Support stateless minimization model
+- Support React/Vue/Angular
 
 ## Usage
 

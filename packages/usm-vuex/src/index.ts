@@ -1,3 +1,4 @@
+import { event, Event } from 'usm';
 import Module, { VuexModule } from './core';
 
 type ModuleInstance = InstanceType<typeof Module> & VuexModule;
@@ -44,5 +45,7 @@ const state: StateFactory = createState;
 export {
   Module as default,
   state,
-  action
+  action,
+  event,
+  Event
 }

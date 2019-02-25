@@ -1,10 +1,14 @@
 import Module, {
   state,
-  action
+  action,
+  event,
+  Event
 } from './src';
 
 export {
   Module as default,
   state,
-  action
+  action,
+  event,
+  Event
 }

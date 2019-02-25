@@ -1,4 +1,5 @@
 import Module, { ModuleInstance } from './core/module';
+import event, { Event } from './utils/event';
 
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
@@ -37,5 +38,7 @@ const state: StateFactory = createState;
 export {
   Module as default,
   action,
-  state
+  state,
+  event,
+  Event,
 }
