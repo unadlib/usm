@@ -84,7 +84,7 @@ type Store = {
   dispatch: Dispatch;
 };
 
-class Module implements Module {
+class Module {
   constructor(...args: any[]) {
     this._makeInstance(this._handleArgs(...args));
   }

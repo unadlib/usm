@@ -29,7 +29,7 @@ type Store = {
   dispatch: Dispatch;
 };
 
-class Module extends BaseModule implements Module {
+class Module extends BaseModule {
   protected get _reducers() {
     const reducers = this._getReducers(this.actionTypes, {});
     return this._proto.combineReducers(reducers);
