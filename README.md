@@ -11,9 +11,9 @@ Using `USM` to develop a modular application system. **USM can help you make mor
 ## Features
 
 - Universal State Management
-- Standardized module lifecycle
+- Standardized Module Lifecycle
 - Optional Event System
-- Support stateless minimization model
+- Support Stateless Model
 - Support React/Vue/Angular
 
 ## Usage
@@ -48,6 +48,20 @@ import Module, { action, state } from 'usm-vuex';
 
 Done.
 
+## FAQ
+
+*1. Can I continue to use the Redux or Vuex plug-in If I use `usm`?*
+
+Of course, you can continue to use it, but `usm` will soon define its own plug-in APIs to ensure that there is a unified universal plug-in that can be used.
+
+*2. Does it look like `usm-redux` is a state library of mutable type?*
+
+Yes, because Redux immutable operation is not convenient enough, so `usm` introduced [immer](https://github.com/mweststrate/immer). In general, if single-action items are less than 50K, then it comes with a tiny loss of performance that can be ignored for most of the time. For more on some of the performance issues that immer brings, it's [here](https://github.com/mweststrate/immer#performance).
+
+*3. How do you ensure that you use `usm` to switch between different state libraries(usm-redux/usm-vuex/usm-mobx) and that they are running consistently?*
+
+`usm` is not a State library, we are trying to turn it into a standardized state library runner, `usm` defines only generic modules. Based on such a module, any state library based on the `usm` encapsulation can run well.
+
 ## TODO
 
 - [ ] support MobX `@computed`
@@ -56,3 +70,4 @@ Done.
 - [ ] universal middleware
 - [ ] support MobX =< 4 verion for `usm-mobx`
 - [ ] `store.subscribe` on `usm`
+- [ ] post-subscription
