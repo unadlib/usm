@@ -1,6 +1,6 @@
-# usm
+# USM
 
-Using `USM` to develop a modular application system. **USM can help you make more concise and intuitive OOP when using some state library**, it can directly support Redux/MobX/Vuex/Angular.
+Using `usm` to develop a modular application system. **It can help you make more concise OOP when using some state library**, and it can directly support Redux/MobX/Vuex/Angular.
 
 ## Support
 
@@ -18,10 +18,20 @@ Using `USM` to develop a modular application system. **USM can help you make mor
 
 ## Usage
 
+To install `usm`:
+
+```bash
+yarn add usm # npm install --save usm
+```
+
+And if you want to use Redux/MobX/Vuex, please install `usm-redux`/`usm-mobx`/`usm-vuex`.
+
+## Example
+
 It's an universal JavaScript code.
 ```js
 class TodoList extends Module {
-  @state list = [{text: 'Learn Typescript'}]
+  @state list = [{text: 'Learn Typescript'}];
 
   @action
   add(todo, state) {
@@ -34,7 +44,7 @@ class TodoList extends Module {
 }
 ```
 
-Using different interface llibrary.
+Using different interface library.
 ```js
 import Module, { action, state } from 'usm';
 // using Native Module/Angular
@@ -46,7 +56,13 @@ import Module, { action, state } from 'usm-vuex';
 // using Vuex
 ```
 
-Done.
+## Concepts
+
+- `@state` decorator:
+
+- `@action` decorator:
+
+- Module lifecycle:
 
 ## FAQ
 
@@ -70,4 +86,3 @@ Yes, because Redux immutable operation is not convenient enough, so `usm` introd
 - [ ] universal middleware
 - [ ] support MobX =< 4 verion for `usm-mobx`
 - [ ] `store.subscribe` on `usm`
-- [ ] post-subscription
