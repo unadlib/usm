@@ -1,6 +1,6 @@
 {
   "name": "usm-vuex",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-alpha.9",
   "description": "Universal state module - usm for vuex",
   "main": "dist/index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "usm": "^1.0.0-alpha.8",
+    "usm": "^1.0.0-alpha.9",
     "vue": "^2.6.6",
     "vuex": "^3.1.0"
   },
