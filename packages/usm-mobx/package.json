@@ -1,19 +1,21 @@
 {
   "name": "usm-mobx",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.8",
   "description": "Universal state module - usm for mobx",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-node test/index.ts --extensions '.ts' --ignore=' ' --root-mode upward",
     "clean": "rm -rf dist",
-    "build": "babel src --out-dir dist --extensions '.ts' --root-mode upward"
+    "build:type": "tsc -d src/index.ts --outDir dist --lib es2017 --target es5",
+    "build:lib": "babel src --out-dir dist --extensions '.ts' --root-mode upward",
+    "build": "yarn build:type && yarn build:lib"
   },
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
     "mobx": "^5.9.0",
-    "usm": "^1.0.0-alpha.7"
+    "usm": "^1.0.0-alpha.8"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -21,6 +23,7 @@
     "@babel/plugin-proposal-class-properties": "^7.3.0",
     "@babel/plugin-proposal-decorators": "^7.3.0",
     "@babel/preset-env": "^7.3.1",
-    "@babel/preset-typescript": "^7.1.0"
+    "@babel/preset-typescript": "^7.1.0",
+    "typescript": "^3.3.3333"
   }
 }
