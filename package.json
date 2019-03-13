@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "lerna run start --stream",
     "clean": "lerna run clean --stream",
-    "build": "lerna run build --stream",
+    "build": "lerna run build --ignore usm --stream && lerna run build --scope usm --stream",
     "publish": "lerna publish --silent",
     "commit": "yarn git-cz"
   },

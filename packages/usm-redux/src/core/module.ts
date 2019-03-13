@@ -14,6 +14,7 @@ export type Attribute<T = any> = {
 
 interface Module {
   _reducersMaps: Attribute<Callback<ActionTypes, Reducer>>;
+  _store: Store;
 }
 interface Callback<T = undefined, S = void> {
   (params: T): S;

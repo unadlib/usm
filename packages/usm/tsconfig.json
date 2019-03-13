@@ -1,12 +1,15 @@
 {
     "compilerOptions": {
-        "target": "esnext",
+        "target": "es5",
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "esModuleInterop": true,
         "noEmit": true,
         "strict": true,
         "allowJs": true,
+        "lib": [
+            "es2017"
+        ],
         "types" : [
             "jest",
             "node"
@@ -14,6 +17,7 @@
     },
     "exclude": [
         "node_modules",
-        "**/*.spec.ts"
+        "**/*.spec.ts",
+        "usm"
     ]
 }

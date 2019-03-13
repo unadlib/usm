@@ -1,4 +1,5 @@
-const __DEV__ = process.env.NODE_ENV === 'development';
+// const __DEV__ = process.env.NODE_ENV === 'development';
+const __DEV__ = false;
 
 type Callback = {
   (): void;

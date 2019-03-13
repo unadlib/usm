@@ -58,11 +58,33 @@ import Module, { action, state } from 'usm-vuex';
 
 ## Concepts
 
-- `@state` decorator:
+### Decorators
 
-- `@action` decorator:
+`usm` provides decorator `@state` to wrap a variable with a state, and decorator `@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object).
 
-- Module lifecycle:
+```js
+class Shop extends Module {
+  @state goods = [];
+  @state status = 'close';
+
+  @action
+  operate(item, status, state) {
+    state.goods.push(item);
+    state.status = status;
+  }
+  // call function -> this.operate({ name: 'fruits', amount: 10 }, 'open');
+}
+```
+
+### Module lifecycle
+
+`usm` provides these lifecycle events:
+
+- `moduleWillInitialize`
+- `moduleWillInitializeSuccess`
+- `moduleDidInitialize`
+- `moduleWillReset`
+- `moduleDidReset`
 
 ## FAQ
 
@@ -86,3 +108,4 @@ Yes, because Redux immutable operation is not convenient enough, so `usm` introd
 - [ ] universal middleware
 - [ ] support MobX =< 4 verion for `usm-mobx`
 - [ ] `store.subscribe` on `usm`
+- [ ] support own plugins
