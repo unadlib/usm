@@ -56,7 +56,7 @@ import Module, { action, state } from 'usm-vuex';
 // using Vuex
 ```
 
-## Concepts
+## APIs
 
 ### Decorators
 
