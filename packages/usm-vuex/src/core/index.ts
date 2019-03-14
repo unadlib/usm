@@ -14,6 +14,11 @@ export type VuexModule =  {
   _mutations?: Properties;
   _state?: Properties;
 }
+
+interface StoreType {
+  commit(type: string, ...args:[]): void;
+  getters: Properties;
+}
 export default class Module extends BaseModule implements VuexModule {
   protected _setStore(_store: StoreOptions<any>) {
     if (this._store) return;
@@ -26,14 +31,12 @@ export default class Module extends BaseModule implements VuexModule {
   }
 
   public get mutations() {
-    // @ts-ignore
     return typeof this._mutations === 'undefined' ? {} : Object.entries(this._mutations).reduce((map, [name, fn]) =>
       Object.assign(map, {[this.actionTypes[name]]: fn})
     , {});
   }
 
   public get getters() {
-    // @ts-ignore
     return typeof this._getters === 'undefined' ? {} : this._getters;
   }
 
@@ -45,14 +48,16 @@ export default class Module extends BaseModule implements VuexModule {
   protected static createStore(instance: ModuleInstance): StoreOptions<any> {
     return new Store(instance);
   }
-  // @ts-ignore
-  public setStore(store) {
+
+  public setStore(store: any) {
     this._setStore(store);
   }
 
-  public get store() {
+  // @ts-ignore
+  public get store(): StoreType {
     const parentModule = this.parentModule || this;
-    const _store = parentModule._store;
+    // @ts-ignore
+    const _store: StoreType = parentModule._store;
     if (!_store) {
       throw new Error(`${this.constructor.name} Module has not been initialized...`);
     }

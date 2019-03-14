@@ -33,6 +33,11 @@ interface Callback<T = undefined, S = void> {
   (params: T): S;
 };
 
+type Subscription = {
+  (): void;
+}
+
+
 export type ActionTypes = InstanceType<typeof Enum>;
 
 interface Module extends Properties {
@@ -52,8 +57,6 @@ interface Module extends Properties {
   getState(): Properties;
   onStateChange?(): void;
   setStore?(store: Store): void;
-  readonly reducers: Reducer;
-  readonly store: Store;
 }
 
 export interface Action {
@@ -281,6 +284,13 @@ class Module {
       }
     }
     return this._dispatch(action);
+  }
+
+  public get store() {
+    return {
+      subscribe: (subscription: Subscription) => event.on('state', subscription),
+      getState: () => this._state || {},
+    }
   }
 
   public get actionTypes() {

@@ -32,6 +32,7 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   const fn = descriptor.value;
   descriptor.value = function (this: ModuleInstance, ...args:[]) {
     const result = fn.call(this, ...args, this._state);
+    event.emit('state', { action: name, module: target.constructor.name });
     return result;
   };
   return descriptor;

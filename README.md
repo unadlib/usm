@@ -132,7 +132,7 @@ Yes, because Redux immutable operation is not convenient enough, so `usm` introd
 - [x] support MobX `@computed`
 - [x] support Vuex `getters`
 - [x] add `reselect` for `usm-redux`
+- [x] `store.subscribe` on `usm`
 - [ ] universal middleware
-- [ ] `store.subscribe` on `usm`
 - [ ] implement `computed` for `usm`
 - [ ] support MobX =< 4 verion for `usm-mobx`

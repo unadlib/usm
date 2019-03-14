@@ -3,9 +3,13 @@ import { autorun } from 'mobx';
 
 export type ModuleInstance = InstanceType<typeof Module>;
 
+type Store = {
+  subscribe(...args:any[]): any,
+  getState(): any
+};
+
 export default class Module extends BaseModule {
-  // @ts-ignore
-  public get store() {
+  public get store(): Store {
     return {
       subscribe: autorun,
       getState: () => this._state,

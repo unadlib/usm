@@ -1,10 +1,9 @@
-import Module, { action, state, computed } from '../src';
+import Module, { state, action, computed } from '../src';
 
 interface Todo {
   text: string,
   completed: boolean,
 }
-// TODO support mobx4
 class TodoList extends Module {  
   @state list: Todo[] = [{text: 'Learn Typescript', completed: false}];
 
@@ -27,14 +26,15 @@ class TodoList extends Module {
     this.toggle(0);
     this.length;
     this.toggle(0);
+    this.add({text: 'Learn Go', completed: false});
   }
-
+  
   @computed
   length = [
-    () => this.list,
-    (list: []) => {
+    () => this.list.length,
+    (length: number) => {
       console.log('computed => list.length');
-      return list.length;
+      return length;
     }
   ];
 }

@@ -3,9 +3,6 @@ import { createSelector } from 'reselect';
 import { event, Event } from 'usm';
 import Module, { ModuleInstance } from './core/module';
 
-type Selector = () => any;
-
-type Compute = () => any;
 interface ComputedFactory {
   (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
 }
@@ -54,10 +51,10 @@ function setComputed(target: ModuleInstance, name: string, descriptor?: Descript
       if (!this[WRAPPER]) {
         this[WRAPPER] = {};
       }
-      if (!this[WRAPPER][name]) {
-        // @ts-ignore
-        const selector = createSelector(...descriptor.initializer.call(this));
-        this[WRAPPER][name] = () => selector();
+      if (!this[WRAPPER][name] && descriptor) {
+        const _selector = descriptor.initializer.call(this);
+        const selector = createSelector(_selector.slice(0, -1), _selector.slice(-1)[0]);
+        this[WRAPPER][name] = () => selector(this.state);
       }
       return this[WRAPPER][name]();
     }

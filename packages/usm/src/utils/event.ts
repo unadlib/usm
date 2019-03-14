@@ -2,7 +2,7 @@
 const __DEV__ = false;
 
 type Callback = {
-  (): void;
+  (...args: any[]): void;
 }
 
 type Subscription = {
@@ -74,7 +74,7 @@ class Event implements Event{
     }
   }
 
-  emit(eventType: EventType, ...args:[]) {
+  emit(eventType: EventType, ...args: any[]) {
     const listeners = this._events[eventType];
     if (
       !Array.isArray(listeners)
@@ -87,6 +87,7 @@ class Event implements Event{
       if (once) {
         listeners.splice(index, 1);
       }
+      if (Array.isArray(args)) 
       callback.apply(this, args);
     });
   }

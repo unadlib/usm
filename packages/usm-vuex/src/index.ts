@@ -35,7 +35,6 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   descriptor.value = function (this: ModuleInstance, ...args:[]) {
-    // @ts-ignore
     return this.store.commit(this.actionTypes[name], ...args);
   }
   return descriptor;
@@ -54,9 +53,7 @@ function setComputed(target: ModuleInstance, name: string, descriptor?: Descript
   return {
     enumerable: true,
     configurable: true,
-    // @ts-ignore
-    get() {
-      // @ts-ignore
+    get(this: ModuleInstance) {
       return this.store.getters[name];
     }
   };
