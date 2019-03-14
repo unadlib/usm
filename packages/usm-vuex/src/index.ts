@@ -3,11 +3,12 @@ import Module, { VuexModule } from './core';
 
 type ModuleInstance = InstanceType<typeof Module> & VuexModule;
 
+type Selector = () => any;
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
 }
 
-interface StateFactory {
+interface Factory {
   (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
 }
 
@@ -30,7 +31,7 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   target._mutations[name] = (...args: []) => {
     const state = args.shift();
     return fn.call(target, ...args, state);
-  };//
+  };
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   descriptor.value = function (this: ModuleInstance, ...args:[]) {
@@ -40,12 +41,35 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   return descriptor;
 }
 
-const state: StateFactory = createState;
+function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+  target._getters = target._getters || {};
+  target._getters[name] = () => {
+    if (descriptor && typeof descriptor.initializer === 'function') {
+      const selectors = descriptor.initializer.call(target);
+      const states = selectors.slice(0,-1).map((selector: Selector) => selector());
+      return selectors.slice(-1)[0](...states);
+    }
+    return;
+  };
+  return {
+    enumerable: true,
+    configurable: true,
+    // @ts-ignore
+    get() {
+      // @ts-ignore
+      return this.store.getters[name];
+    }
+  };
+}
 
+const computed: Factory = setComputed;
+
+const state: Factory = createState;
 export {
   Module as default,
   state,
   action,
+  computed,
   event,
   Event
 }
