@@ -1,8 +1,9 @@
 {
   "name": "usm-mobx",
-  "version": "1.0.0-alpha.9",
+  "version": "1.0.0-alpha.10",
   "description": "Universal state module - usm for mobx",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-node test/index.ts --extensions '.ts' --ignore=' ' --root-mode upward",
@@ -15,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "mobx": "^5.9.0",
-    "usm": "^1.0.0-alpha.9"
+    "usm": "^1.0.0-alpha.10"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
