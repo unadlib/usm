@@ -1,17 +1,41 @@
-import Module, { action, state } from '../src';
+import Module, { state, action, computed } from '../src';
 
+interface Todo {
+  text: string,
+  completed: boolean,
+}
 class TodoList extends Module {  
-  @state list = [{todo: 'Learn Typescript'}]
+  @state list: Todo[] = [{text: 'Learn Typescript', completed: false}];
 
   @action
-  add(todo: object, state?: any) {
+  add(todo: Todo, state?: any) {
     state.list.push(todo);
+  }
+
+  @action
+  toggle(index: number, state?: any) {
+    const todo: Todo = state.list[index];
+    todo.completed = !todo.completed;
   }
 
   async moduleDidInitialize() {
     console.log('moduleDidInitialize');
-    this.add({todo: 'Learn C++'});
+    this.add({text: 'Learn C++', completed: false});
+    this.toggle(0);
+    this.length;
+    this.toggle(0);
+    this.length;
+    this.toggle(0);
   }
+  
+  @computed
+  length = [
+    () => this.list,
+    (list: []) => {
+      console.log('computed => list.length');
+      return list.length;
+    }
+  ];
 }
 
 
@@ -23,5 +47,5 @@ const index = Index.create({
 });
 
 index.store.subscribe(() => {
-  console.log(index.modules.todoList.state.list, todoList.ready);
+  console.log(index.modules.todoList.state.list, todoList.length);
 });

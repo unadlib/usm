@@ -1,10 +1,14 @@
 import Module, { ModuleInstance } from './core/module';
 import event, { Event } from './utils/event';
 
+type Selector = () => any;
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
 }
 
+interface ComputedFactory {
+  (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
+}
 interface StateFactory {
   (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
 }
@@ -33,12 +37,31 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   return descriptor;
 }
 
+function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+  // TODO computed
+  return {
+    enumerable: true,
+    configurable: true,
+    get() {
+      if (descriptor && typeof descriptor.initializer === 'function') {
+        const selectors = descriptor.initializer.call(this);
+        const states = selectors.slice(0,-1).map((selector: Selector) => selector());
+        return selectors.slice(-1)[0](...states);
+      }
+      return;
+    }
+  };
+}
+
 const state: StateFactory = createState;
+
+const computed: ComputedFactory = setComputed;
 
 export {
   Module as default,
   action,
   state,
+  computed,
   event,
   Event,
 }

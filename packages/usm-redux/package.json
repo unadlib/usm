@@ -17,6 +17,7 @@
   "dependencies": {
     "immer": "^1.12.1",
     "redux": "^4.0.1",
+    "reselect": "^4.0.0",
     "usm": "^1.0.0-alpha.10"
   },
   "devDependencies": {

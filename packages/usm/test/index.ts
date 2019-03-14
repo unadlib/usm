@@ -1,48 +1,51 @@
-import Module, { state, action } from '../';
+import Module, { state, action, computed } from '../src';
 
+interface Todo {
+  text: string,
+  completed: boolean,
+}
 class TodoList extends Module {  
-  @state list = [{todo: 'Learn Typescript'}]
+  @state list: Todo[] = [{text: 'Learn Typescript', completed: false}];
 
   @action
-  add(todo: object, state?: any) {
+  add(todo: Todo, state?: any) {
     state.list.push(todo);
   }
 
-  async moduleWillInitialize() {
-    console.log('moduleWillInitialize', { resetting: this.resetting, ready: this.ready, pending: this.pending });
-  }
-
-  async moduleWillInitializeSuccess() {
-    console.log('moduleWillInitializeSuccess', { resetting: this.resetting, ready: this.ready, pending: this.pending });
+  @action
+  toggle(index: number, state?: any) {
+    const todo: Todo = state.list[index];
+    todo.completed = !todo.completed;
   }
 
   async moduleDidInitialize() {
-    console.log('moduleDidInitialize', { resetting: this.resetting, ready: this.ready, pending: this.pending });
-    this.add({todo: 'Learn C++'});
+    console.log('moduleDidInitialize');
+    this.add({text: 'Learn C++', completed: false});
+    this.toggle(0);
+    this.length;
+    this.toggle(0);
+    this.length;
+    this.toggle(0);
   }
-
-  async moduleWillReset() {
-    console.log('moduleWillReset', { resetting: this.resetting, ready: this.ready, pending: this.pending });
-  }
-
-  async moduleDidReset() {
-    console.log('moduleDidReset', { resetting: this.resetting, ready: this.ready, pending: this.pending });
-  }
+  
+  @computed
+  length = [
+    () => this.list,
+    (list: []) => {
+      console.log('computed => list.length');
+      return list.length;
+    }
+  ];
 }
 
 
-class Index extends Module{}
+class Index extends Module {}
 const todoList = new TodoList();
 
 const index = Index.create({
   modules: [todoList]
 });
 
-setTimeout(() => {
-  index.resetModule();
-},100);
-// TODO store.subscribe
 // index.store.subscribe(() => {
-//   // @ts-ignore
-//   console.log(index.modules.todoList.list, todoList.ready);
+//   console.log(index.modules.todoList.state.list, todoList.length);
 // });
