@@ -16,7 +16,7 @@ export type VuexModule =  {
 }
 
 interface StoreType {
-  commit(type: string, ...args:[]): void;
+  commit(type: string, args:[]): void;
   getters: Properties;
 }
 export default class Module extends BaseModule implements VuexModule {

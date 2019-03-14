@@ -28,14 +28,13 @@ function createState(target: ModuleInstance, name: string, descriptor?: Descript
 function action(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   target._mutations = target._mutations || {};
-  target._mutations[name] = (...args: []) => {
-    const state = args.shift();
+  target._mutations[name] = (state, args: []) => {
     return fn.call(target, ...args, state);
   };
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   descriptor.value = function (this: ModuleInstance, ...args:[]) {
-    return this.store.commit(this.actionTypes[name], ...args);
+    return this.store.commit(this.actionTypes[name], args);
   }
   return descriptor;
 }
