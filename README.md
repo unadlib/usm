@@ -121,7 +121,7 @@ Yes, because Redux immutable operation is not convenient enough, so `usm` introd
 ## TODO
 
 - [x] support own plugins
-- [ ] support MobX `@computed`
+- [x] support MobX `@computed`
 - [ ] support Vuex `getters`
 - [ ] add `reselect` for `usm-redux`
 - [ ] universal middleware

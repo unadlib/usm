@@ -1,4 +1,5 @@
-import Module, { action, state } from '../src';
+import Module, { action, state, computed } from '../src';
+
 // TODO support mobx4
 class TodoList extends Module {  
   @state list = [{todo: 'Learn Typescript'}]
@@ -12,6 +13,15 @@ class TodoList extends Module {
     console.log('moduleDidInitialize');
     this.add({todo: 'Learn C++'});
   }
+
+  @computed
+  length = [
+    () => this.list,
+    (list: []) => {
+      console.log('computed => list.length');
+      return list.length;
+    }
+  ];
 }
 
 
@@ -23,5 +33,5 @@ const index = Index.create({
 });
 
 index.store.subscribe(() => {
-  console.log(index.modules.todoList.state.list, todoList.ready);
+  console.log(index.modules.todoList.state.list, todoList.count);
 });
