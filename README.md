@@ -60,7 +60,7 @@ import Module, { action, state } from 'usm-vuex';
 
 ### Decorators
 
-`usm` provides decorator `@state` to wrap a variable with a state, and decorator `@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object).
+`usm` provides decorator `@state` to wrap a variable with a state, and decorator `@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object). `@computed` is used in state `computed`, and it must be an compute function array.
 
 ```js
 class Shop extends Module {
@@ -73,6 +73,14 @@ class Shop extends Module {
     state.status = status;
   }
   // call function -> this.operate({ name: 'fruits', amount: 10 }, 'open');
+
+  @computed
+  length = [
+    () => this.goods,
+    (goods) => {
+      return goods.length;
+    }
+  ];
 }
 ```
 
