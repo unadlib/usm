@@ -92,20 +92,38 @@ class Shop extends Module {
 
 Of course, you can continue to use it, but `usm` will soon define its own plug-in APIs to ensure that there is a unified universal plug-in that can be used.
 
+`usm-redux` using Redux's middleware example:
+
+```js
+class ModuleWithMiddleware extends Module {
+  static _generateStore({ createStore }, { reducers }) {
+    return createStore(reducers, applyMiddleware(...reduxMiddlewares));
+  }
+}
+```
+
+`usm-vuex` using Vuex's plugin example:
+
+```js
+class ModuleWithPlugin extends Module {
+  plugins = [...vuexPlugins];
+}
+```
+
 *2. Does it look like `usm-redux` is a state library of mutable type?*
 
 Yes, because Redux immutable operation is not convenient enough, so `usm` introduced [immer](https://github.com/mweststrate/immer). In general, if single-action items are less than 50K, then it comes with a tiny loss of performance that can be ignored for most of the time. For more on some of the performance issues that immer brings, it's [here](https://github.com/mweststrate/immer#performance).
 
 *3. How do you ensure that you use `usm` to switch between different state libraries(usm-redux/usm-vuex/usm-mobx) and that they are running consistently?*
 
-`usm` is not a State library, we are trying to turn it into a standardized state library runner, `usm` defines only generic modules. Based on such a module, any state library based on the `usm` encapsulation can run well.
+`usm` is not a state library, we are trying to turn it into a standardized state library runner, `usm` defines only generic modules. Based on such a module, any state library based on the `usm` encapsulation can run well.
 
 ## TODO
 
+- [x] support own plugins
 - [ ] support MobX `@computed`
 - [ ] support Vuex `getters`
 - [ ] add `reselect` for `usm-redux`
 - [ ] universal middleware
 - [ ] support MobX =< 4 verion for `usm-mobx`
 - [ ] `store.subscribe` on `usm`
-- [ ] support own plugins
