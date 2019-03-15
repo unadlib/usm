@@ -1,5 +1,8 @@
 # USM
 
+[![Travis](https://img.shields.io/travis/unadlib/usm.svg)](https://travis-ci.org/unadlib/usm)
+[![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
+
 Using `usm` to develop a modular application system. **It can help you make more concise OOP when using some state library**, and it can directly support Redux/MobX/Vuex/Angular.
 
 ## Support
@@ -78,7 +81,7 @@ class Shop extends Module {
   length = [
     () => this.goods,
     (goods) => {
-      return goods.length;
+      return goods.filter(item => item.amount > 5).length;
     }
   ];
 }

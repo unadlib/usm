@@ -8,7 +8,7 @@
   ],
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_ENV=development jest --config ./scripts/jest/config.js",
     "start": "lerna run start --stream",
     "clean": "lerna run clean --stream",
     "build": "lerna run build --ignore usm --stream && lerna run build --scope usm --stream",
@@ -32,7 +32,9 @@
   "homepage": "https://github.com/unadlib/usm#readme",
   "devDependencies": {
     "commitizen": "^3.0.5",
+    "cross-env": "^5.2.0",
     "cz-conventional-changelog": "^2.1.0",
+    "jest": "^24.5.0",
     "lerna": "^2.11.0"
   },
   "config": {

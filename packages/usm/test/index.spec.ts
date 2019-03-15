@@ -30,7 +30,7 @@ function generate() {
   }
 }
 
-describe('single module create', async () => {
+describe('single module create', () => {
   test('check `create` function', () => {
     const { TodoList }= generate();
     const todoList = TodoList.create();
