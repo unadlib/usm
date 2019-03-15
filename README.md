@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/unadlib/usm.svg)](https://travis-ci.org/unadlib/usm)
 [![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
 
-Using `usm` to develop a modular application system. **It can help you make more concise OOP when using some state library**, and it can directly support Redux/MobX/Vuex/Angular.
+USM is a universal state modular lib. **It can help you make more concise OOP when using some state library**, and it can directly support Redux/MobX/Vuex/Angular.
 
 ## Support
 
@@ -27,7 +27,7 @@ To install `usm`:
 yarn add usm # npm install --save usm
 ```
 
-And if you want to use Redux/MobX/Vuex, please install `usm-redux`/`usm-mobx`/`usm-vuex`.
+And if you want to use Redux/MobX/Vuex, you just install `usm-redux`/`usm-mobx`/`usm-vuex`.
 
 ## Example
 
@@ -103,9 +103,9 @@ class Shop extends Module {
 
 ## FAQ
 
-*1. Can I continue to use the Redux or Vuex plug-in If I use `usm`?*
+*1. Can I continue to use the Redux or Vuex plug-in if I use `usm`?*
 
-Of course, you can continue to use it, but `usm` will soon define its own plug-in APIs to ensure that there is a unified universal plug-in that can be used.
+Of course, you can, but `usm` will soon define its own plug-in APIs to ensure that there is a universal plug-in that can be used.
 
 `usm-redux` using Redux's middleware example:
 
