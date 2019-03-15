@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/unadlib/usm.svg)](https://travis-ci.org/unadlib/usm)
 [![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
 
-USM is a universal state modular lib. **It can help you make more concise OOP when using some state library**, and it can directly support Redux/MobX/Vuex/Angular.
+USM is a universal state modular lib. **It can help you make more concise OOP when using some state library**, and it currently supports Redux, MobX, Vuex and Angular.
 
 ## Support
 
@@ -79,14 +79,12 @@ class Shop extends Module {
     state.goods.push(item);
     state.status = status;
   }
-  // call function -> this.operate({ name: 'fruits', amount: 10 }, 'open');
+  // call -> this.operate({ name: 'fruits', amount: 10 }, 'open');
 
   @computed
-  length = [
+  shortages = [
     () => this.goods,
-    (goods) => {
-      return goods.filter(item => item.amount > 5).length;
-    }
+    (goods) => goods.filter(item => item.amount < 5)
   ];
 }
 ```
