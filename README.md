@@ -31,7 +31,6 @@ And if you want to use Redux/MobX/Vuex, you just install `usm-redux`/`usm-mobx`/
 
 ## Example
 
-It's an universal JavaScript code.
 ```js
 class TodoList extends Module {
   @state list = [{text: 'Learn Typescript'}];
@@ -47,16 +46,12 @@ class TodoList extends Module {
 }
 ```
 
-Using different interface library.
+Using different interface library:
 ```js
-import Module, { action, state } from 'usm';
-// using Native Module/Angular
-import Module, { action, state } from 'usm-redux';
-// using Redux
-import Module, { action, state } from 'usm-mobx';
-// using MobX
-import Module, { action, state } from 'usm-vuex';
-// using Vuex
+import Module, { action, state } from 'usm'; // using Native Module/Angular
+import Module, { action, state } from 'usm-redux'; // using Redux
+import Module, { action, state } from 'usm-mobx'; // using MobX
+import Module, { action, state } from 'usm-vuex'; // using Vuex
 ```
 
 More examples:
