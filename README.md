@@ -98,7 +98,7 @@ const todoApp = combineReducers({
 
 ```
 
-And this is todo example with usm-redux 
+And this is todo example with `usm-redux`: 
 ```js
 import Module, { state, action } from 'usm-redux'
 
