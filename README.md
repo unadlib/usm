@@ -29,21 +29,129 @@ yarn add usm # npm install --save usm
 
 And if you want to use Redux/MobX/Vuex, you just install `usm-redux`/`usm-mobx`/`usm-vuex`.
 
+## Pros
+
+Here is Redux's todo example boilerplate:
+```js
+import { createStore, combineReducers } from 'redux'
+
+// action
+let nextTodoId = 0
+const addTodo = text => {
+  return {
+    type: 'ADD_TODO',
+    id: nextTodoId++,
+    text
+  }
+}
+
+const setVisibilityFilter = filter => {
+  return {
+    type: 'SET_VISIBILITY_FILTER',
+    filter
+  }
+}
+
+const toggleTodo = id => {
+  return {
+    type: 'TOGGLE_TODO',
+    id
+  }
+}
+
+// reducers
+const todos = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return [
+        ...state,
+        {
+          id: action.id,
+          text: action.text,
+          completed: false
+        }
+      ]
+    case 'TOGGLE_TODO':
+      return state.map(todo =>
+        (todo.id === action.id) 
+          ? {...todo, completed: !todo.completed}
+          : todo
+      )
+    default:
+      return state
+  }
+}
+
+const visibilityFilter = (state = 'SHOW_ALL', action) => {
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter
+    default:
+      return state
+  }
+}
+
+const todoApp = combineReducers({
+  todos,
+  visibilityFilter
+})
+
+```
+
+And this is todo example with usm-redux 
+```js
+import Module, { state, action } from 'usm-redux'
+
+class TodoList extends Module {
+  @state todos = []
+  @state visibilityFilter = 'SHOW_ALL'
+  nextTodoId = 0
+
+  @action
+  add(text, state) {
+    this.nextTodoId++
+    state.todos.push({
+      text,
+      id: this.nextTodoId,
+      completed: false,
+    })
+  }
+
+  @action
+  toggle(id, state) {
+    const todo = state.todos.find(todo => todo.id === id)
+    todo.completed = !todo.completed
+  }
+
+  @action
+  setVisibility(filter, state) {
+    state.visibilityFilter = filter
+  }
+}
+```
+USM will help you better object-oriented programming when using Redux/Vuex/MobX and so on, in the hope that it is flexible and concise enough.
+
 ## Example
 
 ```js
-class TodoList extends Module {
-  @state list = [{text: 'Learn Typescript'}];
+class Counter extends Module {
+  @state count = 0;
 
   @action
-  add(todo, state) {
-    state.list.push(todo);
+  increase(state) {
+    state.count += 1;
   }
 
-  async moduleDidInitialize() {
-    this.add({text: 'Learn C++'});
+  @action
+  decrease(state) {
+    state.count -= 1;
   }
 }
+
+const counter = Counter.create();
+
+counter.increase();
+counter.decrease();
 ```
 
 Using different interface library:
@@ -93,6 +201,34 @@ class Shop extends Module {
 - `moduleDidInitialize`
 - `moduleWillReset`
 - `moduleDidReset`
+
+Note: 
+
+If you need to run the USM-based module directly, you must use the module's `create` method, just like the following.
+
+```js
+class Something extends Module {}
+const thing = Something.create();
+```
+
+And if the module is only instantiated, its internal lifecycle will not run.
+
+If a system with multiple dependent module collections needs to run, the modules need to be instantiated and then initialized in the factory module.
+
+```js
+class Foo extends Module {}
+class Bar extends Module {}
+class FoobarFactory extends Module {}
+const foo = new Foo();
+const bar = new Bar({
+  modules: [foo],
+});
+const foobarFactory = FoobarFactory.create({
+  modules: [foo, bar],
+});
+```
+
+USM does not provide module dependency management, you are free to choose to manually manage dependencies as in the example above, and we recommend that you introduce additional dependency injection libraries to automatically manage dependencies if necessary. For example, using [InversifyJS](https://github.com/inversify/InversifyJS). If you use Angular, you will be able to use Angualr's dependency injection directly.
 
 ## FAQ
 
