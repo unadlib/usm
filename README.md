@@ -221,10 +221,15 @@ class Bar extends Module {}
 class FoobarFactory extends Module {}
 const foo = new Foo();
 const bar = new Bar({
-  modules: [foo],
+  modules: {
+    foo,
+  },
 });
 const foobarFactory = FoobarFactory.create({
-  modules: [foo, bar],
+  modules: {
+    foo,
+    bar
+  },
 });
 ```
 

@@ -44,7 +44,9 @@ class Index extends Module {}
 const todoList = new TodoList();
 
 const index = Index.create({
-  modules: [todoList]
+  modules: {
+    todoList,
+  }
 });
 
 index.store.subscribe(() => {

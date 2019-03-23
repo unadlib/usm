@@ -45,7 +45,9 @@ export default async (Module: any, state: any, action: any, computed: any) => {
     const todoList = new TodoList();
     
     const index = Index.create({
-      modules: [todoList]
+      modules: {
+        todoList,
+      }
     });
     
     index.store.subscribe(() => {

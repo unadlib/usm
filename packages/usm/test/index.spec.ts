@@ -59,7 +59,9 @@ describe('parent-child set modules', () => {
     }= generate();
     const todoList = new TodoList();
     const index = Index.create({
-      modules: [todoList]
+      modules: {
+        todoList,
+      }
     });
     expect(index.ready).toBeFalsy();
     await new Promise(resolve => setTimeout(resolve));
@@ -75,13 +77,20 @@ describe('parent-child set modules', () => {
     }= generate();
     const todoList = new TodoList();
     const index = new Index({
-      modules: [todoList]
+      modules: {
+        todoList,
+      }
     });
     const other = new Other({
-      modules: [todoList]
+      modules: {
+        todoList,
+      }
     });
     const home = Home.create({
-      modules: [index, other]
+      modules: {
+        index,
+        other
+      }
     });
     expect(home.ready).toBeFalsy();
     expect(home.modules.todoList.state.list.length).toEqual(1);

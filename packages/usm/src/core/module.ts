@@ -20,7 +20,7 @@ export type Attribute<T = any> = {
 
 type Params = {
   getState?(): Properties;
-  modules: ModuleInstance[];
+  modules: Attribute<ModuleInstance>;
 }
 
 const DEFAULT_PROPERTY = {
@@ -96,21 +96,14 @@ class Module {
     const params: Params = args[0];
     if (typeof params === 'undefined') {
       return {
-        modules:[]
+        modules: {}
       };
     }
     return params;
   }
   
   private _makeInstance(params: Params) {
-    params.modules = params.modules || [];
-    const modulesMapping = params.modules
-      .reduce((mapping, module) => {
-        const key = this._proto._getModuleKey(module);
-        return Object.assign(mapping, {
-          [key]: module,
-        });
-      }, {});
+    params.modules = params.modules || {};
     const key = this._proto._getModuleKey(this);
     const getState = params.getState || (() => (this._store.getState.call(this)[key]));
     Object.defineProperties(this, {
@@ -120,7 +113,7 @@ class Module {
       },
       _modules: {
         ...DEFAULT_PROPERTY,
-        value: modulesMapping,
+        value: params.modules,
       },
       _status: {
         ...DEFAULT_PROPERTY,
