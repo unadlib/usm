@@ -165,6 +165,7 @@ import Module, { action, state } from 'usm-vuex'; // using Vuex
 More examples:
 
 - [TodoList with React+Redux/React+MobX/Angular/Vue+Vuex in same design(Ant-Design)](https://github.com/unadlib/usm-examples)
+- [Todo + Counter example with usm-redux and react-navigation](https://github.com/unadlib/usm-redux-demo)
 
 ## APIs
 
