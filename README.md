@@ -164,8 +164,8 @@ import Module, { action, state } from 'usm-vuex'; // using Vuex
 
 More examples:
 
-- [TodoList with React+Redux/React+MobX/Angular/Vue+Vuex in same design(Ant-Design)](https://github.com/unadlib/usm-examples)
-- [Todo + Counter example with usm-redux and react-navigation](https://github.com/unadlib/usm-redux-demo)
+- [Todo with React+Redux/React+MobX/Angular/Vue+Vuex in same design(Ant-Design)](https://github.com/unadlib/usm-examples)
+- [Todo+Counter example with usm-redux and react-navigation](https://github.com/unadlib/usm-redux-demo)
 
 ## APIs
 
@@ -276,5 +276,4 @@ Yes, because Redux immutable operation is not convenient enough, so `usm` introd
 - [x] add `reselect` for `usm-redux`
 - [x] `store.subscribe` on `usm`
 - [ ] universal middleware
-- [ ] implement `computed` for `usm`
 - [ ] support MobX =< 4 verion for `usm-mobx`
