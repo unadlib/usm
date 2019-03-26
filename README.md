@@ -131,7 +131,11 @@ class TodoList extends Module {
 ```
 USM will help you better object-oriented programming when using Redux/Vuex/MobX and so on, in the hope that it is flexible and concise enough.
 
-## Example
+## Articles
+
+- [Practice OOP to front-end universal state module with Redux/MobX/Vuex.](https://medium.com/@unadlib/practice-oop-to-front-end-universal-state-module-with-redux-mobx-vuex-af73e3a4cbfb)
+
+## Examples
 
 ```js
 class Counter extends Module {
