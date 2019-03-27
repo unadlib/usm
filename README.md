@@ -176,9 +176,9 @@ More examples:
 ### Decorators
 
 `usm` provides different kinds of decorators: 
-- state` to wrap a variable with a state, and decorator 
--`@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object). 
--`@computed` is used in state `computed`, and it must be an compute function array.
+- `@state` to wrap a variable with a state, and decorator 
+- `@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object). 
+- `@computed` is used in state `computed`, and it must be an compute function array.
 
 ```js
 class Shop extends Module {
