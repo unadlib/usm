@@ -27,11 +27,11 @@ To install `usm`:
 yarn add usm # npm install --save usm
 ```
 
-And if you want to use Redux/MobX/Vuex, you just install `usm-redux`/`usm-mobx`/`usm-vuex`.
+And if you want to use Redux/MobX/Vuex, just install `usm-redux`/`usm-mobx`/`usm-vuex` correspondingly.
 
 ## Pros
 
-Here is Redux's todo example boilerplate:
+Here is the Redux todo example:
 ```js
 import { createStore, combineReducers } from 'redux'
 
@@ -98,7 +98,7 @@ const todoApp = combineReducers({
 
 ```
 
-And this is todo example with `usm-redux`: 
+With `usm-redux` it can be much more shorter:
 ```js
 import Module, { state, action } from 'usm-redux'
 
@@ -129,7 +129,7 @@ class TodoList extends Module {
   }
 }
 ```
-USM will help you better object-oriented programming when using Redux/Vuex/MobX and so on, in the hope that it is flexible and concise enough.
+USM will help you a lot on object-oriented programming using Redux, Vuex, MobX, etc. 
 
 ## Articles
 
@@ -158,7 +158,7 @@ counter.increase();
 counter.decrease();
 ```
 
-Using different interface library:
+Using different wrapper libraries:
 ```js
 import Module, { action, state } from 'usm'; // using Native Module/Angular
 import Module, { action, state } from 'usm-redux'; // using Redux
@@ -175,7 +175,10 @@ More examples:
 
 ### Decorators
 
-`usm` provides decorator `@state` to wrap a variable with a state, and decorator `@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object). `@computed` is used in state `computed`, and it must be an compute function array.
+`usm` provides different kinds of decorators: 
+- `@state` to wrap a variable with a state, and decorator 
+- `@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object). 
+- `@computed` is used in state `computed`, and it must be an compute function array.
 
 ```js
 class Shop extends Module {
@@ -199,7 +202,7 @@ class Shop extends Module {
 
 ### Module lifecycle
 
-`usm` provides these lifecycle events:
+`usm` provides these lifecycle hooks:
 
 - `moduleWillInitialize`
 - `moduleWillInitializeSuccess`
@@ -207,18 +210,17 @@ class Shop extends Module {
 - `moduleWillReset`
 - `moduleDidReset`
 
-Note: 
+**Note**:
 
-If you need to run the USM-based module directly, you must use the module's `create` method, just like the following.
+If you need to run the USM-based module directly, you must use the module's `create` method, just like this:
 
 ```js
 class Something extends Module {}
 const thing = Something.create();
 ```
 
-And if the module is only instantiated, its internal lifecycle will not run.
-
-If a system with multiple dependent module collections needs to run, the modules need to be instantiated and then initialized in the factory module.
+And if the module is just initialized, the internal lifecycle hooks will not be called.
+If a module depends on more than one modules, these modules have to be initialized before the curent module.
 
 ```js
 class Foo extends Module {}
@@ -238,7 +240,7 @@ const foobarFactory = FoobarFactory.create({
 });
 ```
 
-USM does not provide module dependency management, you are free to choose to manually manage dependencies as in the example above, and we recommend that you introduce additional dependency injection libraries to automatically manage dependencies if necessary. For example, using [InversifyJS](https://github.com/inversify/InversifyJS). If you use Angular, you will be able to use Angualr's dependency injection directly.
+USM does not provide module dependency management, you have to manage dependencies youself like the example above. And you are stronglly recommended to introduct external dependency injection libs to manage dependencies automatically, it will make you life easir. For example, using [InversifyJS](https://github.com/inversify/InversifyJS). If you use Angular, you will be able to use Angualr's dependency injection directly.
 
 ## FAQ
 
@@ -266,9 +268,9 @@ class ModuleWithPlugin extends Module {
 
 *2. Does it look like `usm-redux` is a state library of mutable type?*
 
-Yes, because Redux immutable operation is not convenient enough, so `usm` introduced [immer](https://github.com/mweststrate/immer). In general, if single-action items are less than 50K, then it comes with a tiny loss of performance that can be ignored for most of the time. For more on some of the performance issues that immer brings, it's [here](https://github.com/mweststrate/immer#performance).
+Yes, because Redux immutable operation is not convenient enough, so `usm` introduced [immer](https://github.com/mweststrate/immer). Generally, single-action items are less than 50K, then it comes with a tiny loss of performance which can be ignored most of the time. For more on performance issues that immer brings, please check it out [here](https://github.com/mweststrate/immer#performance).
 
-*3. How do you ensure that you use `usm` to switch between different state libraries(usm-redux/usm-vuex/usm-mobx) and that they are running consistently?*
+*3. How do you ensure that you use `usm` to switch between different states libraries(usm-redux/usm-vuex/usm-mobx) and that they are running consistently?*
 
 `usm` is not a state library, we are trying to turn it into a standardized state library runner, `usm` defines only generic modules. Based on such a module, any state library based on the `usm` encapsulation can run well.
 
