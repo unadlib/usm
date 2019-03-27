@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/unadlib/usm.svg)](https://travis-ci.org/unadlib/usm)
 [![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
 
-USM is a universal state modular lib. **It can help you make more concise OOP when using some state library**, and it currently supports Redux, MobX, Vuex and Angular.
+USM is a universal state modular library. **It can help you make more concise OOP when using some state library**, and it currently supports Redux, MobX, Vuex and Angular.
 
 ## Support
 
@@ -98,7 +98,7 @@ const todoApp = combineReducers({
 
 ```
 
-With `usm-redux` it can be much more shorter:
+With `usm-redux` it can be more concise:
 ```js
 import Module, { state, action } from 'usm-redux'
 
@@ -175,10 +175,11 @@ More examples:
 
 ### Decorators
 
-`usm` provides different kinds of decorators: 
-- `@state` to wrap a variable with a state, and decorator 
+`usm` provides different kinds of decorators:
+
+- `@state` to wrap a variable with a state. 
 - `@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object). 
-- `@computed` is used in state `computed`, and it must be an compute function array.
+- `@computed` is used in state computed, and it must be an compute function array.
 
 ```js
 class Shop extends Module {
