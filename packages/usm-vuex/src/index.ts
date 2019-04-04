@@ -5,7 +5,7 @@ type ModuleInstance = InstanceType<typeof Module> & VuexModule;
 
 type Selector = () => any;
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
-  initializer(): T;
+  initializer?(): T;
 }
 
 interface Factory {
@@ -14,7 +14,7 @@ interface Factory {
 
 function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
   target._state = target._state || {};
-  target._state[name] = descriptor ? descriptor.initializer.call(target) : undefined;
+  target._state[name] = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined;
   const get = function(this: ModuleInstance) {
     return this.state[name];
   };
@@ -47,7 +47,10 @@ function setComputed(target: ModuleInstance, name: string, descriptor?: Descript
       const states = selectors.slice(0,-1).map((selector: Selector) => selector());
       return selectors.slice(-1)[0](...states);
     }
-    return;
+    if (descriptor && typeof descriptor.get === 'function') {
+      return descriptor.get.call(target);
+    }
+    throw new Error(`${name} must be used in getter or properties setter value with Array type`);
   };
   return {
     enumerable: true,

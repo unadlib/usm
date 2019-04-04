@@ -8,7 +8,7 @@ interface ComputedFactory {
   (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
 }
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
-  initializer(): T;
+  initializer?(): T;
 }
 
 function action(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
@@ -34,6 +34,9 @@ function state(target: ModuleInstance, name: string, descriptor?: TypedPropertyD
 }
 
 function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+  if (descriptor && typeof descriptor.initializer !== 'function') {
+    return mobxComputed(target, name, descriptor);
+  }
   const _descriptor = {
     enumerable: true,
     configurable: true,

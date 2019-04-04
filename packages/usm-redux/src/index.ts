@@ -13,12 +13,20 @@ interface Descriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
 }
 
+type Properties<T = any> = {
+  [P in string]?: T;
+}
+interface Action {
+  type: string;
+  states: Properties;
+}
+
 function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   target._reducersMaps = target._reducersMaps || {};
-  target._reducersMaps[name] = (types, initialValue = descriptor ? descriptor.initializer.call(target) : undefined) =>
-    (_state = initialValue, { type, states }) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
+  target._reducersMaps[name] = (types, initialValue = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined) =>
+    (_state = initialValue, { type, states }: Action) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
   const get = function(this: ModuleInstance) {
     return this.state[name];
   };
@@ -44,6 +52,9 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
 const WRAPPER = '__seletors__';
 
 function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+  if (descriptor && typeof descriptor.initializer !== 'function') {
+    throw new Error(`${name} must be used in properties setter value with Array type`);
+  }
   return {
     configurable: true,
     enumerable: true,

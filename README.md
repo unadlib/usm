@@ -179,7 +179,7 @@ More examples:
 
 - `@state` to wrap a variable with a state. 
 - `@action` is used to wrap a function that changes state (the last parameter passed in by the function is always the current state object). 
-- `@computed` is used in state computed, and it must be an compute function array.
+- `@computed` is used in state computed, and it must be an computed function array(**You can also use it for a getter with `usm-vuex` or `usm-mobx`**).
 
 ```js
 class Shop extends Module {
@@ -274,13 +274,3 @@ Yes, because Redux immutable operation is not convenient enough, so `usm` introd
 *3. How do you ensure that you use `usm` to switch between different states libraries(usm-redux/usm-vuex/usm-mobx) and that they are running consistently?*
 
 `usm` is not a state library, we are trying to turn it into a standardized state library runner, `usm` defines only generic modules. Based on such a module, any state library based on the `usm` encapsulation can run well.
-
-## TODO
-
-- [x] support own plugins
-- [x] support MobX `@computed`
-- [x] support Vuex `getters`
-- [x] add `reselect` for `usm-redux`
-- [x] `store.subscribe` on `usm`
-- [ ] universal middleware
-- [ ] support MobX =< 4 verion for `usm-mobx`

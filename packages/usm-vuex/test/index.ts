@@ -33,10 +33,21 @@ class TodoList extends Module {
   length = [
     () => this.list.length,
     (length: number) => {
-      console.log('computed => list.length');
+      console.log('computed: length => list.length');
       return length;
     }
   ];
+
+  @computed
+  get size() {
+    console.log('computed: size => list.length');
+    return this.list.length;
+  }
+
+  get amount() {
+    console.log('computed: amount => list.length');
+    return this.list.length;
+  }
 }
 
 
@@ -50,5 +61,11 @@ const index = Index.create({
 });
 
 index.store.subscribe(() => {
-  console.log(index.modules.todoList.state.list, todoList.length);
+  console.log(
+    index.modules.todoList.state.list,
+    todoList.list[0].completed,
+    todoList.length,
+    todoList.size,
+    todoList.amount
+  );
 });
