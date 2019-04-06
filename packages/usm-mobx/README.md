@@ -4,13 +4,13 @@ Using `usm-mobx` to develop a modular application system. **`usm-mobx` can help 
 
 ## Install
 
-using yarn:
+Use yarn:
 
 ```bash
 yarn add usm-mobx
 ```
 
-Or npm:
+Or use npm:
 
 ```bash
 npm install --save usm-mobx

@@ -4,13 +4,13 @@ Using `usm` to develop a modular application system. **`usm` can help you make m
 
 ## Install
 
-using yarn:
+Use yarn:
 
 ```bash
 yarn add usm
 ```
 
-Or npm:
+Or use npm:
 
 ```bash
 npm install --save usm

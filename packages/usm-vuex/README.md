@@ -4,13 +4,13 @@ Using `usm-vuex` to develop a modular application system. **`usm-vuex` can help 
 
 ## Install
 
-using yarn:
+Use yarn:
 
 ```bash
 yarn add usm-vuex
 ```
 
-Or npm:
+Or use npm:
 
 ```bash
 npm install --save usm-vuex
