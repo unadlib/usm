@@ -53,11 +53,11 @@ export default class Module extends BaseModule implements VuexModule {
     this._setStore(store);
   }
 
-  // @ts-ignore
-  public get store(): StoreType {
+  // todo fix StoreType
+  public get store(): any {
     const parentModule = this.parentModule || this;
-    // @ts-ignore
-    const _store: StoreType = parentModule._store;
+    // todo fix StoreType
+    const _store: any = parentModule._store;
     if (!_store) {
       throw new Error(`${this.constructor.name} Module has not been initialized...`);
     }
