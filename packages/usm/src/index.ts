@@ -1,4 +1,4 @@
-import Module, { ModuleInstance } from './core/module';
+import Module, { ModuleInstance, Action, ActionTypes, Reducer, State, StaticModule, Properties } from './core/module';
 import event, { Event } from './utils/event';
 
 type Selector = () => any;
@@ -67,4 +67,10 @@ export {
   computed,
   event,
   Event,
+  Action,
+  ActionTypes,
+  Reducer,
+  State,
+  StaticModule,
+  Properties
 }
