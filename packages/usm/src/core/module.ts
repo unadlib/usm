@@ -92,7 +92,7 @@ class Module {
     this._makeInstance(this._handleArgs(...args));
   }
 
-  private _handleArgs(...args: any[]): Params {
+  public _handleArgs(...args: any[]): Params {
     const params: Params = args[0];
     if (typeof params === 'undefined') {
       return {
