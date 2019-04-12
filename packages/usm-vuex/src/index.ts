@@ -18,17 +18,23 @@ function createState(target: ModuleInstance, name: string, descriptor?: Descript
   const get = function(this: ModuleInstance) {
     return this.state[name];
   };
+  const set = function(this: ModuleInstance, value: any) {
+    if (typeof this._state === 'object') {
+      this._state[name] = value;
+    }
+  };
   return {
     enumerable: true,
     configurable: true,
-    get
+    get,
+    set
   };
 }
 
 function action(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   target._mutations = target._mutations || {};
-  target._mutations[name] = (state, args: []) => {
+  target._mutations[name] = (state: any, args: []) => {
     return fn.call(target, ...args, state);
   };
   target._actionTypes = target._actionTypes || [];

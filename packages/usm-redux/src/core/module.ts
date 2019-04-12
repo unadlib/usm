@@ -1,4 +1,4 @@
-import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer } from 'usm';
+import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer, Params } from 'usm';
 import { createStore, combineReducers, ReducersMapObject } from 'redux';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
@@ -31,6 +31,17 @@ type Store = {
 };
 
 class Module extends BaseModule {
+  public _makeInstance(params: Params) {
+    this._reducersMaps = this._reducersMaps || {};
+    if (Array.isArray(this._actionTypes)) {
+      this._actionTypes.forEach(name => {
+        this._reducersMaps[name] = (types, initialValue = this._initialValue[name]) =>
+        (_state = initialValue, { type, states }) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
+      });
+    }
+    super._makeInstance(params);
+  }
+
   protected get _reducers() {
     const reducers = this._getReducers(this.actionTypes, {});
     return this._proto.combineReducers(reducers);

@@ -4,9 +4,15 @@ export default async (Module: any, state: any, action: any, computed: any) => {
       text: string,
       completed: boolean,
     }
-    class TodoList extends Module {  
-      @state list: Todo[] = [{text: 'Learn Typescript', completed: false}];
-    
+    class TodoList extends Module {
+      @state visibilityFilter = 'SHOW_ALL';
+      @state list: Todo[];
+      
+      constructor(...args:[]) {
+        super(...args);
+        this.list = [{text: 'Learn Typescript', completed: false}];
+      }
+
       @action
       add(todo: Todo, state?: any) {
         state.list.push(todo);

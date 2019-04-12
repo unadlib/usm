@@ -21,15 +21,19 @@ function createState(target: ModuleInstance, name: string, descriptor?: Descript
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   target._reducersMaps = target._reducersMaps || {};
-  target._reducersMaps[name] = (types, initialValue = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined) =>
-    (_state = initialValue, { type, states }) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
+  target._initialValue = target._initialValue || {};
+  target._initialValue[name] = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined
   const get = function(this: ModuleInstance) {
     return this.state[name];
+  };
+  const set = function(this: ModuleInstance, value: any) {
+    this._initialValue[name] = value;
   };
   return {
     enumerable: true,
     configurable: true,
-    get
+    get,
+    set
   };
 }
 

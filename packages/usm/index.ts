@@ -1,4 +1,4 @@
-import Module, { Action, ActionTypes, Reducer, State, StaticModule, Properties } from './src/core/module';
+import Module, { Action, ActionTypes, Reducer, State, StaticModule, Properties, Params } from './src/core/module';
 import { state, action, event, Event } from './src';
 import Enum, { PropertyKey } from './src/utils/enum';
 import moduleStatuses from './src/core/moduleStatuses';
@@ -18,4 +18,5 @@ export {
   moduleStatuses,
   StaticModule,
   Properties,
+  Params,
 }

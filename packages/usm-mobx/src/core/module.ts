@@ -9,6 +9,12 @@ type Store = {
 };
 
 export default class Module extends BaseModule {
+  public get _state() {
+    return (this._stateKeys || []).reduce((state: any, key: string) => Object.assign(state, {
+      [key]: this[key],
+    }), {});
+  }
+
   public get store(): Store {
     return {
       subscribe: autorun,

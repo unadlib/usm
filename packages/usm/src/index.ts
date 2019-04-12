@@ -1,4 +1,4 @@
-import Module, { ModuleInstance, Action, ActionTypes, Reducer, State, StaticModule, Properties } from './core/module';
+import Module, { ModuleInstance, Action, ActionTypes, Reducer, State, StaticModule, Properties, Params } from './core/module';
 import event, { Event } from './utils/event';
 
 type Selector = () => any;
@@ -13,18 +13,20 @@ interface StateFactory {
   (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
 }
 
-// It just supports running TypeScript with Babel 7+.
-// Because there are different decorators in TypeScript ECMAScript.
 function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
   target._state = target._state || {};
-  target._state[name] = descriptor ? descriptor.initializer.call(target) : undefined;
+  target._state[name] = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined;
   const get = function(this: ModuleInstance) {
     return this.state[name];
+  };
+  const set = function(this: ModuleInstance, value: any) {
+    this.state[name] = value;
   };
   return {
     enumerable: true,
     configurable: true,
-    get
+    get,
+    set,
   };
 }
 
@@ -72,5 +74,6 @@ export {
   Reducer,
   State,
   StaticModule,
-  Properties
+  Properties,
+  Params,
 }

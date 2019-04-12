@@ -18,7 +18,7 @@ export type Attribute<T = any> = {
   [P in string]: T;
 }
 
-type Params = {
+export type Params = {
   getState?(): Properties;
   modules: Attribute<ModuleInstance>;
 } & Properties;
@@ -102,7 +102,7 @@ class Module {
     return params;
   }
   
-  private _makeInstance(params: Params) {
+  public _makeInstance(params: Params) {
     params.modules = params.modules || {};
     const key = this._proto._getModuleKey(this);
     const getState = params.getState || (() => (this._store.getState.call(this)[key]));

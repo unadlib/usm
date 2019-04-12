@@ -20,16 +20,8 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
 }
 
 function state(target: ModuleInstance, name: string, descriptor?: TypedPropertyDescriptor<any>) {
-  target._state = target._state || {};
-  Object.defineProperties(target._state, {
-    [name]: {
-      configurable: true,
-      enumerable: true,
-      get() {
-        return target[name];
-      }
-    }
-  })
+  target._stateKeys = target._stateKeys || [];
+  target._stateKeys.push(name);
   return observable(target, name, descriptor);
 }
 
