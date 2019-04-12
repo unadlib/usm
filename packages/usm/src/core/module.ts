@@ -21,7 +21,7 @@ export type Attribute<T = any> = {
 type Params = {
   getState?(): Properties;
   modules: Attribute<ModuleInstance>;
-}
+} & Properties;
 
 const DEFAULT_PROPERTY = {
   configurable: false,

@@ -16,17 +16,13 @@ interface Descriptor<T> extends TypedPropertyDescriptor<T> {
 type Properties<T = any> = {
   [P in string]?: T;
 }
-interface Action {
-  type: string;
-  states: Properties;
-}
 
 function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
   target._reducersMaps = target._reducersMaps || {};
   target._reducersMaps[name] = (types, initialValue = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined) =>
-    (_state = initialValue, { type, states }: Action) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
+    (_state = initialValue, { type, states }) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
   const get = function(this: ModuleInstance) {
     return this.state[name];
   };
