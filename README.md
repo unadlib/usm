@@ -149,6 +149,8 @@ USM will help you a lot on object-oriented programming using Redux, Vuex, MobX, 
 ## Articles
 
 - [Practice OOP to front-end universal state module with Redux/MobX/Vuex.](https://medium.com/@unadlib/practice-oop-to-front-end-universal-state-module-with-redux-mobx-vuex-af73e3a4cbfb)
+- [How to build a large Vue application with usm-vuex](https://medium.com/@unadlib/how-to-build-a-large-vue-application-3afa2aad4402)
+- [A concise design that completely changed Redux](https://medium.com/@unadlib/a-concise-design-that-completely-changed-redux-e95d6b76bd8b)
 
 ## Examples
 
@@ -184,7 +186,8 @@ import Module, { action, state } from 'usm-vuex'; // using Vuex
 More examples:
 
 - [Todo with React+Redux/React+MobX/Angular/Vue+Vuex in same design(Ant-Design)](https://github.com/unadlib/usm-examples)
-- [Todo+Counter example with usm-redux and react-navigation](https://github.com/unadlib/usm-redux-demo)
+- [Todo+Counter example with usm-redux](https://github.com/unadlib/usm-redux-demo)
+- [A large project of demo with usm-vuex in TypeScript](https://github.com/unadlib/usm-vuex-demo)
 
 ## APIs
 
@@ -267,8 +270,10 @@ Of course, you can, but `usm` will soon define its own plug-in APIs to ensure th
 `usm-redux` using Redux's middleware example:
 
 ```js
+import { applyMiddleware, createStore } from 'redux';
+
 class ModuleWithMiddleware extends Module {
-  static _generateStore({ createStore }, { reducers }) {
+  static _generateStore(_, { reducers }) {
     return createStore(reducers, applyMiddleware(...reduxMiddlewares));
   }
 }
