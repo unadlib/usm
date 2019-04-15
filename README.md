@@ -115,32 +115,32 @@ const todoApp = combineReducers({
 
 With `usm-redux` it can be more concise:
 ```js
-import Module, { state, action } from 'usm-redux'
+import Module, { state, action } from 'usm-redux';
 
 class TodoList extends Module {
-  @state todos = []
-  @state visibilityFilter = 'SHOW_ALL'
-  nextTodoId = 0
+  @state todos = [];
+  @state visibilityFilter = 'SHOW_ALL';
+  nextTodoId = 0;
 
   @action
   add(text, state) {
-    this.nextTodoId++
+    this.nextTodoId++;
     state.todos.push({
       text,
       id: this.nextTodoId,
       completed: false,
-    })
+    });
   }
 
   @action
   toggle(id, state) {
-    const todo = state.todos.find(todo => todo.id === id)
-    todo.completed = !todo.completed
+    const todo = state.todos.find(todo => todo.id === id);
+    todo.completed = !todo.completed;
   }
 
   @action
   setVisibility(filter, state) {
-    state.visibilityFilter = filter
+    state.visibilityFilter = filter;
   }
 }
 ```
