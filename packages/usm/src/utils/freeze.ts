@@ -3,14 +3,6 @@ const warn = (key: Key) => {
   throw new TypeError(`Enum key:'${key}' is read only`)
 };
 
-type Proxy<T> = {
-  get(): T;
-  set(): void;
-}
-type Proxify<T> = {
-  [P in keyof T]: Proxy<T[P]>;
-}
-
 type Target<T = any> = {
   [key: string]: T;
 };

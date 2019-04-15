@@ -43,7 +43,6 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
 }
 
 function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
-  // TODO computed
   return {
     enumerable: true,
     configurable: true,

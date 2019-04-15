@@ -37,7 +37,6 @@ type Subscription = {
   (): void;
 }
 
-
 export type ActionTypes = InstanceType<typeof Enum>;
 
 interface Module extends Properties {
@@ -50,11 +49,6 @@ export interface Action {
   type: string[]|string;
   states?: Properties;
 }
-
-type Proto<T> = {
-  constructor: T;
-};
-
 
 export type StaticModule = {
   _getModuleKey(module: ModuleInstance): string;
