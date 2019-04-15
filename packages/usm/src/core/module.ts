@@ -41,21 +41,8 @@ type Subscription = {
 export type ActionTypes = InstanceType<typeof Enum>;
 
 interface Module extends Properties {
-  __proto__: Proto<StaticModule>;
-  __init__: boolean;
-  __reset__: boolean;
   _modules: Attribute<ModuleInstance>;
-  _store: Store;
-  _arguments: Params;
-  _status: string;
-  _subscribe(callback: Callback): void;
-  _actionTypes: string[]|undefined;
-  _dispatch(action: Action): void;
-  _onStateChange(): void;
-  _state?: Properties;
   parentModule: ModuleInstance;
-  getState(): Properties;
-  onStateChange?(): void;
   setStore?(store: Store): void;
 }
 
