@@ -48,6 +48,7 @@ And if you want to use Redux/MobX/Vuex, just install `usm-redux`/`usm-mobx`/`usm
 
 <details>
   <summary>Here is the Redux todo example:</summary>
+  
   ```js
   import { createStore, combineReducers } from 'redux'
 
