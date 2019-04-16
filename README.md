@@ -46,72 +46,74 @@ And if you want to use Redux/MobX/Vuex, just install `usm-redux`/`usm-mobx`/`usm
 
 ## Pros
 
-Here is the Redux todo example:
-```js
-import { createStore, combineReducers } from 'redux'
+<details>
+  <summary>Here is the Redux todo example:</summary>
+  ```js
+  import { createStore, combineReducers } from 'redux'
 
-// action
-let nextTodoId = 0
-const addTodo = text => {
-  return {
-    type: 'ADD_TODO',
-    id: nextTodoId++,
-    text
+  // action
+  let nextTodoId = 0
+  const addTodo = text => {
+    return {
+      type: 'ADD_TODO',
+      id: nextTodoId++,
+      text
+    }
   }
-}
 
-const setVisibilityFilter = filter => {
-  return {
-    type: 'SET_VISIBILITY_FILTER',
-    filter
+  const setVisibilityFilter = filter => {
+    return {
+      type: 'SET_VISIBILITY_FILTER',
+      filter
+    }
   }
-}
 
-const toggleTodo = id => {
-  return {
-    type: 'TOGGLE_TODO',
-    id
+  const toggleTodo = id => {
+    return {
+      type: 'TOGGLE_TODO',
+      id
+    }
   }
-}
 
-// reducers
-const todos = (state = [], action) => {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return [
-        ...state,
-        {
-          id: action.id,
-          text: action.text,
-          completed: false
-        }
-      ]
-    case 'TOGGLE_TODO':
-      return state.map(todo =>
-        (todo.id === action.id) 
-          ? {...todo, completed: !todo.completed}
-          : todo
-      )
-    default:
-      return state
+  // reducers
+  const todos = (state = [], action) => {
+    switch (action.type) {
+      case 'ADD_TODO':
+        return [
+          ...state,
+          {
+            id: action.id,
+            text: action.text,
+            completed: false
+          }
+        ]
+      case 'TOGGLE_TODO':
+        return state.map(todo =>
+          (todo.id === action.id) 
+            ? {...todo, completed: !todo.completed}
+            : todo
+        )
+      default:
+        return state
+    }
   }
-}
 
-const visibilityFilter = (state = 'SHOW_ALL', action) => {
-  switch (action.type) {
-    case 'SET_VISIBILITY_FILTER':
-      return action.filter
-    default:
-      return state
+  const visibilityFilter = (state = 'SHOW_ALL', action) => {
+    switch (action.type) {
+      case 'SET_VISIBILITY_FILTER':
+        return action.filter
+      default:
+        return state
+    }
   }
-}
 
-const todoApp = combineReducers({
-  todos,
-  visibilityFilter
-})
+  const todoApp = combineReducers({
+    todos,
+    visibilityFilter
+  })
 
-```
+  ```
+</details>
 
 With `usm-redux` it can be more concise:
 ```js
@@ -294,3 +296,7 @@ Yes, because Redux immutable operation is not convenient enough, so `usm` introd
 *3. How do you ensure that you use `usm` to switch between different states libraries(usm-redux/usm-vuex/usm-mobx) and that they are running consistently?*
 
 `usm` is not a state library, we are trying to turn it into a standardized state library runner, `usm` defines only generic modules. Based on such a module, any state library based on the `usm` encapsulation can run well.
+
+*4. Can `usm-redux` support redux-devtools or `usm-vuex` support vue-devtools?*
+
+Of course, They fully support these devtools.
