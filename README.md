@@ -48,7 +48,7 @@ And if you want to use Redux/MobX/Vuex, just install `usm-redux`/`usm-mobx`/`usm
 
 <details>
   <summary>Here is the Redux todo example:</summary>
-  
+
   ```js
   import { createStore, combineReducers } from 'redux'
 
@@ -212,7 +212,17 @@ class Shop extends Module {
     state.goods.push(item);
     state.status = status;
   }
-  // call -> this.operate({ name: 'fruits', amount: 10 }, 'open');
+
+  @action
+  setList(list, state) {
+    state.goods = list;
+  }
+
+  async getRemoteData(url) {
+    const response = await fetch(url);
+    const data = await response.json();
+    this.setList(data);
+  }
 
   @computed
   shortages = [
