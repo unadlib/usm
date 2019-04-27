@@ -46,7 +46,7 @@ interface Module extends Properties {
 }
 
 export interface Action {
-  type: string[]|string;
+  type: string;
   states?: Properties;
 }
 

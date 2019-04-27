@@ -2,6 +2,7 @@ import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer, Params } 
 import { createStore, combineReducers, ReducersMapObject } from 'redux';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
+export const separator = '__$$__';
 
 export type ModuleInstance = InstanceType<typeof Module>;
 export type Properties<T = any> = {
@@ -36,7 +37,7 @@ class Module extends BaseModule {
     if (Array.isArray(this._actionTypes)) {
       this._actionTypes.forEach(name => {
         this._reducersMaps[name] = (types, initialValue = this._initialValue[name]) =>
-        (_state = initialValue, { type, states }) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
+        (_state = initialValue, { type, states }) => type.split(separator).indexOf(types[name]) > -1 && states ? states[name] : _state;
       });
     }
     super._makeInstance(params);
