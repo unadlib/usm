@@ -1,6 +1,6 @@
 {
   "name": "usm-redux",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Universal state module - usm for redux",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -18,7 +18,7 @@
     "immer": "^3.1.1",
     "redux": "^4.0.1",
     "reselect": "^4.0.0",
-    "usm": "^1.0.8"
+    "usm": "^1.0.9"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
