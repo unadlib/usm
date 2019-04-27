@@ -46,7 +46,7 @@ interface Module extends Properties {
 }
 
 export interface Action {
-  type: string;
+  type: string[]|string;
   states?: Properties;
 }
 
@@ -85,8 +85,10 @@ class Module {
   
   public _makeInstance(params: Params) {
     params.modules = params.modules || {};
-    const key = this._proto._getModuleKey(this);
-    const getState = params.getState || (() => (this._store.getState.call(this)[key]));
+    const getState = params.getState || (() => {
+      const key = this._proto._getModuleKey(this);
+      return this._store.getState.call(this)[key];
+    });
     Object.defineProperties(this, {
       _arguments: {
         ...DEFAULT_PROPERTY,
@@ -204,8 +206,11 @@ class Module {
   }
 
   private static _getModuleKey(module: ModuleInstance) {
-    const { name } = module.constructor;
-    return name[0].toLowerCase() + name.slice(1);
+    for (const key in module.parentModule._modules) {
+      if (module.parentModule._modules[key] === module) {
+        return key;
+      }
+    }
   }
 
   public static create(...args: any[]) {

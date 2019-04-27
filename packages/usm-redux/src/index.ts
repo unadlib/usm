@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { createSelector } from 'reselect';
 import { event, Event } from 'usm';
-import Module, { ModuleInstance, separator } from './core/module';
+import Module, { ModuleInstance } from './core/module';
 
 interface ComputedFactory {
   (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
@@ -42,7 +42,7 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   descriptor.value = function (this: ModuleInstance, ...args:[]) {
     const states = produce(this.state, fn.bind(this, ...args));
     this._dispatch({
-      type: Object.keys(this.state).map(key => this.actionTypes[key]).filter(key => key).join(separator),
+      type: Object.keys(this.state).map(key => this.actionTypes[key]),
       states,
     });
   };
