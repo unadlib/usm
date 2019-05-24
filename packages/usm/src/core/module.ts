@@ -216,6 +216,7 @@ class Module {
   public static create(...args: any[]) {
     const RootModule = this;
     const rootModule = new RootModule(...args);
+    rootModule.isFactoryModule = true;
     const proto = rootModule.__proto__.constructor;
     proto.boot(proto, rootModule);
     return rootModule;

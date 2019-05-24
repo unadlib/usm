@@ -83,7 +83,8 @@ class Module extends BaseModule {
 
   protected _getReducers(actionTypes: ActionTypes, initialValue: State<any>) {
     const reducers = this.getReducers(actionTypes, initialValue);
-    const subReducers: Properties<Reducer> = Object
+    console.log(this.constructor.name, this._modules, this.parentModule);
+    const subReducers: Properties<Reducer> = !this.isFactoryModule ? {} : Object
       .entries(this._modules)
       .reduce((reducers, [key, module]) => (
         Object.assign(reducers, { [key]: module.reducers })
