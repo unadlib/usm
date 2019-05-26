@@ -1,6 +1,6 @@
 {
   "name": "usm-redux",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Universal state module - usm for redux",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
