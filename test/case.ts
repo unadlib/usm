@@ -4,6 +4,7 @@ export default async (Module: any, state: any, action: any, computed: any) => {
       text: string,
       completed: boolean,
     }
+    let index;
     class TodoList extends Module {
       @state visibilityFilter = 'SHOW_ALL';
       @state list: Todo[];
@@ -33,7 +34,7 @@ export default async (Module: any, state: any, action: any, computed: any) => {
         this.length;
         this.toggle(0);
         this.add({text: 'Learn Go', completed: false});
-        resolve();
+        resolve(index); 
       }
       
       @computed
@@ -58,7 +59,7 @@ export default async (Module: any, state: any, action: any, computed: any) => {
     });
     const todoList = new TodoList();
     
-    const index = Index.create({
+    index = Index.create({
       modules: {
         todoList,
         counter,
@@ -69,6 +70,5 @@ export default async (Module: any, state: any, action: any, computed: any) => {
     index.store.subscribe(() => {
       console.log(index.modules.todoList.state.list, todoList.length);
     });
-    resolve(index);
   })
 }
