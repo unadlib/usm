@@ -206,6 +206,9 @@ class Module {
   }
 
   private static _getModuleKey(module: ModuleInstance) {
+    if (typeof module.parentModule === 'undefined' || module.parentModule === null) {
+      return null;
+    }
     for (const key in module.parentModule._modules) {
       if (module.parentModule._modules[key] === module) {
         return key;
@@ -216,6 +219,7 @@ class Module {
   public static create(...args: any[]) {
     const RootModule = this;
     const rootModule = new RootModule(...args);
+    rootModule.isFactoryModule = true;
     const proto = rootModule.__proto__.constructor;
     proto.boot(proto, rootModule);
     return rootModule;
