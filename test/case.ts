@@ -48,16 +48,27 @@ export default async (Module: any, state: any, action: any, computed: any) => {
     
     
     class Index extends Module {}
+    class Counter extends Module {}
+    class FooBar extends Module {}
+    const fooBar = new FooBar();
+    const counter = new (Counter as any)({
+      modules: {
+        fooBar,
+      }
+    });
     const todoList = new TodoList();
     
     const index = Index.create({
       modules: {
         todoList,
+        counter,
+        fooBar
       }
     });
     
     index.store.subscribe(() => {
       console.log(index.modules.todoList.state.list, todoList.length);
     });
+    resolve(index);
   })
 }

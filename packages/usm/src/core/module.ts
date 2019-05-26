@@ -206,6 +206,9 @@ class Module {
   }
 
   private static _getModuleKey(module: ModuleInstance) {
+    if (typeof module.parentModule === 'undefined' || module.parentModule === null) {
+      return null;
+    }
     for (const key in module.parentModule._modules) {
       if (module.parentModule._modules[key] === module) {
         return key;
