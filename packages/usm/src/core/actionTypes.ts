@@ -1,14 +1,16 @@
-import Enum, { PropertyKeys, Prefix } from '../utils/enum';
-
+import { PropertyKeys, Prefix, createEnum } from '../utils/enum';
 
 export default function getActionTypes(
   actionsTypes: PropertyKeys = [],
   prefix: Prefix
 ) {
-  return new Enum([
+  const initialEnum = createEnum([
     'init',
     'initSuccess',
     'reset',
-    ...actionsTypes,
   ], prefix);
+  return Object.assign(
+    initialEnum,
+    createEnum(actionsTypes, prefix)
+  );
 }

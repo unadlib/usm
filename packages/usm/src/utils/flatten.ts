@@ -1,8 +1,13 @@
 
 import { ModuleInstance, Properties } from '../core/module';
 
-export default function flatten(modulesTree: ModuleInstance, flattenModules: Properties<ModuleInstance> = {}) {
-  Object.entries(modulesTree._modules).forEach(([key, module]) => {
+type ModulesTuple = [string, ModuleInstance];
+
+function flatten(
+  modulesTree: ModuleInstance,
+  flattenModules: Properties<ModuleInstance> = {}
+): Properties<ModuleInstance> {
+  Object.entries(modulesTree._modules).forEach(([key, module]: ModulesTuple) => {
     flattenModules[key] = module;
     if (
       typeof module._modules === 'object' &&
@@ -15,3 +20,7 @@ export default function flatten(modulesTree: ModuleInstance, flattenModules: Pro
     ...flattenModules,
   }
 }
+
+export {
+  flatten as default
+} 

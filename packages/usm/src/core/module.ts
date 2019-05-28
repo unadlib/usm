@@ -1,90 +1,82 @@
 import getActionTypes from './actionTypes';
 import moduleStatuses from './moduleStatuses';
-import Enum from '../utils/enum';
 import flatten from '../utils/flatten';
+import DEFAULT_PROPERTY from '../utils/property';
 import event from '../utils/event';
 
-export type State<T> = T;
-export interface Reducer {
-  (state: State<any>, action: Action): State<any>;
-}
 
-export type ModuleInstance = InstanceType<typeof Module>;
-export type Properties<T = any> = {
+type InterfaceModule = typeof Module;
+type ModuleInstance = InstanceType<InterfaceModule>;
+type Properties<T = any> = {
   [P in string]?: T;
 }
+type Reducer<S = any, A extends Action = AnyAction> = (
+  state: S | undefined,
+  action: A
+) => S;
 
-export type Attribute<T = any> = {
-  [P in string]: T;
+interface Params<T> {
+  modules?: T;
+  getState?(): any;
 }
 
-export type Params = {
-  getState?(): Properties;
-  modules: Attribute<ModuleInstance>;
-} & Properties;
-
-const DEFAULT_PROPERTY = {
-  configurable: false,
-  enumerable: false,
-  writable: false,
-};
-
-interface Callback<T = undefined, S = void> {
-  (params: T): S;
-};
-
-type Subscription = {
-  (): void;
-}
-
-export type ActionTypes = InstanceType<typeof Enum>;
-
-interface Module extends Properties {
-  _modules: Attribute<ModuleInstance>;
-  parentModule: ModuleInstance;
-  setStore?(store: Store): void;
-}
-
-export interface Action {
+interface Action {
   type: string[]|string;
   states?: Properties;
 }
 
-export type StaticModule = {
-  _getModuleKey(module: ModuleInstance): string;
-  boot(proto: StaticModule, module: ModuleInstance): void;
-  combineReducers(reducers: Properties<Reducer>): Reducer;
-  createStore<T = Reducer>(option: T): any;
-  _generateStore(proto: StaticModule, module: ModuleInstance): Store;
+interface AnyAction extends Action {
+  [P: string]: any;
 }
+
+interface Callback<T = any, V = void> {
+  (params: T): V;
+};
 
 interface Dispatch {
   (action: Action): void;
 };
 
-type Store = {
+interface Store {
   subscribe(call: Callback): void;
   getState(): Properties;
-  dispatch: Dispatch;
+  dispatch?: Dispatch;
 };
 
-class Module {
-  constructor(...args: any[]) {
-    this._makeInstance(this._handleArgs(...args));
+class Module<T = {}> {
+  protected __init__: boolean;
+  protected __reset__: boolean;
+  public getState: any;
+  public _modules: T;
+  public _store: any;
+  public _arguments: any;
+  public _status?: string;
+  public _actionTypes?: string[];
+  public _dispatch?(action: Action): void;
+  public _state?: any; //
+  public onStateChange?(): void;
+  public parentModule?: Module<any>;
+  public isFactoryModule?: boolean;
+  public reducers?: Reducer;
+  public setStore?(store: Store): void;
+
+  constructor(params?: Params<T>, ...args: any[]) {
+    this._modules = {} as T;
+    this.__init__ = false;
+    this.__reset__ = false;
+    this._makeInstance(this._handleArgs(params, ...args));
   }
 
-  public _handleArgs(...args: any[]): Params {
-    const params: Params = args[0];
+  public _handleArgs(params?: Params<T>, ...args: any[]): Params<T> {
     if (typeof params === 'undefined') {
       return {
-        modules: {}
+        modules: {} as T,
       };
     }
     return params;
   }
   
-  public _makeInstance(params: Params) {
-    params.modules = params.modules || {};
+  public _makeInstance(params: Params<T>) {
     const getState = params.getState || (() => {
       const key = this._proto._getModuleKey(this);
       return this._store.getState.call(this)[key];
@@ -111,14 +103,15 @@ class Module {
   }
 
   protected get _proto() {
-    return this.__proto__.constructor;
+    const prototype = Object.getPrototypeOf(this);
+    return prototype.constructor;
   }
 
   private _moduleWillInitialize() {
 
   }
 
-  private async _initialize() {
+  private async _initialize(): Promise<void> {
     this._moduleWillInitialize();
     await this.moduleWillInitialize();
     this.dispatch({
@@ -127,7 +120,7 @@ class Module {
     await this._moduleDidInitialize();
   }
 
-  private async _moduleDidInitialize() {
+  private async _moduleDidInitialize(): Promise<void> {
     if (this._moduleInitializeCheck()) {
       this.__init__ = true;
       await this.moduleWillInitializeSuccess();
@@ -138,11 +131,11 @@ class Module {
     }
   }
 
-  private _moduleInitializeCheck() {
+  private _moduleInitializeCheck(): boolean {
     return !this.__init__ && Object.values(this._modules).every(module => module.ready);
   }
 
-  _onStateChange() {
+  protected _onStateChange(): void {
     if (typeof this.onStateChange === 'function') {
       this.onStateChange();
     }
@@ -153,7 +146,7 @@ class Module {
     }
   }
 
-  private _initModule() {
+  private _initModule(): void {
     event.on('module', this._onStateChange.bind(this));
     this._initialize();
     Object.values(this._modules).forEach(module => {
@@ -166,10 +159,11 @@ class Module {
   }
 
   private async _moduleWillReset() {
-    for (const index in this._modules) {
-      const parentModule = this.parentModule || this;
-      const dependentModules = parentModule._modules[index];
-      await dependentModules._resetModule();
+    for (const key in this._modules) {
+      if (typeof this.parentModule !== 'undefined') {
+        const dependentModules = this.parentModule._modules[key];
+        await dependentModules._resetModule();
+      }
     }
     await this.moduleWillReset();
   }
@@ -216,16 +210,16 @@ class Module {
     }
   }
 
-  public static create(...args: any[]) {
+  public static create(...args: any[]): ModuleInstance {
     const RootModule = this;
     const rootModule = new RootModule(...args);
     rootModule.isFactoryModule = true;
-    const proto = rootModule.__proto__.constructor;
+    const proto = Object.getPrototypeOf(rootModule).constructor;
     proto.boot(proto, rootModule);
     return rootModule;
   }
 
-  public static boot(proto: StaticModule, module: ModuleInstance) {
+  public static boot(proto: InterfaceModule, module: ModuleInstance): void {
     if (typeof module._modules === 'object') {
       const flattenModules = flatten(module);
       Object.assign(module._modules, flattenModules);
@@ -236,11 +230,14 @@ class Module {
     module._initModule();
   }
 
-  public static _generateStore(proto: StaticModule, module: ModuleInstance) {
+  public static _generateStore(proto: InterfaceModule, module: ModuleInstance): Store {
     return proto.createStore(module.reducers);
   }
-  
 
+  protected static createStore(reducers?: Reducer): Store {
+    throw new Error('`createStore` has not yet been implemented.');
+  }
+  
   public bootstrap() {
     this._proto.boot(this._proto, this);
   }
@@ -249,7 +246,7 @@ class Module {
     this._resetModule();
   }
 
-  public dispatch(action: Action) {
+  public dispatch(action: Action): void {
     if (typeof action.type === 'string') {
       const index = [
         this.actionTypes.init,
@@ -266,12 +263,14 @@ class Module {
         return event.emit('module');
       }
     }
-    return this._dispatch(action);
+    if (typeof this._dispatch === 'function') {
+      return this._dispatch(action);
+    }
   }
 
-  public get store() {
+  public get store(): Store {
     return {
-      subscribe: (subscription: Subscription) => event.on('state', subscription),
+      subscribe: (subscription: Callback) => event.on('state', subscription),
       getState: () => this._state || {},
     }
   }
@@ -288,15 +287,15 @@ class Module {
     return this._status;
   }
 
-  public get pending() {
+  public get pending(): boolean {
     return this.status === moduleStatuses.pending;
   }
 
-  public get ready() {
+  public get ready(): boolean {
     return this.status === moduleStatuses.ready;
   }
 
-  public get resetting() {
+  public get resetting(): boolean {
     return this.status === moduleStatuses.resetting;
   }
 
@@ -320,5 +319,11 @@ class Module {
 }
 
 export {
-  Module as default
+  Module as default,
+  ModuleInstance,
+  Properties,
+  Params,
+  Action,
+  Reducer,
+  InterfaceModule
 };

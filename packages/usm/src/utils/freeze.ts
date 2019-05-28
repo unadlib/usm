@@ -1,42 +1,44 @@
-
-const warn = (key: Key) => {
-  throw new TypeError(`Enum key:'${key}' is read only`)
+type Proxy<T> = T & {
+  get(): T;
+  set(value: T): void;
 };
-
-type Target<T = any> = {
-  [key: string]: T;
-};
+type Proxify<T> = {
+  [P in keyof T]: Proxy<T[P]>;
+}
 type Key = string;
-type Value<T = any> = T;
-
 type Decorator = {
   configurable: boolean;
   enumerable: boolean;
   writable: boolean;
 };
 
-export default function freeze<T>(object: Target) {
+const warn = (key: Key) => {
+  throw new TypeError(`Property '${key}' is read only.`)
+};
+
+function freeze<T extends object>(object: T) {
   return new Proxy(object, {
-    set (target: Target, key: Key, value: Value, receiver: T) {
-      return Reflect.set(target, key, value, receiver);
+    set (target: T, key: Key, value: T, receiver: T) {
+      return warn(key);
     },
-    get (target: Target, key: Key) {
+    get (target: T, key: Key) {
       if (!(key in target)) {
         warn(key);
       }
       return Reflect.get(target, key);
     },
-    deleteProperty (target: Target, key: Key) {
-      warn(key);
-      delete target[key];
-      return false;
+    deleteProperty (target: T, key: Key) {
+      return warn(key);
     },
-    setPrototypeOf (target: Target, proto) {
-      throw new TypeError(`Enum is read only`);
+    setPrototypeOf (target: T, proto: typeof Object.prototype) {
+      throw new TypeError(`Frozen Object is read only`);
     },
-    defineProperty(target: Target, key: Key, decorator: Decorator) {
-      warn(key);
-      return false;
+    defineProperty(target: T, key: Key, decorator: Decorator) {
+      return warn(key);
     }
-  });
+  }) as Proxify<T>;
+}
+
+export {
+  freeze as default
 }

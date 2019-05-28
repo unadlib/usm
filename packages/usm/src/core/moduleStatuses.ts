@@ -1,6 +1,6 @@
-import Enum from '../utils/enum';
+import { createEnum } from '../utils/enum';
 
-export default new Enum([
+export default createEnum([
   'initial',
   'pending',
   'ready',
