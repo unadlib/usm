@@ -210,13 +210,13 @@ class Module<T = {}> {
     }
   }
 
-  public static create(...args: any[]): ModuleInstance {
-    const RootModule = this;
-    const rootModule = new RootModule(...args);
-    rootModule.isFactoryModule = true;
-    const proto = Object.getPrototypeOf(rootModule).constructor;
-    proto.boot(proto, rootModule);
-    return rootModule;
+  public static create<T1>(params?: Params<T1>, ...args: any[]) {
+    const FactoryModule = this;
+    const factoryModule = new FactoryModule(params, ...args);
+    factoryModule.isFactoryModule = true;
+    const proto = Object.getPrototypeOf(factoryModule).constructor;
+    proto.boot(proto, factoryModule);
+    return factoryModule;
   }
 
   public static boot(proto: InterfaceModule, module: ModuleInstance): void {
