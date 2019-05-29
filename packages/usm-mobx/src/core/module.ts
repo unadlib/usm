@@ -1,14 +1,13 @@
-import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer } from 'usm';
+import BaseModule, { Store }from 'usm';
 import { autorun } from 'mobx';
 
 export type ModuleInstance = InstanceType<typeof Module>;
 
-type Store = {
-  subscribe(...args:any[]): any,
-  getState(): any
-};
-
-export default class Module extends BaseModule {
+interface Module {
+  _stateKeys: string[];
+  [K: string]: any;
+}
+class Module extends BaseModule {
   public get _state() {
     return (this._stateKeys || []).reduce((state: any, key: string) => Object.assign(state, {
       [key]: this[key],
@@ -21,4 +20,8 @@ export default class Module extends BaseModule {
       getState: () => this._state,
     }
   }
+}
+
+export {
+  Module as default,
 }

@@ -10,9 +10,9 @@ const {
   defineProperty
 } = Object;
 
-type Prefix = string;
-type PropertyKey = string;
-type PropertyKeys = PropertyKey[];
+export type Prefix = string;
+export type PropertyKey = string;
+export type PropertyKeys = PropertyKey[];
 
 type Properties<T> = {
   [P in PropertyKey]?: T;
@@ -104,7 +104,4 @@ export {
   prefixCache,
   prefixEnum,
   createEnum,
-  Prefix,
-  PropertyKey,
-  PropertyKeys
 };

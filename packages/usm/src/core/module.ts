@@ -4,32 +4,31 @@ import flatten from '../utils/flatten';
 import DEFAULT_PROPERTY from '../utils/property';
 import event from '../utils/event';
 
-
-type InterfaceModule = typeof Module;
-type ModuleInstance = InstanceType<InterfaceModule>;
-type Properties<T = any> = {
+export type InterfaceModule = typeof Module;
+export type ModuleInstance = InstanceType<InterfaceModule>;
+export type Properties<T = any> = {
   [P in string]?: T;
 }
-type Reducer<S = any, A extends Action = AnyAction> = (
+export type Reducer<S = any, A extends Action = AnyAction> = (
   state: S | undefined,
   action: A
 ) => S;
 type Modules<T> = T extends { modules: infer U } ? U : never;
 type ModulesMap = {
-  [P in string]: ModuleInstance;
+  [P in string]: Module;
 }
 
-interface Params<T> {
+export interface Params<T> {
   modules: Modules<T>;
   getState?(): any;
 }
 
-interface Action {
+export interface Action {
   type: string[]|string;
   states?: Properties;
 }
 
-interface AnyAction extends Action {
+export interface AnyAction extends Action {
   [P: string]: any;
 }
 
@@ -41,12 +40,16 @@ interface Dispatch {
   (action: Action): void;
 };
 
-interface Store {
+export interface Store {
   subscribe(call: Callback): void;
   getState(): Properties;
   dispatch?: Dispatch;
 };
 
+interface Module {
+  _state?: any;
+  reducers?: Reducer;
+}
 class Module<T extends Params<T> = Params<{}>> {
   protected __init__: boolean;
   protected __reset__: boolean;
@@ -57,11 +60,9 @@ class Module<T extends Params<T> = Params<{}>> {
   public _status: string;
   public _actionTypes?: string[];
   public _dispatch?(action: Action): void;
-  public _state?: any;
   public onStateChange?(): void;
   public parentModule?: Module<any>;
   public isFactoryModule?: boolean;
-  public reducers?: Reducer;
   public setStore?(store: Store): void;
 
   constructor(params?: T, ...args: any[]) {
@@ -326,10 +327,4 @@ class Module<T extends Params<T> = Params<{}>> {
 
 export {
   Module as default,
-  ModuleInstance,
-  Properties,
-  Params,
-  Action,
-  Reducer,
-  InterfaceModule
 };

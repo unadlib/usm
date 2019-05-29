@@ -1,4 +1,4 @@
-import Module, { state, action } from '../';
+import Module, { state, action } from '../src';
 
 interface Todo {
   text: string,
