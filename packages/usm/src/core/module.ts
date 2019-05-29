@@ -14,9 +14,13 @@ type Reducer<S = any, A extends Action = AnyAction> = (
   state: S | undefined,
   action: A
 ) => S;
+type Modules<T> = T extends { modules: infer U } ? U : never;
+type ModulesMap = {
+  [P in string]: ModuleInstance;
+}
 
 interface Params<T> {
-  modules?: T;
+  modules: Modules<T>;
   getState?(): any;
 }
 
@@ -43,40 +47,42 @@ interface Store {
   dispatch?: Dispatch;
 };
 
-class Module<T = {}> {
+class Module<T extends Params<T> = Params<{}>> {
   protected __init__: boolean;
   protected __reset__: boolean;
   public getState: any;
-  public _modules: T;
+  public _modules: Modules<T> & ModulesMap;
   public _store: any;
-  public _arguments: any;
-  public _status?: string;
+  public _arguments: T;
+  public _status: string;
   public _actionTypes?: string[];
   public _dispatch?(action: Action): void;
-  public _state?: any; //
+  public _state?: any;
   public onStateChange?(): void;
   public parentModule?: Module<any>;
   public isFactoryModule?: boolean;
   public reducers?: Reducer;
   public setStore?(store: Store): void;
 
-  constructor(params?: Params<T>, ...args: any[]) {
-    this._modules = {} as T;
+  constructor(params?: T, ...args: any[]) {
+    this._modules = {} as Modules<T>;
+    this._arguments = {} as T;
+    this._status = moduleStatuses.initial;
     this.__init__ = false;
     this.__reset__ = false;
     this._makeInstance(this._handleArgs(params, ...args));
   }
 
-  public _handleArgs(params?: Params<T>, ...args: any[]): Params<T> {
+  public _handleArgs(params?: T, ...args: any[]): T {
     if (typeof params === 'undefined') {
       return {
-        modules: {} as T,
-      };
+        modules: {},
+      } as T;
     }
     return params;
   }
   
-  public _makeInstance(params: Params<T>) {
+  public _makeInstance(params: T) {
     const getState = params.getState || (() => {
       const key = this._proto._getModuleKey(this);
       return this._store.getState.call(this)[key];
@@ -210,7 +216,7 @@ class Module<T = {}> {
     }
   }
 
-  public static create<T1>(params?: Params<T1>, ...args: any[]) {
+  public static create<T1 extends Params<T1> = Params<{}>>(params?: T1, ...args: any[]) {
     const FactoryModule = this;
     const factoryModule = new FactoryModule(params, ...args);
     factoryModule.isFactoryModule = true;
