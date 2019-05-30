@@ -1,20 +1,16 @@
-import BaseModule, { PropertyKey, ActionTypes, Action, State, Reducer, Params } from 'usm';
+import BaseModule, { Action, Reducer, Params, Properties } from 'usm';
 import { createStore, combineReducers, ReducersMapObject } from 'redux';
 
-const __DEV__ = process.env.NODE_ENV === 'development';
-
 export type ModuleInstance = InstanceType<typeof Module>;
-export type Properties<T = any> = {
-  [P in string]?: T;
-}
-
 export type Attribute<T = any> = {
   [P in string]: T;
 }
+type ActionTypes = Attribute<string>;
 
 interface Module {
+  _initialValue: Properties;
+  __seletors__: Properties;
   _reducersMaps: Attribute<Callback<ActionTypes, Reducer>>;
-  _store: Store;
 }
 interface Callback<T = undefined, S = void> {
   (params: T): S;
@@ -30,9 +26,8 @@ type Store = {
   dispatch: Dispatch;
 };
 
-class Module extends BaseModule {
-  public _makeInstance(params: Params) {
-    this._reducersMaps = this._reducersMaps || {};
+class Module<T extends Params<T> = Params<{}>> extends BaseModule<T> {
+  public _makeInstance(params: T) {
     if (Array.isArray(this._actionTypes)) {
       this._actionTypes.forEach(name => {
         this._reducersMaps[name] = (types, initialValue = this._initialValue[name]) =>
@@ -51,7 +46,7 @@ class Module extends BaseModule {
     return combineReducers(reducers);
   }
 
-  protected static createStore(reducer: Reducer) {
+  protected static createStore(reducer: Reducer): Store {
     return createStore(reducer);
   }
 
@@ -59,7 +54,6 @@ class Module extends BaseModule {
     if (this._store) return;
     this._store = store;
     if (
-      __DEV__ &&
       typeof this._store.subscribe !== 'function' ||
       typeof this._store.getState !== 'function' ||
       typeof this._store.dispatch !== 'function'
@@ -81,7 +75,7 @@ class Module extends BaseModule {
     return !this.parentModule || !this.getState ? this._store.getState()[key] : this.getState();
   }
 
-  protected _getReducers(actionTypes: ActionTypes, initialValue: State<any>) {
+  protected _getReducers(actionTypes: ActionTypes, initialValue: any) {
     const reducers = this.getReducers(actionTypes, initialValue);
     const subReducers: Properties<Reducer> = !this.isFactoryModule ? {} : Object
       .entries(this._modules)
@@ -110,8 +104,8 @@ class Module extends BaseModule {
     return this._store;
   }
 
-  public getReducers(actionTypes: ActionTypes, initialValue: State<any> = {}) {
-    return (this._actionTypes || []).reduce((map: Properties<Reducer>, name: PropertyKey) => {
+  public getReducers(actionTypes: ActionTypes, initialValue: any = {}) {
+    return (this._actionTypes || []).reduce((map: Properties<Reducer>, name: string) => {
       map[name] = this._reducersMaps[name](actionTypes);
       return map;
     }, {});

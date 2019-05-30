@@ -36,7 +36,7 @@ class Enum implements Enum {
     });
     defineProperties(this, properties);
     if (Proxy && Reflect) {
-      freeze(this);
+      return freeze(this);
     } else {
       Object.freeze(this)
     }
@@ -94,8 +94,16 @@ function prefixEnum({ enumMap, prefix, base = enumMap }: PrefixEnum) {
   return cache && cache[base.prefix];
 }
 
+
+function createEnum<V extends string> (values: V[], prefix: string): { [K in V]: string };
+
+function createEnum(values: string[], prefix: string) {
+  return new Enum(values, prefix);
+}
+
 export {
   Enum as default,
   prefixCache,
   prefixEnum,
+  createEnum,
 };

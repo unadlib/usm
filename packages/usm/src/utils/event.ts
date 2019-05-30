@@ -1,6 +1,3 @@
-// const __DEV__ = process.env.NODE_ENV === 'development';
-const __DEV__ = false;
-
 type Callback = {
   (...args: any[]): void;
 }
@@ -9,18 +6,14 @@ type Subscription = {
   callback: Callback;
   once: boolean;
 }
-
 type EventType = string;
-
-type EventListMapping<T> = {
+type EventMapping<T = Subscription> = {
   [P in EventType]: T[]
 }
 
-interface Event {
-  _events: EventListMapping<Subscription>;
-}
+class Event {
+  public _events: EventMapping;
 
-class Event implements Event{
   constructor() {
     this._events = {};
   }
@@ -58,19 +51,13 @@ class Event implements Event{
       const isExist = index > -1;
       if (isExist) {
         listeners.splice(index, 1);
-      } else if (__DEV__) {
-        console.warn(`Event type '${eventType}' listener removed the failure.`);
       }
-    } else if (__DEV__){
-      console.warn(`Event type '${eventType}' does not exist.`);
     }
   }
 
   remove(eventType: EventType) {
     if (this._events[eventType]) {
       delete this._events[eventType];
-    } else if(__DEV__) {
-      console.warn(`Event type '${eventType}' does not exist.`);
     }
   }
 

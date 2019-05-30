@@ -1,6 +1,6 @@
 import Vuex, { Store, StoreOptions } from 'vuex';
 import Vue from 'vue';
-import BaseModule, { Properties, StaticModule } from 'usm';
+import BaseModule, { Properties, InterfaceModule } from 'usm';
 
 const DEFAULT_PROPERTY = {
   configurable: false,
@@ -19,7 +19,12 @@ interface StoreType {
   commit(type: string, args:[]): void;
   getters: Properties;
 }
-export default class Module extends BaseModule implements VuexModule {
+
+interface Module {
+  _mutations?: any;
+  _getters?: any;
+}
+class Module extends BaseModule implements VuexModule {
   protected _setStore(_store: StoreOptions<any>) {
     if (this._store) return;
     Object.defineProperties(this,  {
@@ -40,12 +45,12 @@ export default class Module extends BaseModule implements VuexModule {
     return typeof this._getters === 'undefined' ? {} : this._getters;
   }
 
-  public static _generateStore(proto: StaticModule, module: ModuleInstance) {
+  public static _generateStore(proto: InterfaceModule, module: ModuleInstance) {
     Vue.use(Vuex);
-    return proto.createStore(module);
+    return proto.createStore(module as any);
   }  
 
-  protected static createStore(instance: ModuleInstance): StoreOptions<any> {
+  protected static createStore(instance: any): StoreOptions<any> {
     return new Store(instance);
   }
 
@@ -63,4 +68,8 @@ export default class Module extends BaseModule implements VuexModule {
     }
     return _store;
   }
+}
+
+export {
+  Module as default
 }
