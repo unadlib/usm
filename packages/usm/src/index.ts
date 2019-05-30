@@ -1,4 +1,13 @@
-import Module, { ModuleInstance, Action, ActionTypes, Reducer, State, StaticModule, Properties, Params } from './core/module';
+import Module, {
+  ModuleInstance, 
+  Store,
+  Action,
+  Reducer,
+  AnyAction,
+  Params,
+  Properties,
+  InterfaceModule,
+} from './core/module';
 import event, { Event } from './utils/event';
 
 type Selector = () => any;
@@ -68,11 +77,11 @@ export {
   computed,
   event,
   Event,
+  Store,
   Action,
-  ActionTypes,
   Reducer,
-  State,
-  StaticModule,
-  Properties,
+  AnyAction,
   Params,
+  Properties,
+  InterfaceModule,
 }

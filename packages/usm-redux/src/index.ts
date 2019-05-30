@@ -13,10 +13,6 @@ interface Descriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
 }
 
-type Properties<T = any> = {
-  [P in string]?: T;
-}
-
 function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);

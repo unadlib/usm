@@ -1,22 +1,30 @@
-import Module, { Action, ActionTypes, Reducer, State, StaticModule, Properties, Params } from './src/core/module';
-import { state, action, event, Event } from './src';
-import Enum, { PropertyKey } from './src/utils/enum';
-import moduleStatuses from './src/core/moduleStatuses';
+import Module, {
+  state,
+  action,
+  computed,
+  event,
+  Event,
+  Store,
+  Action,
+  Reducer,
+  AnyAction,
+  Params,
+  Properties,
+  InterfaceModule,
+} from './src';
 
 export {
   Module as default,
-  state,
   action,
+  state,
+  computed,
   event,
   Event,
-  Enum,
-  PropertyKey,
-  Reducer,
-  State,
+  Store,
   Action,
-  ActionTypes,
-  moduleStatuses,
-  StaticModule,
-  Properties,
+  Reducer,
+  AnyAction,
   Params,
+  Properties,
+  InterfaceModule
 }
