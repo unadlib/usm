@@ -49,21 +49,22 @@ export interface Store {
 interface Module {
   _state?: any;
   reducers?: Reducer;
+  getState: any;
+  _store: any;
+  _status: string;
+  _actionTypes?: string[];
+  _dispatch?(action: Action): void;
+  onStateChange?(): void;
+  parentModule?: Module<any>;
+  isFactoryModule?: boolean;
+  setStore?(store: Store): void;
 }
+
 class Module<T extends Params<T> = Params<{}>> {
   protected __init__: boolean;
   protected __reset__: boolean;
-  public getState: any;
   public _modules: Modules<T> & ModulesMap;
-  public _store: any;
   public _arguments: T;
-  public _status: string;
-  public _actionTypes?: string[];
-  public _dispatch?(action: Action): void;
-  public onStateChange?(): void;
-  public parentModule?: Module<any>;
-  public isFactoryModule?: boolean;
-  public setStore?(store: Store): void;
 
   constructor(params?: T, ...args: any[]) {
     this._modules = {} as Modules<T>;

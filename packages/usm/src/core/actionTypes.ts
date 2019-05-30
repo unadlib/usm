@@ -10,6 +10,7 @@ export default function getActionTypes(
     'reset',
   ], prefix);
   return Object.assign(
+    {},
     initialEnum,
     createEnum(actionsTypes, prefix)
   );
