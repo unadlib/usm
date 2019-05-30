@@ -242,7 +242,7 @@ class Module<T extends Params<T> = Params<{}>> {
     return proto.createStore(module.reducers);
   }
 
-  protected static createStore(reducers?: Reducer): Store {
+  protected static createStore(reducers?: Reducer): any {
     throw new Error('`createStore` has not yet been implemented.');
   }
   

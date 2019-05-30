@@ -22,9 +22,6 @@ function freeze<T extends object>(object: T) {
       return warn(key);
     },
     get (target: T, key: Key) {
-      if (!(key in target)) {
-        warn(key);
-      }
       return Reflect.get(target, key);
     },
     deleteProperty (target: T, key: Key) {
