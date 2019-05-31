@@ -42,7 +42,26 @@ To install `usm`:
 yarn add usm # npm install --save usm
 ```
 
-And if you want to use Redux/MobX/Vuex, just install `usm-redux`/`usm-mobx`/`usm-vuex` correspondingly.
+if you want to use Redux/MobX/Vuex, just install `usm-redux`/`usm-mobx`/`usm-vuex` correspondingly.
+
+---
+
+You should install babel plugins:
+
+```bash
+yarn install --dev @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties
+```
+
+Add the following line to your .babelrc or babel.config.js file:
+
+```
+{
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose" : true }]
+  ]
+}
+```
 
 ## Pros
 
