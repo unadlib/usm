@@ -49,7 +49,7 @@ if you want to use Redux/MobX/Vuex, just install `usm-redux`/`usm-mobx`/`usm-vue
 You should install babel plugins:
 
 ```bash
-yarn install --dev @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties
+yarn add --dev @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties
 ```
 
 Add the following line to your .babelrc or babel.config.js file:
