@@ -15,7 +15,7 @@
     "check-type": "lerna run check-type --stream",
     "build": "lerna run build --stream",
     "quick-build": "lerna run quick-build --stream",
-    "publish": "lerna publish --silent",
+    "publish": "lerna publish",
     "commit": "yarn git-cz"
   },
   "repository": {

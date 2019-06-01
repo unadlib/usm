@@ -2,9 +2,9 @@
   "name": "usm",
   "version": "1.2.0",
   "description": "Universal state module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "test": "jest",
     "watch": "jest --watch",
