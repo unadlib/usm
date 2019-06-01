@@ -2,18 +2,32 @@
   "name": "usm-mobx",
   "version": "1.1.0",
   "description": "Universal state module - usm for mobx",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "test": "jest",
+    "watch": "jest --watch",
     "start": "babel-node test/index.ts --extensions '.ts' --ignore=' ' --root-mode upward",
-    "clean": "rm -rf dist",
-    "build:type": "tsc -d src/index.ts --outDir dist --lib es2017 --target es5",
-    "build:lib": "babel src --out-dir dist --extensions '.ts' --root-mode upward",
-    "build": "yarn build:type && yarn build:lib"
+    "clean": "rm -rf lib",
+    "check-type": "tsc --noEmit",
+    "quick-build": "tsc",
+    "build:lib": "babel src --out-dir lib --extensions '.ts'",
+    "build": "yarn quick-build && yarn build:lib"
   },
   "author": "unadlib",
   "license": "MIT",
+  "keywords": [
+    "usm",
+    "universal state module",
+    "state module",
+    "react",
+    "mobx",
+    "state management",
+    "model",
+    "module",
+    "reactjs"
+  ],
   "dependencies": {
     "mobx": "^5.9.0",
     "usm": "^1.1.0"

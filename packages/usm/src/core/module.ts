@@ -50,7 +50,7 @@ interface Module {
   _state?: any;
   reducers?: Reducer;
   getState: any;
-  _store: any;
+  _store: Store;
   _status: string;
   _actionTypes?: string[];
   _dispatch?(action: Action): void;
@@ -87,7 +87,11 @@ class Module<T extends Params<T> = Params<{}>> {
   public _makeInstance(params: T) {
     const getState = params.getState || (() => {
       const key = this._proto._getModuleKey(this);
-      return this._store.getState.call(this)[key];
+      if (typeof key === 'undefined'|| key === null) {
+        return {};
+      }
+      const states = this._store.getState.call(this);
+      return states[key];
     });
     Object.defineProperties(this, {
       _arguments: {
@@ -110,7 +114,7 @@ class Module<T extends Params<T> = Params<{}>> {
     });
   }
 
-  protected get _proto() {
+  protected get _proto(): InterfaceModule {
     const prototype = Object.getPrototypeOf(this);
     return prototype.constructor;
   }
@@ -207,9 +211,9 @@ class Module<T extends Params<T> = Params<{}>> {
     return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
 
-  private static _getModuleKey(module: ModuleInstance) {
+  protected static _getModuleKey(module: ModuleInstance): string|void {
     if (typeof module.parentModule === 'undefined' || module.parentModule === null) {
-      return null;
+      return;
     }
     for (const key in module.parentModule._modules) {
       if (module.parentModule._modules[key] === module) {

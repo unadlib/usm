@@ -1,22 +1,28 @@
 {
     "compilerOptions": {
+        "rootDir": "src",
         "target": "es5",
+        "module": "commonjs",
         "moduleResolution": "node",
+        "outDir": "lib",
         "experimentalDecorators": true,
-        "esModuleInterop": true,
-        "noEmit": true,
+        "downlevelIteration": true,
+        "alwaysStrict": true,
+        "sourceMap": false,
+        "declaration": true,
+        "removeComments": false,
         "strict": true,
-        "allowJs": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": false,
+        "noImplicitAny": false,
+        "noImplicitThis": false,
         "lib": [
             "es2017",
             "dom"
-        ],
-        "types" : [
-            "node",
         ]
     },
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
+    "include": [
+        "src/**/*.ts"
     ]
 }

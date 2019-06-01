@@ -9,9 +9,12 @@
   "private": true,
   "scripts": {
     "test": "cross-env NODE_ENV=development jest --config ./scripts/jest/config.js",
+    "watch": "yarn test --watch",
     "start": "lerna run start --stream",
     "clean": "lerna run clean --stream",
-    "build": "lerna run build --ignore usm --stream && lerna run build --scope usm --stream",
+    "check-type": "lerna run check-type --stream",
+    "build": "lerna run build --stream",
+    "quick-build": "lerna run quick-build --stream",
     "publish": "lerna publish --silent",
     "commit": "yarn git-cz"
   },

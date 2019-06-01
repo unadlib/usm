@@ -37,6 +37,11 @@ class Module<T extends Params<T> = Params<{}>> extends BaseModule<T> {
     super._makeInstance(params);
   }
 
+  protected get _proto(): typeof Module {
+    const prototype = Object.getPrototypeOf(this);
+    return prototype.constructor;
+  }
+
   protected get _reducers() {
     const reducers = this._getReducers(this.actionTypes, {});
     return this._proto.combineReducers(reducers);
@@ -63,7 +68,9 @@ class Module<T extends Params<T> = Params<{}>> extends BaseModule<T> {
   }
 
   public _dispatch(action: Action) {
-    return this._store.dispatch(action);
+    if (typeof this._store.dispatch === 'function') {
+      return this._store.dispatch(action);
+    }
   }
 
   public _subscribe(callback: Callback) {
@@ -72,7 +79,9 @@ class Module<T extends Params<T> = Params<{}>> extends BaseModule<T> {
 
   public _getState() {
     const key = this._proto._getModuleKey(this);
-    return !this.parentModule || !this.getState ? this._store.getState()[key] : this.getState();
+    return this.isFactoryModule || !this.getState ? (
+      this.isFactoryModule ? this._store.getState() : key ? this._store.getState()[key] : {}
+    ) : this.getState();
   }
 
   protected _getReducers(actionTypes: ActionTypes, initialValue: any) {

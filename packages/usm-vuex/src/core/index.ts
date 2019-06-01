@@ -15,10 +15,10 @@ export type VuexModule =  {
   _state?: Properties;
 }
 
-interface StoreType {
-  commit(type: string, args:[]): void;
-  getters: Properties;
-}
+// interface StoreType {
+//   commit(type: string, args:[]): void;
+//   getters: Properties;
+// }
 
 interface Module {
   _mutations?: any;
