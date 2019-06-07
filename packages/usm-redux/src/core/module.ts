@@ -88,6 +88,7 @@ class Module<T extends Params<T> = Params<{}>> extends BaseModule<T> {
     const reducers = this.getReducers(actionTypes, initialValue);
     const subReducers: Properties<Reducer> = !this.isFactoryModule ? {} : Object
       .entries(this._modules)
+      .filter(([_, module]) => module instanceof Module)
       .reduce((reducers, [key, module]) => (
         Object.assign(reducers, { [key]: module.reducers })
       ), {});
