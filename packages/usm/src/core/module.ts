@@ -15,10 +15,10 @@ export type Reducer<S = any, A extends Action = AnyAction> = (
 ) => S;
 type Modules<T> = T extends { modules: infer U } ? U : never;
 type ModulesMap = {
-  [P in string]: Module;
+  [P in string]: Module|any;
 }
 
-export interface Params<T> {
+export interface Params<T = {}> {
   modules: Modules<T>;
   getState?(): any;
 }
@@ -60,7 +60,7 @@ interface Module {
   setStore?(store: Store): void;
 }
 
-class Module<T extends Params<T> = Params<{}>> {
+class Module<T extends Params<T> = Params> {
   protected __init__: boolean;
   protected __reset__: boolean;
   public _modules: Modules<T> & ModulesMap;
@@ -144,7 +144,10 @@ class Module<T extends Params<T> = Params<{}>> {
   }
 
   private _moduleInitializeCheck(): boolean {
-    return !this.__init__ && Object.values(this._modules).every(module => module.ready);
+    return !this.__init__ && Object
+      .values(this._modules)
+      .filter(module => module instanceof Module)
+      .every(module => module.ready);
   }
 
   protected _onStateChange(): void {
@@ -162,19 +165,23 @@ class Module<T extends Params<T> = Params<{}>> {
     event.on('module', this._onStateChange.bind(this));
     this._initialize();
     Object.values(this._modules).forEach(module => {
-      module.parentModule = this;
-      if (typeof module.setStore === 'function') {
-        module.setStore(this._store);
+      if(module instanceof Module) {
+        module.parentModule = this;
+        if (typeof module.setStore === 'function') {
+          module.setStore(this._store);
+        }
+        module._initModule();
       }
-      module._initModule();
     });
   }
 
   private async _moduleWillReset() {
     for (const key in this._modules) {
       if (typeof this.parentModule !== 'undefined') {
-        const dependentModules = this.parentModule._modules[key];
-        await dependentModules._resetModule();
+        const dependentModule = this.parentModule._modules[key];
+        if (dependentModule instanceof Module) {
+          await dependentModule._resetModule();
+        }
       }
     }
     await this.moduleWillReset();
@@ -193,7 +200,10 @@ class Module<T extends Params<T> = Params<{}>> {
   }
 
   private _moduleResetCheck() {
-    return this.__reset__ && Object.values(this._modules).every(module => module.ready);
+    return this.__reset__ && Object
+      .values(this._modules)
+      .filter(module => module instanceof Module)
+      .every(module => module.ready);
   }
 
   private async _moduleDidReset() {
@@ -222,7 +232,7 @@ class Module<T extends Params<T> = Params<{}>> {
     }
   }
 
-  public static create<T1 extends Params<T1> = Params<{}>>(params?: T1, ...args: any[]) {
+  public static create<T1 extends Params<T1> = Params>(params?: T1, ...args: any[]) {
     const FactoryModule = this;
     const factoryModule = new FactoryModule(params, ...args);
     factoryModule.isFactoryModule = true;
