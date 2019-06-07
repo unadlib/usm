@@ -267,13 +267,15 @@ If you need to run the USM-based module directly, you must use the module's `cre
 
 ```js
 class Something extends Module {}
-const thing = Something.create();
+const something = Something.create();
 ```
 
 And if the module is just initialized, the internal lifecycle hooks will not be called.
 If a module depends on more than one modules, these modules have to be initialized before the curent module.
 
 ```js
+class FooBar {} // This is not an usm module.
+
 class Foo extends Module {}
 class Bar extends Module {}
 class FoobarFactory extends Module {}
@@ -283,10 +285,15 @@ const bar = new Bar({
     foo,
   },
 });
+
+const fooBar = new FooBar();
+
 const foobarFactory = FoobarFactory.create({
   modules: {
     foo,
-    bar
+    bar,
+    foobar, // support not usm module
+    obj: {} // support any type value
   },
 });
 ```
@@ -330,3 +337,6 @@ Yes, because Redux immutable operation is not convenient enough, so `usm` introd
 *4. Can `usm-redux` support redux-devtools or `usm-vuex` support vue-devtools?*
 
 Of course, They fully support these devtools.
+
+## License
+MIT
