@@ -26,8 +26,8 @@ type Store = {
   dispatch: Dispatch;
 };
 
-class Module<T extends Params<T> = Params<{}>> extends BaseModule<T> {
-  public _makeInstance(params: T) {
+class Module<T = {}> extends BaseModule<T> {
+  public _makeInstance(params: Params<T>) {
     if (Array.isArray(this._actionTypes)) {
       this._actionTypes.forEach(name => {
         this._reducersMaps[name] = (types, initialValue = this._initialValue[name]) =>

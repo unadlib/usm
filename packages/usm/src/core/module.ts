@@ -13,13 +13,9 @@ export type Reducer<S = any, A extends Action = AnyAction> = (
   state: S | undefined,
   action: A
 ) => S;
-type Modules<T> = T extends { modules: infer U } ? U : never;
-type ModulesMap = {
-  [P in string]: Module|any;
-}
 
 export interface Params<T = {}> {
-  modules: Modules<T>;
+  modules: T;
   getState?(): any;
 }
 
@@ -60,31 +56,31 @@ interface Module {
   setStore?(store: Store): void;
 }
 
-class Module<T extends Params<T> = Params> {
+class Module<T = {}> {
   protected __init__: boolean;
   protected __reset__: boolean;
-  public _modules: Modules<T> & ModulesMap;
-  public _arguments: T;
+  public _modules: T;
+  public _arguments: Params<T>;
 
-  constructor(params?: T, ...args: any[]) {
-    this._modules = {} as Modules<T>;
-    this._arguments = {} as T;
+  constructor(params?: Params<T>, ...args: any[]) {
+    this._modules = {} as T;
+    this._arguments = {} as Params<T>;
     this._status = moduleStatuses.initial;
     this.__init__ = false;
     this.__reset__ = false;
     this._makeInstance(this._handleArgs(params, ...args));
   }
 
-  public _handleArgs(params?: T, ...args: any[]): T {
+  public _handleArgs(params?: Params<T>, ...args: any[]): Params<T> {
     if (typeof params === 'undefined') {
       return {
-        modules: {},
-      } as T;
+        modules: {} as T,
+      };
     }
     return params;
   }
   
-  public _makeInstance(params: T) {
+  public _makeInstance(params: Params<T>) {
     const getState = params.getState || (() => {
       const key = this._proto._getModuleKey(this);
       if (typeof key === 'undefined'|| key === null) {
@@ -232,7 +228,7 @@ class Module<T extends Params<T> = Params> {
     }
   }
 
-  public static create<T1 extends Params<T1> = Params>(params?: T1, ...args: any[]) {
+  public static create<T1>(params?: Params<T1>, ...args: any[]) {
     const FactoryModule = this;
     const factoryModule = new FactoryModule(params, ...args);
     factoryModule.isFactoryModule = true;
