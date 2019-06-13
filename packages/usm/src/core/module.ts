@@ -266,17 +266,12 @@ class Module<T = {}> {
 
   public dispatch(action: Action): void {
     if (typeof action.type === 'string') {
-      const index = [
-        this.actionTypes.init,
-        this.actionTypes.reset,
-        this.actionTypes.initSuccess,
-      ].indexOf(action.type);
-      const moduleStatus = [
-        moduleStatuses.pending,
-        moduleStatuses.resetting,
-        moduleStatuses.ready
-      ][index];
-      if (index > -1) {
+      const moduleStatus = {
+        [this.actionTypes.init]: moduleStatuses.pending,
+        [this.actionTypes.reset]: moduleStatuses.resetting,
+        [this.actionTypes.initSuccess]: moduleStatuses.ready,
+      }[action.type];
+      if (moduleStatus) {
         this._status = moduleStatus;
         return event.emit('module');
       }

@@ -7,7 +7,7 @@ interface Module {
   _stateKeys: string[];
   [K: string]: any;
 }
-class Module extends BaseModule {
+class Module<T = {}> extends BaseModule<T> {
   public get _state() {
     return (this._stateKeys || []).reduce((state: any, key: string) => Object.assign(state, {
       [key]: this[key],

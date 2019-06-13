@@ -9,6 +9,7 @@ export default [
         "completed": false
       }
     ],
+    true,
     1
   ],
   [
@@ -28,6 +29,7 @@ export default [
         "completed": false
       }
     ],
+    true,
     2
   ],
   [
@@ -41,6 +43,7 @@ export default [
         "completed": false
       }
     ],
+    true,
     2
   ],
   [
@@ -54,6 +57,7 @@ export default [
         "completed": false
       }
     ],
+    true,
     2
   ],
   [
@@ -67,6 +71,7 @@ export default [
         "completed": false
       }
     ],
+    true,
     2
   ],
   [
@@ -87,6 +92,7 @@ export default [
         "completed": false
       }
     ],
+    true,
     3
   ]
 ]
