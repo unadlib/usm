@@ -69,12 +69,26 @@ describe('parent-child set modules', () => {
     expect(index.ready).toBeTruthy();
   });
   test('check `create` function for deep sub-modules', async () => {
-    const {
-      TodoList,
-      Index,
-      Other,
-      Home
-    }= generate();
+    class TodoList extends Module {
+      @state list: Todo[] = [{text: "Learn Typescript"}];
+    
+      @action
+      add(todo: Todo, state?: any) {
+        state.list.push(todo);
+      }
+    
+      async moduleDidInitialize() {
+        console.log('moduleDidInitialize');
+        this.add({text: 'Learn C++'});
+      }
+    }
+    
+    class Index extends Module<{
+      todoList: TodoList
+    }> {}
+    class Home extends Module {}
+    class Other extends Module {}
+
     const todoList = new TodoList();
     const index = new Index({
       modules: {
@@ -93,13 +107,30 @@ describe('parent-child set modules', () => {
       }
     });
     expect(home.ready).toBeFalsy();
-    expect(home.modules.todoList.state.list.length).toEqual(1);
+    expect(home.modules.index.modules.todoList.state.list.length).toEqual(1);
     await new Promise(resolve => setTimeout(resolve));
-    expect(home.modules.todoList.state.list.length).toEqual(2);
+    expect(home.modules.index.modules.todoList.state.list.length).toEqual(2);
     expect(todoList.ready).toBeTruthy();
     expect(index.ready).toBeTruthy();
     expect(home.ready).toBeTruthy();
     expect(other.ready).toBeTruthy();
+  });
+
+  test('check non-module', async () => {
+    const {
+      TodoList,
+      Index
+    }= generate();
+    const todoList = new TodoList();
+    const index = Index.create({
+      modules: {
+        todoList,
+        indexOptions: { foobar: true }
+      }
+    });
+    await new Promise(resolve => setTimeout(resolve));
+    expect(index.ready).toBeTruthy();
+    expect(index.modules.indexOptions.foobar).toBeTruthy();
   });
 });
 

@@ -24,7 +24,7 @@ interface Module {
   _mutations?: any;
   _getters?: any;
 }
-class Module extends BaseModule implements VuexModule {
+class Module<T = {}> extends BaseModule<T> implements VuexModule {
   protected _setStore(_store: StoreOptions<any>) {
     if (this._store) return;
     Object.defineProperties(this,  {

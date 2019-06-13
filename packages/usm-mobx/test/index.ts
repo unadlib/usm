@@ -51,7 +51,11 @@ class TodoList extends Module {
 }
 
 
-class Index extends Module {}
+class Index extends Module<{ todoList: TodoList }> {
+  list() {
+    this.modules.todoList.state.list;
+  }
+}
 const todoList = new TodoList();
 
 const index = Index.create({

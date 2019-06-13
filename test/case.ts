@@ -63,12 +63,17 @@ export default async (Module: any, state: any, action: any, computed: any) => {
       modules: {
         todoList,
         counter,
-        fooBar
+        fooBar,
+        indexOptions: { enable: true }
       }
     });
     
     index.store.subscribe(() => {
-      console.log(index.modules.todoList.state.list, todoList.length);
+      console.log(
+        index.modules.todoList.state.list,
+        index.modules.indexOptions.enable,
+        todoList.length
+      );
     });
   })
 }
