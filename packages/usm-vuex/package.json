@@ -1,6 +1,6 @@
 {
   "name": "usm-vuex",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Universal state module - usm for vuex",
   "main": "lib/index.js",
   "module": "lib/index.js",
