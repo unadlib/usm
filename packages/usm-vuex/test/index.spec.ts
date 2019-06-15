@@ -7,7 +7,6 @@ console.log = (...args) => {
 
 function run() {
   return new Promise((resolve) => {
-    const log = [];
     interface Todo {
       text: string,
       completed: boolean,
@@ -41,9 +40,10 @@ function run() {
       @computed
       length = [
         () => this.list.length,
-        (length: number) => {
+        () => this._modules.foo.bar,
+        (length: number, bar: number) => {
           console.log('computed: length => list.length');
-          return length;
+          return length + bar;
         }
       ];
     
@@ -118,7 +118,7 @@ test('test with deps getters', async () => {
         }
       ],
       false,
-      2,
+      3,
       3,
       2
     ],
@@ -137,7 +137,7 @@ test('test with deps getters', async () => {
         }
       ],
       true,
-      2,
+      3,
       3,
       2
     ],
@@ -156,7 +156,7 @@ test('test with deps getters', async () => {
         }
       ],
       false,
-      2,
+      3,
       3,
       2
     ],
@@ -175,7 +175,7 @@ test('test with deps getters', async () => {
         }
       ],
       true,
-      2,
+      3,
       3,
       2
     ],
@@ -204,7 +204,7 @@ test('test with deps getters', async () => {
         }
       ],
       true,
-      3,
+      4,
       4,
       3
     ]
