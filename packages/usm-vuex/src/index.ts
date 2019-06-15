@@ -46,15 +46,16 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
 }
 
 function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+  let that;
   target._getters = target._getters || {};
   target._getters[name] = () => {
     if (descriptor && typeof descriptor.initializer === 'function') {
-      const selectors = descriptor.initializer.call(target);
+      const selectors = descriptor.initializer.call(that);
       const states = selectors.slice(0,-1).map((selector: Selector) => selector());
       return selectors.slice(-1)[0](...states);
     }
     if (descriptor && typeof descriptor.get === 'function') {
-      return descriptor.get.call(target);
+      return descriptor.get.call(that);
     }
     throw new Error(`${name} must be used in getter or properties setter value with Array type`);
   };
@@ -62,6 +63,7 @@ function setComputed(target: ModuleInstance, name: string, descriptor?: Descript
     enumerable: true,
     configurable: true,
     get(this: ModuleInstance) {
+      that = this;
       return this.store.getters[name];
     }
   };

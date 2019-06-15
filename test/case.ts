@@ -1,4 +1,4 @@
-export default async (Module: any, state: any, action: any, computed: any) => {
+export default (Module: any, state: any, action: any, computed: any) => {
   return new Promise(resolve => {
     interface Todo {
       text: string,
