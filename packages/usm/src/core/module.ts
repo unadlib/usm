@@ -231,13 +231,13 @@ class Module<T = {}> {
   public static create<T1>(params?: Params<T1>, ...args: any[]) {
     const FactoryModule = this;
     const factoryModule = new FactoryModule(params, ...args);
-    factoryModule.isFactoryModule = true;
     const proto = Object.getPrototypeOf(factoryModule).constructor;
     proto.boot(proto, factoryModule);
     return factoryModule;
   }
 
   public static boot(proto: InterfaceModule, module: ModuleInstance): void {
+    module.isFactoryModule = true;
     if (typeof module._modules === 'object') {
       const flattenModules = flatten(module);
       Object.assign(module._modules, flattenModules);
