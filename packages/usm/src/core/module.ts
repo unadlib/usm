@@ -313,7 +313,7 @@ class Module<T = {}> {
   }
 
   public get modules() {
-    return this._modules;
+    return this.isFactoryModule ? this._modules : {};
   }
 
   public getActionTypes() {
