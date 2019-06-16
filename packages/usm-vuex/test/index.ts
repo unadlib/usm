@@ -1,10 +1,11 @@
 import Module, { state, action, computed } from '../src';
 
+
 interface Todo {
   text: string,
   completed: boolean,
 }
-class TodoList extends Module {  
+class TodoList extends Module<{ foo: Foo }> {  
   @state list: Todo[] = [{text: 'Learn Typescript', completed: false}];
 
   @action
@@ -32,16 +33,17 @@ class TodoList extends Module {
   @computed
   length = [
     () => this.list.length,
-    (length: number) => {
+    () => this._modules.foo.bar,
+    (length: number, bar: number) => {
       console.log('computed: length => list.length');
-      return length;
+      return length + bar;
     }
   ];
 
   @computed
   get size() {
     console.log('computed: size => list.length');
-    return this.list.length;
+    return this.list.length + this._modules.foo.bar;
   }
 
   get amount() {
@@ -50,23 +52,34 @@ class TodoList extends Module {
   }
 }
 
+class Foo extends Module {
+  @state bar = 1;
 
-class Index extends Module<{ todoList: TodoList }> {
-  list() {
-    this.modules.todoList.state.list;
+  @action
+  add(state) {
+    state.bar++;
   }
 }
-const todoList = new TodoList();
+class Index extends Module<{ todoList: TodoList }> {
+  list() {
+    this._modules.todoList.state.list;
+  }
+}
+const todoList = new TodoList({
+  modules: {
+    foo: new Foo
+  }
+});
 
 const index = Index.create({
   modules: {
     todoList,
   }
 });
-
+debugger
 index.store.subscribe(() => {
   console.log(
-    index.modules.todoList.state.list,
+    index._modules.todoList.state.list,
     todoList.list[0].completed,
     todoList.length,
     todoList.size,

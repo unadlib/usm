@@ -298,6 +298,8 @@ const foobarFactory = FoobarFactory.create({
 });
 ```
 
+**You can use `this._modules` access sub dependent modules.**
+
 USM does not provide module dependency management, you have to manage dependencies youself like the example above. And you are stronglly recommended to introduct external dependency injection libs to manage dependencies automatically, it will make you life easir. For example, using [InversifyJS](https://github.com/inversify/InversifyJS). If you use Angular, you will be able to use Angualr's dependency injection directly.
 
 ## FAQ

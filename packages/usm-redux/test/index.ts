@@ -42,7 +42,7 @@ class TodoList extends Module {
 
 class Index extends Module<{ todoList: TodoList }> {
   list() {
-    this.modules.todoList.state.list;
+    this._modules.todoList.state.list;
   }
 }
 const todoList = new TodoList();
@@ -54,5 +54,5 @@ const index = Index.create({
 });
 
 index.store.subscribe(() => {
-  console.log(index.modules.todoList.state.list, todoList.length);
+  console.log(index._modules.todoList.state.list, todoList.length);
 });

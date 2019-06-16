@@ -34,6 +34,7 @@ function run() {
         this.length;
         this.toggle(0);
         this.add({text: 'Learn Go', completed: false});
+        this._modules.foo.add();
         resolve();
       }
       
@@ -61,10 +62,15 @@ function run() {
     
     class Foo extends Module {
       @state bar = 1;
+      
+      @action
+      add(state?: any) {
+        state.bar++;
+      }
     }
     class Index extends Module<{ todoList: TodoList }> {
       list() {
-        this.modules.todoList.state.list;
+        this._modules.todoList.state.list;
       }
     }
     const todoList = new TodoList({
@@ -81,7 +87,7 @@ function run() {
     
     index.store.subscribe(() => {
       console.log(
-        index.modules.todoList.state.list,
+        index._modules.todoList.state.list,
         todoList.list[0].completed,
         todoList.length,
         todoList.size,
@@ -206,6 +212,35 @@ test('test with deps getters', async () => {
       true,
       4,
       4,
+      3
+    ],
+    [
+      "computed: length => list.length"
+    ],
+    [
+      "computed: size => list.length"
+    ],
+    [
+      "computed: amount => list.length"
+    ],
+    [
+      [
+        {
+          "text": "Learn Typescript",
+          "completed": true
+        },
+        {
+          "text": "Learn C++",
+          "completed": false
+        },
+        {
+          "text": "Learn Go",
+          "completed": false
+        }
+      ],
+      true,
+      5,
+      5,
       3
     ]
   ]);

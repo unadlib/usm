@@ -107,9 +107,9 @@ describe('parent-child set modules', () => {
       }
     });
     expect(home.ready).toBeFalsy();
-    expect(home.modules.index.modules.todoList.state.list.length).toEqual(1);
+    expect(home._modules.index._modules.todoList.state.list.length).toEqual(1);
     await new Promise(resolve => setTimeout(resolve));
-    expect(home.modules.index.modules.todoList.state.list.length).toEqual(2);
+    expect(home._modules.index._modules.todoList.state.list.length).toEqual(2);
     expect(todoList.ready).toBeTruthy();
     expect(index.ready).toBeTruthy();
     expect(home.ready).toBeTruthy();
@@ -130,7 +130,7 @@ describe('parent-child set modules', () => {
     });
     await new Promise(resolve => setTimeout(resolve));
     expect(index.ready).toBeTruthy();
-    expect(index.modules.indexOptions.foobar).toBeTruthy();
+    expect(index._modules.indexOptions.foobar).toBeTruthy();
   });
 });
 

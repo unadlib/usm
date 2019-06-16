@@ -70,8 +70,8 @@ export default (Module: any, state: any, action: any, computed: any) => {
     
     index.store.subscribe(() => {
       console.log(
-        index.modules.todoList.state.list,
-        index.modules.indexOptions.enable,
+        index._modules.todoList.state.list,
+        index._modules.indexOptions.enable,
         todoList.length
       );
     });
