@@ -1,6 +1,6 @@
 import Vuex, { Store, StoreOptions } from 'vuex';
 import Vue from 'vue';
-import BaseModule, { Properties, InterfaceModule } from 'usm';
+import BaseModule, { Properties, InterfaceModule, ModulesMap } from 'usm';
 
 const DEFAULT_PROPERTY = {
   configurable: false,
@@ -24,7 +24,7 @@ interface Module {
   _mutations?: any;
   _getters?: any;
 }
-class Module<T = {}> extends BaseModule<T> implements VuexModule {
+class Module<T extends ModulesMap = {}> extends BaseModule<T> implements VuexModule {
   protected _setStore(_store: StoreOptions<any>) {
     if (this._store) return;
     Object.defineProperties(this,  {

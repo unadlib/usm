@@ -1,4 +1,4 @@
-import BaseModule, { Store }from 'usm';
+import BaseModule, { Store, ModulesMap }from 'usm';
 import { autorun } from 'mobx';
 
 export type ModuleInstance = InstanceType<typeof Module>;
@@ -7,7 +7,7 @@ interface Module {
   _stateKeys: string[];
   [K: string]: any;
 }
-class Module<T = {}> extends BaseModule<T> {
+class Module<T extends ModulesMap= {}> extends BaseModule<T> {
   public get _state() {
     return (this._stateKeys || []).reduce((state: any, key: string) => Object.assign(state, {
       [key]: this[key],

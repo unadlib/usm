@@ -7,6 +7,7 @@ import Module, {
   Params,
   Properties,
   InterfaceModule,
+  ModulesMap,
 } from './core/module';
 import event, { Event } from './utils/event';
 
@@ -84,4 +85,5 @@ export {
   Params,
   Properties,
   InterfaceModule,
+  ModulesMap
 }

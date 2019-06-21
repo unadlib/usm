@@ -11,6 +11,7 @@ import Module, {
   Params,
   Properties,
   InterfaceModule,
+  ModulesMap,
 } from './src';
 
 export {
@@ -26,5 +27,6 @@ export {
   AnyAction,
   Params,
   Properties,
-  InterfaceModule
+  InterfaceModule,
+  ModulesMap,
 }
