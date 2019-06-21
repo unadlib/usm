@@ -1,6 +1,6 @@
 {
   "name": "usm",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Universal state module",
   "main": "lib/index.js",
   "module": "lib/index.js",
