@@ -15,6 +15,7 @@ USM is a universal state modular library. **It can help you make more concise OO
 - [Pros](#pros)
 - [Articles](#articles)
 - [Examples](#examples)
+- [Migration](#migration)
 - [APIs](#apis)
   - [Decorators](#decorators)
   - [Module lifecycle](#module-lifecycle)
@@ -210,6 +211,18 @@ More examples:
 - [Todo with React+Redux/React+MobX/Angular/Vue+Vuex in same design(Ant-Design)](https://github.com/unadlib/usm-examples)
 - [Todo+Counter example with usm-redux](https://github.com/unadlib/usm-redux-demo)
 - [A large project of demo with usm-vuex in TypeScript](https://github.com/unadlib/usm-vuex-demo)
+
+## Migration
+
+### use `usm-redux` for Redux boilerplate code migration
+
+- Add `usm-redux`, babel plugins babel plugins and set babel config
+- Create a migration module
+- Replace the store
+- Dev new feature with usm module model
+- Migrate other old redcers
+
+Example: [https://github.com/unadlib/usm-redux-migration-demo](https://github.com/unadlib/usm-redux-migration-demo).
 
 ## APIs
 
