@@ -1,10 +1,13 @@
-
 import { ModuleInstance, Properties } from '../core/module';
 
-type ModulesTuple = [string, ModuleInstance];
+type SubModule = ModuleInstance | any;
+type ModulesTuple = [string, SubModule];
+type ModulesTree = {
+  [P in string]?: SubModule;
+}
 
 function flatten(
-  modulesTree: ModuleInstance,
+  modulesTree: ModulesTree,
   flattenModules: Properties<ModuleInstance> = {}
 ): Properties<ModuleInstance> {
   Object.entries(modulesTree._modules).forEach(([key, module]: ModulesTuple) => {

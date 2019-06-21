@@ -1,4 +1,4 @@
-import BaseModule, { Action, Reducer, Params, Properties, ModulesMap } from 'usm';
+import BaseModule, { Action, Reducer, Params, Properties } from 'usm';
 import { createStore, combineReducers, ReducersMapObject } from 'redux';
 
 export type ModuleInstance = InstanceType<typeof Module>;
@@ -26,7 +26,7 @@ type Store = {
   dispatch: Dispatch;
 };
 
-class Module<T extends ModulesMap = {}> extends BaseModule<T> {
+class Module<T = {}> extends BaseModule<T> {
   public _makeInstance(params: Params<T>) {
     if (Array.isArray(this._actionTypes)) {
       this._actionTypes.forEach(name => {

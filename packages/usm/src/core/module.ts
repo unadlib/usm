@@ -13,9 +13,6 @@ export type Reducer<S = any, A extends Action = AnyAction> = (
   state: S | undefined,
   action: A
 ) => S;
-export type ModulesMap = {
-  [P in string]: Module;
-};
 
 export interface Params<T = {}> {
   modules: T;
@@ -59,7 +56,7 @@ interface Module {
   setStore?(store: Store): void;
 }
 
-class Module<T extends ModulesMap = {}> {
+class Module<T = {}> {
   protected __init__: boolean;
   protected __reset__: boolean;
   public _modules: T;
@@ -231,7 +228,7 @@ class Module<T extends ModulesMap = {}> {
     }
   }
 
-  public static create<T1 extends ModulesMap>(params?: Params<T1>, ...args: any[]) {
+  public static create<T1>(params?: Params<T1>, ...args: any[]) {
     const FactoryModule = this;
     const factoryModule = new FactoryModule(params, ...args);
     const proto = Object.getPrototypeOf(factoryModule).constructor;

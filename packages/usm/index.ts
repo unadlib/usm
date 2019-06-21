@@ -11,7 +11,6 @@ import Module, {
   Params,
   Properties,
   InterfaceModule,
-  ModulesMap,
 } from './src';
 
 export {
@@ -28,5 +27,4 @@ export {
   Params,
   Properties,
   InterfaceModule,
-  ModulesMap,
 }
