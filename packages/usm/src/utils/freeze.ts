@@ -13,7 +13,7 @@ type Decorator = {
 };
 
 const warn = (key: Key) => {
-  throw new TypeError(`Property '${key}' is read only.`)
+  throw new Error(`Property '${key}' is read only.`)
 };
 
 function freeze<T extends object>(object: T) {
@@ -28,7 +28,7 @@ function freeze<T extends object>(object: T) {
       return warn(key);
     },
     setPrototypeOf (target: T, proto: typeof Object.prototype) {
-      throw new TypeError(`Frozen Object is read only`);
+      throw new Error(`Frozen Object is read only`);
     },
     defineProperty(target: T, key: Key, decorator: Decorator) {
       return warn(key);
