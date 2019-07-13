@@ -28,7 +28,7 @@ function freeze<T extends object>(object: T) {
       return warn(key);
     },
     setPrototypeOf (target: T, proto: typeof Object.prototype) {
-      throw new Error(`Frozen Object is read only`);
+      throw new Error(`Frozen Object is read only.`);
     },
     defineProperty(target: T, key: Key, decorator: Decorator) {
       return warn(key);
