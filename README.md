@@ -266,6 +266,34 @@ class Shop extends Module {
 }
 ```
 
+Note: `usm-redux` provides `@reducer` for Redux writing style of reducer.
+
+For example: 
+```js
+class Shop extends Module {
+  @state goods = [];
+  @state status = 'close';
+
+  @action
+  operate(item, status, state) {
+    state.goods.push(item);
+    state.status = status;
+  }
+  
+  @reducer
+  operateWithReducer(item, status, state) {
+    return {
+      ...state,
+      status,
+      goods: [
+        ...state.goods,
+        item,
+      ]
+    }
+  }
+}
+```
+
 ### Module lifecycle
 
 `usm` provides these lifecycle hooks:
