@@ -45,6 +45,18 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   return descriptor;
 }
 
+function reducer(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
+  const fn = descriptor.value;
+  descriptor.value = function (this: ModuleInstance, ...args:[]) {
+    const states = fn.apply(this, [...args, this.state]);
+    this._dispatch({
+      type: Object.keys(this.state).map(key => this.actionTypes[key]),
+      states,
+    });
+  };
+  return descriptor;
+}
+
 const WRAPPER = '__seletors__';
 
 function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
@@ -75,6 +87,7 @@ export {
   Module as default,
   state,
   action,
+  reducer,
   computed,
   event,
   Event,
