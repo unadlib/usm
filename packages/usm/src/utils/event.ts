@@ -30,7 +30,7 @@ class Event {
     const isExist = listeners.filter(listener => listener.callback === callback).length > 0;
     const listener = {callback, once};
     if (isExist) {
-      throw new Error(`Event type ${eventType} has been registered, please re-register it.`);
+      throw new Error(`Event type \'${eventType}\' has been registered, please re-register it.`);
     }
     if (priority) {
       listeners.unshift(listener);
@@ -66,9 +66,9 @@ class Event {
     if (
       !Array.isArray(listeners)
     ) {
-      throw new Error(`Event type ${eventType} should be registered before emit it.`);
+      throw new Error(`Event type \'${eventType}\' should be registered before emit it.`);
     } else if (listeners.length === 0) {
-      throw new Error(`Event type ${eventType} has not any listener.`);
+      throw new Error(`Event type \'${eventType}\' has not any listener.`);
     }
     [...listeners].forEach(({ callback, once }, index) => {
       if (once) {

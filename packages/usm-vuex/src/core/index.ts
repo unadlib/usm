@@ -58,12 +58,10 @@ class Module<T = {}> extends BaseModule<T> implements VuexModule {
     this._setStore(store);
   }
 
-  // todo fix StoreType
   public get store(): any {
     const parentModule = this.parentModule || this;
-    // todo fix StoreType
     const _store: any = parentModule._store;
-    if (!_store) {
+    if (typeof _store === 'undefined' || _store === null) {
       throw new Error(`${this.constructor.name} Module has not been initialized...`);
     }
     return _store;

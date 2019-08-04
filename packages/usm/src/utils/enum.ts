@@ -72,12 +72,12 @@ class Enum implements Enum {
   }
 }
 
-type EnumInstance = InstanceType<typeof Enum>;
+// type EnumInstance = InstanceType<typeof Enum>;
 
 interface PrefixEnum {
-  enumMap: EnumInstance;
+  enumMap: Enum;
   prefix: Prefix;
-  base: EnumInstance;
+  base?: Enum;
 }
 
 const prefixCache: Properties<Properties<Properties<string>>> = {};
@@ -97,7 +97,7 @@ function prefixEnum({ enumMap, prefix, base = enumMap }: PrefixEnum) {
 
 function createEnum<V extends string> (values: V[], prefix: string): { [K in V]: string };
 
-function createEnum(values: string[], prefix: string) {
+function createEnum(values: string[], prefix: string): Enum {
   return new Enum(values, prefix);
 }
 

@@ -12,7 +12,7 @@
     "watch": "yarn test --watch",
     "start": "lerna run start --stream",
     "clean": "lerna run clean --stream",
-    "check-type": "lerna run check-type --stream",
+    "type-check": "lerna run check-type --stream",
     "build": "lerna run build --stream",
     "quick-build": "lerna run quick-build --stream",
     "publish": "lerna publish",

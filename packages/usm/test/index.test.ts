@@ -133,4 +133,3 @@ describe('parent-child set modules', () => {
     expect(index._modules.indexOptions.foobar).toBeTruthy();
   });
 });
-

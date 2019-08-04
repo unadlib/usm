@@ -1,4 +1,4 @@
-import freeze from '../../src/utils/freeze';
+import freeze from 'usm/src/utils/freeze';
 
 const foo = {
   test: 1
