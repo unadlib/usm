@@ -72,8 +72,6 @@ class Enum implements Enum {
   }
 }
 
-// type EnumInstance = InstanceType<typeof Enum>;
-
 interface PrefixEnum {
   enumMap: Enum;
   prefix: Prefix;

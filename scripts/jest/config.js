@@ -5,7 +5,9 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'node', 'ts'],
   rootDir: process.cwd(),
   roots: ['<rootDir>/packages'],
-  collectCoverageFrom: ['packages/**/*.js'],
+  collectCoverageFrom: [
+    'packages/*/src/**/*.ts',
+  ],
   setupFiles: [
     require.resolve('./setupEnvironment.js'),
     require.resolve('./setupHostConfigs.js'),
