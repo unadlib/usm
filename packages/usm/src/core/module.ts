@@ -173,8 +173,8 @@ class Module<T = {}> {
 
   private async _moduleWillReset() {
     for (const key in this._modules) {
-      if (typeof this.parentModule !== 'undefined') {
-        const dependentModule = this.parentModule._modules[key];
+      if (typeof this.parentModule === 'undefined') {
+        const dependentModule = this._modules[key];
         if (dependentModule instanceof Module) {
           await dependentModule._resetModule();
         }
@@ -191,8 +191,6 @@ class Module<T = {}> {
     await this._initialize();
     this.__init__ = false;
     this.__reset__ = true;
-    await this._moduleDidReset();
-    await this._moduleDidInitialize();
   }
 
   private _moduleResetCheck() {
@@ -260,8 +258,10 @@ class Module<T = {}> {
     this._proto.boot(this._proto, this);
   }
 
-  public resetModule() {
-    this._resetModule();
+  public async resetModule() {
+    await this._resetModule();
+    await this._moduleDidReset();
+    await this._moduleDidInitialize();
   }
 
   public dispatch(action: Action): void {
