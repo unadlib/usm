@@ -273,7 +273,9 @@ class Module<T = {}> {
       }[action.type];
       if (moduleStatus) {
         this._status = moduleStatus;
-        return event.emit('module');
+        if (Array.isArray(event._events['module'])) {
+          return event.emit('module');
+        }
       }
     }
     if (typeof this._dispatch === 'function') {
