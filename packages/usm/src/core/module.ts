@@ -5,10 +5,11 @@ import DEFAULT_PROPERTY from '../utils/property';
 import event from '../utils/event';
 
 export type InterfaceModule = typeof Module;
-export type ModuleInstance = InstanceType<InterfaceModule>;
+
 export type Properties<T = any> = {
   [P in string]?: T;
 }
+
 export type Reducer<S = any, A extends Action = AnyAction> = (
   state: S | undefined,
   action: A
@@ -215,7 +216,7 @@ class Module<T = {}> {
     return getActionTypes(this.getActionTypes(), this.constructor.name);
   }
 
-  protected static _getModuleKey(module: ModuleInstance): string|void {
+  protected static _getModuleKey(module: Module): string|void {
     if (typeof module.parentModule === 'undefined' || module.parentModule === null) {
       return;
     }
@@ -234,7 +235,7 @@ class Module<T = {}> {
     return factoryModule;
   }
 
-  public static boot(proto: InterfaceModule, module: ModuleInstance): void {
+  public static boot(proto: InterfaceModule, module: Module): void {
     module.isFactoryModule = true;
     if (typeof module._modules === 'object') {
       const flattenModules = flatten(module);
@@ -246,7 +247,7 @@ class Module<T = {}> {
     module._initModule();
   }
 
-  public static _generateStore(proto: InterfaceModule, module: ModuleInstance): Store {
+  public static _generateStore(proto: InterfaceModule, module: Module): Store {
     return proto.createStore(module.reducers);
   }
 

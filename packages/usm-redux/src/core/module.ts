@@ -1,10 +1,10 @@
 import BaseModule, { Action, Reducer, Params, Properties } from 'usm';
 import { createStore, combineReducers, ReducersMapObject } from 'redux';
 
-export type ModuleInstance = InstanceType<typeof Module>;
 export type Attribute<T = any> = {
   [P in string]: T;
 }
+
 type ActionTypes = Attribute<string>;
 
 interface Module {

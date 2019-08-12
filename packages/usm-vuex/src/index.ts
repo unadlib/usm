@@ -1,7 +1,6 @@
 import { event, Event } from 'usm';
-import Module, { VuexModule } from './core';
+import Module from './core';
 
-type ModuleInstance = InstanceType<typeof Module> & VuexModule;
 
 type Selector = () => any;
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
@@ -9,16 +8,16 @@ interface Descriptor<T> extends TypedPropertyDescriptor<T> {
 }
 
 interface Factory {
-  (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
+  (target: Module, name: string, descriptor?: Descriptor<any>): any;
 }
 
-function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+function createState(target: Module, name: string, descriptor?: Descriptor<any>) {
   target._state = target._state || {};
   target._state[name] = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined;
-  const get = function(this: ModuleInstance) {
+  const get = function(this: Module) {
     return this.state[name];
   };
-  const set = function(this: ModuleInstance, value: any) {
+  const set = function(this: Module, value: any) {
     if (typeof this._state === 'object') {
       this._state[name] = value;
     }
@@ -31,7 +30,7 @@ function createState(target: ModuleInstance, name: string, descriptor?: Descript
   };
 }
 
-function action(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
+function action(target: Module, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   target._mutations = target._mutations || {};
   target._mutations[name] = (state: any, args: []) => {
@@ -39,13 +38,13 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   };
   target._actionTypes = target._actionTypes || [];
   target._actionTypes.push(name);
-  descriptor.value = function (this: ModuleInstance, ...args:[]) {
+  descriptor.value = function (this: Module, ...args:[]) {
     return this.store.commit(this.actionTypes[name], args);
   }
   return descriptor;
 }
 
-function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+function setComputed(target: Module, name: string, descriptor?: Descriptor<any>) {
   let that;
   target._getters = target._getters || {};
   target._getters[name] = () => {
@@ -62,7 +61,7 @@ function setComputed(target: ModuleInstance, name: string, descriptor?: Descript
   return {
     enumerable: true,
     configurable: true,
-    get(this: ModuleInstance) {
+    get(this: Module) {
       that = this;
       return this.store.getters[name];
     }

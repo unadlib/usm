@@ -1,5 +1,4 @@
 import Module, {
-  ModuleInstance, 
   Store,
   Action,
   Reducer,
@@ -16,19 +15,19 @@ interface Descriptor<T> extends TypedPropertyDescriptor<T> {
 }
 
 interface ComputedFactory {
-  (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
+  (target: Module, name: string, descriptor?: Descriptor<any>): any;
 }
 interface StateFactory {
-  (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
+  (target: Module, name: string, descriptor?: Descriptor<any>): any;
 }
 
-function createState(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+function createState(target: Module, name: string, descriptor?: Descriptor<any>) {
   target._state = target._state || {};
   target._state[name] = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined;
-  const get = function(this: ModuleInstance) {
+  const get = function(this: Module) {
     return this.state[name];
   };
-  const set = function(this: ModuleInstance, value: any) {
+  const set = function(this: Module, value: any) {
     this.state[name] = value;
   };
   return {
@@ -39,9 +38,9 @@ function createState(target: ModuleInstance, name: string, descriptor?: Descript
   };
 }
 
-function action(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
+function action(target: Module, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
-  descriptor.value = function (this: ModuleInstance, ...args:[]) {
+  descriptor.value = function (this: Module, ...args:[]) {
     const result = fn.call(this, ...args, this._state);
     if (event._events.state) {
       event.emit('state', { action: name, module: target.constructor.name });
@@ -51,7 +50,7 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   return descriptor;
 }
 
-function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+function setComputed(target: Module, name: string, descriptor?: Descriptor<any>) {
   return {
     enumerable: true,
     configurable: true,

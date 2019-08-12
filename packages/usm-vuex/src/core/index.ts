@@ -7,12 +7,9 @@ const DEFAULT_PROPERTY = {
   enumerable: false,
   writable: false,
 };
-type ModuleInstance = InstanceType<typeof Module>;
 
-export type VuexModule =  {
-  setStore(store: StoreOptions<any>): void;
-  _mutations?: Properties;
-  _state?: Properties;
+interface Module {
+
 }
 
 // interface StoreType {
@@ -23,8 +20,10 @@ export type VuexModule =  {
 interface Module {
   _mutations?: any;
   _getters?: any;
+  setStore(store: StoreOptions<any>): void;
+  _state?: Properties;
 }
-class Module<T = {}> extends BaseModule<T> implements VuexModule {
+class Module<T = {}> extends BaseModule<T> {
   protected _setStore(_store: StoreOptions<any>) {
     if (this._store) return;
     Object.defineProperties(this,  {
@@ -45,7 +44,7 @@ class Module<T = {}> extends BaseModule<T> implements VuexModule {
     return typeof this._getters === 'undefined' ? {} : this._getters;
   }
 
-  public static _generateStore(proto: InterfaceModule, module: ModuleInstance) {
+  public static _generateStore(proto: InterfaceModule, module: Module) {
     Vue.use(Vuex);
     return proto.createStore(module as any);
   }  

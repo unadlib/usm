@@ -1,17 +1,17 @@
 import { observable, action as mobxAction, computed as mobxComputed } from 'mobx';
 import { event, Event } from 'usm';
-import Module, { ModuleInstance } from './core/module';
+import Module from './core/module';
 
 type Selector = () => any;
 
 interface ComputedFactory {
-  (target: ModuleInstance, name: string, descriptor?: Descriptor<any>): any;
+  (target: Module, name: string, descriptor?: Descriptor<any>): any;
 }
 interface Descriptor<T> extends TypedPropertyDescriptor<T> {
   initializer?(): T;
 }
 
-function action(target: ModuleInstance, name: string, descriptor: TypedPropertyDescriptor<any>) {
+function action(target: Module, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   descriptor.value = function (...args:[]) {
     return fn(...args, this);
@@ -19,13 +19,13 @@ function action(target: ModuleInstance, name: string, descriptor: TypedPropertyD
   return mobxAction(target, name, descriptor);
 }
 
-function state(target: ModuleInstance, name: string, descriptor?: TypedPropertyDescriptor<any>) {
+function state(target: Module, name: string, descriptor?: TypedPropertyDescriptor<any>) {
   target._stateKeys = target._stateKeys || [];
   target._stateKeys.push(name);
   return observable(target, name, descriptor);
 }
 
-function setComputed(target: ModuleInstance, name: string, descriptor?: Descriptor<any>) {
+function setComputed(target: Module, name: string, descriptor?: Descriptor<any>) {
   if (descriptor && typeof descriptor.initializer !== 'function') {
     return mobxComputed(target, name, descriptor);
   }
