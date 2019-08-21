@@ -20,8 +20,10 @@ function action(target: Module, name: string, descriptor: TypedPropertyDescripto
 }
 
 function state(target: Module, name: string, descriptor?: TypedPropertyDescriptor<any>) {
-  target._stateKeys = target._stateKeys || [];
-  target._stateKeys.push(name);
+  target._stateKeys = [
+    ...target._stateKeys || [],
+    name
+  ];
   return observable(target, name, descriptor);
 }
 

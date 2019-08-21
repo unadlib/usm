@@ -36,8 +36,10 @@ function action(target: Module, name: string, descriptor: TypedPropertyDescripto
   target._mutations[name] = (state: any, args: []) => {
     return fn.call(target, ...args, state);
   };
-  target._actionTypes = target._actionTypes || [];
-  target._actionTypes.push(name);
+  target._actionTypes = [
+    ...target._actionTypes || [],
+    name,
+  ]
   descriptor.value = function (this: Module, ...args:[]) {
     return this.store.commit(this.actionTypes[name], args);
   }

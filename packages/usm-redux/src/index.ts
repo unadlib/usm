@@ -14,8 +14,10 @@ interface Descriptor<T> extends TypedPropertyDescriptor<T> {
 }
 
 function createState(target: Module, name: string, descriptor?: Descriptor<any>) {
-  target._actionTypes = target._actionTypes || [];
-  target._actionTypes.push(name);
+  target._actionTypes = [
+    ...target._actionTypes || [],
+    name,
+  ];
   target._reducersMaps = target._reducersMaps || {};
   target._initialValue = target._initialValue || {};
   target._initialValue[name] = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined
