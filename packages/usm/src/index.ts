@@ -22,7 +22,9 @@ interface StateFactory {
 }
 
 function createState(target: Module, name: string, descriptor?: Descriptor<any>) {
-  target._state = target._state || {};
+  target._state = {
+    ...target._state || {},
+  };
   target._state[name] = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined;
   const get = function(this: Module) {
     return this.state[name];

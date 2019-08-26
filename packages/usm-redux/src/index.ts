@@ -18,9 +18,14 @@ function createState(target: Module, name: string, descriptor?: Descriptor<any>)
     ...target._actionTypes || [],
     name,
   ];
-  target._reducersMaps = target._reducersMaps || {};
-  target._initialValue = target._initialValue || {};
-  target._initialValue[name] = descriptor && descriptor.initializer ? descriptor.initializer.call(target) : undefined
+  target._reducersMaps = {
+    ...target._reducersMaps || {},
+  };
+  target._initialValue = {
+    ...target._initialValue || {},
+  };
+  target._initialValue[name] = descriptor && descriptor.initializer ?
+    descriptor.initializer.call(target) : undefined;
   const get = function(this: Module) {
     return this.state[name];
   };
