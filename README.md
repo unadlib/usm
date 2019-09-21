@@ -70,9 +70,34 @@ Add the following line to your .babelrc or babel.config.js file:
 ## Quick Start for React
 
 1. Build a project with `create-react-app`.
+
+```sh
+npx create-react-app usm-redux-example
+cd usm-redux-example
+yarn eject
+```
+
 2. Install `usm-redux` and other dependences package.
-3. Set babel config.
+
+```sh
+yarn add usm-redux react-redux
+yarn add --dev @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties
+```
+
+3. Set babel config in `package.json`.
+
+```js
+{
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose" : true }]
+  ]
+}
+```
+
 4. Start the project `yarn start`.
+
+
 5. Coding:
 
 `<root>/src/index.js`:
