@@ -13,6 +13,7 @@
 
 - [Support](#support)
 - [Features](#features)
+- [Quick Start for React](#quick-start-for-react)
 - [Usage](#usage)
 - [Pros](#pros)
 - [Articles](#articles)
@@ -65,6 +66,93 @@ Add the following line to your .babelrc or babel.config.js file:
   ]
 }
 ```
+
+## Quick Start for React
+
+1. Build a project with `create-react-app`.
+2. Install `usm-redux` and other dependences package.
+3. Set babel config.
+4. Start the project `yarn start`.
+5. Coding:
+
+`<root>/src/index.js`:
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import Module, { state, action } from 'usm-redux';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+class Todos extends Module {
+  @state list = [];
+
+  @action
+  add(text, state) {
+    state.list.push({ text });
+  }
+}
+
+const todos = Todos.create();
+
+ReactDOM.render(
+  <Provider store={todos.store}>
+    <App todos={todos} />
+  </Provider>,
+  document.getElementById('root')
+);
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
+```
+
+`<root>/src/App.js`:
+
+```js
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+
+function App({
+  todos,
+  add,
+}) {
+  const [todo, setTodo] = useState('');
+  return (
+    <div className="App">
+      <input
+        value={todo}
+        onChange={({ target }) => {
+          setTodo(target.value);
+        }} />
+      <button
+        onClick={() => {
+          add(todo);
+          setTodo('');
+        }}>
+        Add
+      </button>
+      <ul>
+        {
+          todos.map(({ text }, index) => (
+            <li key={index}>{text}</li>
+          ))
+        }
+      </ul>
+    </div>
+  );
+}
+
+export default connect(
+  (_, { todos }) => ({ todos: todos.list }),
+  (_, { todos }) => ({ add: (text) => todos.add(text) }),
+)(App);
+```
+
+6. Open [http://localhost:3000/](http://localhost:3000/) to see the app.
 
 ## Pros
 
