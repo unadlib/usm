@@ -9,6 +9,7 @@ console.log = (...args) => {
 }
 test('simple case', async () => {
   const index = await createCase(Module, state, action, computed);
+  // print(JSON.stringify(logs, null, 2));
   expect(logs).toEqual(caseResult);
   expect((index as any).store.getState()).toEqual({
     "__$$default$$__": null,
@@ -31,7 +32,9 @@ test('simple case', async () => {
       ]
     },
     "counter": {
-      "__$$default$$__": null
+      "__$$default$$__": null,
+      "i": 1,
+      "j": -1,
     },
     "fooBar": {
       "__$$default$$__": null

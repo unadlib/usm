@@ -34,7 +34,6 @@ export default (Module: any, state: any, action: any, computed: any) => {
         this.length;
         this.toggle(0);
         this.add({text: 'Learn Go', completed: false});
-        resolve(index); 
       }
       
       @computed
@@ -49,7 +48,30 @@ export default (Module: any, state: any, action: any, computed: any) => {
     
     
     class Index extends Module {}
-    class Counter extends Module {}
+    class BaseCounter extends Module {
+      @state
+      i = 0;
+
+      @action
+      increase(state?) {
+        state.i += 1;
+      }
+    }
+    class Counter extends BaseCounter {
+      @state
+      j = 0;
+
+      @action
+      decrease(state?) {
+        state.j -= 1;
+      }
+
+      moduleDidInitialize() {
+        this.decrease();
+        this.increase();
+        resolve(index);
+      }
+    }
     class FooBar extends Module {}
     const fooBar = new FooBar();
     const counter = new (Counter as any)({
@@ -72,7 +94,9 @@ export default (Module: any, state: any, action: any, computed: any) => {
       console.log(
         index._modules.todoList.state.list,
         index._modules.indexOptions.enable,
-        todoList.length
+        todoList.length,
+        index._modules.counter.i,
+        index._modules.counter.j,
       );
     });
   })

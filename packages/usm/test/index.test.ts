@@ -133,3 +133,110 @@ describe('parent-child set modules', () => {
     expect(index._modules.indexOptions.foobar).toBeTruthy();
   });
 });
+
+describe('inherit module create', () => {
+  test('check base nherit module', (done) => {
+    const result = [];
+    class BaseFoo extends Module {
+      @state
+      i = 0;
+
+      @action
+      increase(state?) {
+        state.i += 1;
+      }
+    }
+
+    class Foo extends BaseFoo {
+      moduleDidInitialize() {
+        this.increase();
+        expect(result).toEqual([1, 2]);
+        done();
+      }
+    }
+    const foo = Foo.create() as Foo;
+    Foo.create().store.subscribe(() => {
+      result.push(foo.i);
+    });
+  });
+  test('check override `action` of inherit module', (done) => {
+    const result = [];
+    class BaseFoo extends Module {
+      @state
+      i = 0;
+
+      @action
+      increase(state?) {
+        state.i += 1;
+      }
+    }
+
+    class Foo extends BaseFoo {
+      @action
+      increase(state?) {
+        state.i += 2;
+      }
+
+      moduleDidInitialize() {
+        this.increase();
+        expect(result).toEqual([2, 4]);
+        done();
+      }
+    }
+    const foo = Foo.create() as Foo;
+    Foo.create().store.subscribe(() => {
+      result.push(foo.i);
+    });
+  });
+
+  test('check override `action` & `state` of inherit module', (done) => {
+    const result = [];
+    class BaseFoo extends Module {
+      @state
+      i = 0;
+
+      @action
+      increase(state?) {
+        state.i += 1;
+      }
+
+      moduleDidInitialize() {
+        this.increase();
+      }
+    }
+
+    class Foo extends BaseFoo {
+      @state
+      i = 3;
+
+      @action
+      increase(state?) {
+        state.i += 2;
+      }
+
+      @state
+      j = 10;
+
+      @action
+      decrease(state?) {
+        state.j -= 1;
+      }
+
+      moduleDidInitialize() {
+        super.moduleDidInitialize();
+        this.decrease();
+        expect(result).toEqual([
+          [5, 10],
+          [5, 9],
+          [7, 9],
+          [7, 8],
+        ]);
+        done();
+      }
+    }
+    const foo = Foo.create() as Foo;
+    Foo.create().store.subscribe(() => {
+      result.push([foo.i, foo.j]);
+    });
+  });
+});

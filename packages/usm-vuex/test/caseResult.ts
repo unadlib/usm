@@ -17,7 +17,9 @@ export default [
       }
     ],
     true,
-    2
+    2,
+    0,
+    0
   ],
   [
     [
@@ -31,7 +33,9 @@ export default [
       }
     ],
     true,
-    2
+    2,
+    0,
+    0
   ],
   [
     [
@@ -45,7 +49,9 @@ export default [
       }
     ],
     true,
-    2
+    2,
+    0,
+    0
   ],
   [
     [
@@ -59,7 +65,9 @@ export default [
       }
     ],
     true,
-    2
+    2,
+    0,
+    0
   ],
   [
     "computed => list.length"
@@ -80,6 +88,48 @@ export default [
       }
     ],
     true,
-    3
+    3,
+    0,
+    0
+  ],
+  [
+    [
+      {
+        "text": "Learn Typescript",
+        "completed": true
+      },
+      {
+        "text": "Learn C++",
+        "completed": false
+      },
+      {
+        "text": "Learn Go",
+        "completed": false
+      }
+    ],
+    true,
+    3,
+    0,
+    -1
+  ],
+  [
+    [
+      {
+        "text": "Learn Typescript",
+        "completed": true
+      },
+      {
+        "text": "Learn C++",
+        "completed": false
+      },
+      {
+        "text": "Learn Go",
+        "completed": false
+      }
+    ],
+    true,
+    3,
+    1,
+    -1
   ]
 ]
