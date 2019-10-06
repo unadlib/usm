@@ -407,6 +407,10 @@ class Shop extends Module {
 }
 ```
 
+`operate` and `operateWithReducer` are the same in logic, just `operateWithReducer` as a handwritten reducer doesn't run `immer`.
+
+ You'll hardly use `@reducer` unless you're having a [immer performance issue](https://immerjs.github.io/immer/docs/performance).
+
 ### Module lifecycle
 
 `usm` provides these lifecycle hooks:
