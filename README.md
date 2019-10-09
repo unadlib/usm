@@ -1,11 +1,11 @@
-# USM
+# usm
 
 [![Travis](https://img.shields.io/travis/unadlib/usm.svg)](https://travis-ci.org/unadlib/usm)
 [![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
 
- **USM can help you make more concise OOP when using some state library**, and it currently supports Redux, Vuex, MobX and Angular.
+ **`usm` can help you make more concise OOP when using some state library**, and it currently supports Redux, Vuex, MobX and Angular.
 
-> USM is a universal state modular library.
+> `usm` is a universal state modular library.
 
 ![Modular Model](assets/images/modular-model.png)
 
@@ -282,7 +282,8 @@ class TodoList extends Module {
   }
 }
 ```
-USM will help you a lot on object-oriented programming using Redux, Vuex, MobX, etc. 
+
+`usm` will help you a lot on object-oriented programming using Redux, Vuex, MobX, etc. 
 
 ## Articles
 
@@ -423,7 +424,7 @@ class Shop extends Module {
 
 **Note**:
 
-If you need to run the USM-based module directly, you must use the module's `create` method, just like this:
+If you need to run the module based on `usm` directly, you must use the module's `create` method, just like this:
 
 ```js
 class Something extends Module {}
@@ -458,9 +459,9 @@ const foobarFactory = FoobarFactory.create({
 });
 ```
 
-**You can use `this._modules` access sub dependent modules.**
+**You can use `this._modules` access dependent modules.**
 
-USM does not provide module dependency management, you have to manage dependencies youself like the example above. And you are stronglly recommended to introduct external dependency injection libs to manage dependencies automatically, it will make you life easir. For example, using [InversifyJS](https://github.com/inversify/InversifyJS). If you use Angular, you will be able to use Angualr's dependency injection directly.
+`usm` does not provide module dependency management, you have to manage dependencies yourself like the example above. And you are stronglly recommended to introduct external dependency injection libs to manage dependencies automatically, it will make you life easir. For example, using [InversifyJS](https://github.com/inversify/InversifyJS). If you use Angular, you can use Angular's dependency injection.
 
 ## FAQ
 
