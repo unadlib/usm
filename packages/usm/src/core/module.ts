@@ -122,9 +122,7 @@ class Module<T = {}> {
 
   private async _initialize(): Promise<void> {
     this._moduleWillInitialize();
-    if (typeof this.moduleWillInitialize === 'function') {
-      await this.moduleWillInitialize();
-    }
+    await this.moduleWillInitialize();
     this.dispatch({
       type: this.actionTypes.init,
     });
@@ -134,15 +132,11 @@ class Module<T = {}> {
   private async _moduleDidInitialize(): Promise<void> {
     if (this._moduleInitializeCheck()) {
       this.__init__ = true;
-      if (typeof this.moduleWillInitializeSuccess === 'function') {
-        await this.moduleWillInitializeSuccess();
-      }
+      await this.moduleWillInitializeSuccess();
       this.dispatch({
         type: this.actionTypes.initSuccess,
       });
-      if (typeof this.moduleDidInitialize === 'function') {
-        await this.moduleDidInitialize();
-      }
+      await this.moduleDidInitialize();
     }
   }
 
@@ -187,9 +181,7 @@ class Module<T = {}> {
         }
       }
     }
-    if (typeof this.moduleWillReset === 'function') {
-      await this.moduleWillReset();
-    }
+    await this.moduleWillReset();
   }
 
   private async _resetModule() {
@@ -212,9 +204,7 @@ class Module<T = {}> {
   private async _moduleDidReset() {
     if (this._moduleResetCheck()) {
       this.__reset__ = false;
-      if (typeof this.moduleDidReset === 'function') {
-        await this.moduleDidReset();
-      }
+      await this.moduleDidReset();
     }
   }
 
@@ -333,15 +323,15 @@ class Module<T = {}> {
     return this._actionTypes;
   }
 
-  public moduleWillInitialize?(): void | Promise<void>;
+  public moduleWillInitialize() {}
 
-  public moduleWillInitializeSuccess?(): void | Promise<void>;
+  public moduleWillInitializeSuccess() {}
 
-  public moduleDidInitialize?(): void | Promise<void>;
+  public moduleDidInitialize() {}
 
-  public moduleWillReset?(): void | Promise<void>;
+  public moduleWillReset() {}
 
-  public moduleDidReset?(): void | Promise<void>;
+  public moduleDidReset() {}
 }
 
 export {
