@@ -1,6 +1,6 @@
 {
   "name": "usm-mobx",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "Universal state module - usm for mobx",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -30,7 +30,7 @@
   ],
   "dependencies": {
     "mobx": "^5.9.0",
-    "usm": "^1.3.5"
+    "usm": "^1.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
