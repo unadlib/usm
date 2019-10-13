@@ -56,7 +56,14 @@ interface Module {
   isFactoryModule?: boolean;
   setStore?(store: Store): void;
 }
-
+/**
+ * TypeScript interface Usage:
+ * interface DepsModules = {
+ *   foo: Foo;
+ *   bar: Bar;
+ * }
+ * class Foobar<DepsModules> {}
+ */
 class Module<T = {}> {
   protected __init__: boolean;
   protected __reset__: boolean;
