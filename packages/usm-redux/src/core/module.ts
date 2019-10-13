@@ -30,8 +30,9 @@ class Module<T = {}> extends BaseModule<T> {
   public _makeInstance(params: Params<T>) {
     if (Array.isArray(this._actionTypes)) {
       this._actionTypes.forEach(name => {
-        this._reducersMaps[name] = (types, initialValue = this._initialValue[name]) =>
-        (_state = initialValue, { type, states }) => type.indexOf(types[name]) > -1 && states ? states[name] : _state;
+        this._reducersMaps[name] = (types) =>
+        (_state = this._initialValue[name], { type, states }) =>
+          type.indexOf(types[name]) > -1 && states ? states[name] : _state;
       });
     }
     super._makeInstance(params);
@@ -43,7 +44,7 @@ class Module<T = {}> extends BaseModule<T> {
   }
 
   protected get _reducers() {
-    const reducers = this._getReducers(this.actionTypes, {});
+    const reducers = this._getReducers(this.actionTypes);
     return this._proto.combineReducers(reducers);
   }
 
@@ -84,8 +85,8 @@ class Module<T = {}> extends BaseModule<T> {
     ) : this.getState();
   }
 
-  protected _getReducers(actionTypes: ActionTypes, initialValue: any) {
-    const reducers = this.getReducers(actionTypes, initialValue);
+  protected _getReducers(actionTypes: ActionTypes) {
+    const reducers = this.getReducers(actionTypes);
     const subReducers: Properties<Reducer> = !this.isFactoryModule ? {} : Object
       .entries(this._modules)
       .filter(([_, module]) => module instanceof Module)
@@ -114,7 +115,7 @@ class Module<T = {}> extends BaseModule<T> {
     return this._store;
   }
 
-  public getReducers(actionTypes: ActionTypes, initialValue: any = {}) {
+  public getReducers(actionTypes: ActionTypes) {
     return (this._actionTypes || []).reduce((map: Properties<Reducer>, name: string) => {
       map[name] = this._reducersMaps[name](actionTypes);
       return map;

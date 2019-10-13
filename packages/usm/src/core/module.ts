@@ -17,11 +17,11 @@ export type Reducer<S = any, A extends Action = AnyAction> = (
 
 export interface Params<T = {}> {
   modules: T;
-  getState?(): any;
+  getState?(): Properties;
 }
 
 export interface Action {
-  type: string[]|string;
+  type: string[] | string;
   states?: Properties;
 }
 
@@ -44,15 +44,15 @@ export interface Store {
 };
 
 interface Module {
-  _state?: any;
-  reducers?: Reducer;
-  getState: any;
+  _state?: Properties;
   _store: Store;
   _status: string;
   _actionTypes?: string[];
   _dispatch?(action: Action): void;
+  reducers?: Reducer;
+  getState(): Properties;
   onStateChange?(): void;
-  parentModule?: Module<any>;
+  parentModule?: Module<Properties<Module | any>>;
   isFactoryModule?: boolean;
   setStore?(store: Store): void;
 }
@@ -140,7 +140,7 @@ class Module<T = {}> {
     }
   }
 
-  private _moduleInitializeCheck(): boolean {
+  private _moduleInitializeCheck() {
     return !this.__init__ && Object
       .values(this._modules)
       .filter(module => module instanceof Module)
@@ -265,7 +265,7 @@ class Module<T = {}> {
     await this._moduleDidInitialize();
   }
 
-  public dispatch(action: Action): void {
+  public dispatch(action: Action) {
     if (typeof action.type === 'string') {
       const moduleStatus = {
         [this.actionTypes.init]: moduleStatuses.pending,
@@ -303,15 +303,15 @@ class Module<T = {}> {
     return this._status;
   }
 
-  public get pending(): boolean {
+  public get pending() {
     return this.status === moduleStatuses.pending;
   }
 
-  public get ready(): boolean {
+  public get ready() {
     return this.status === moduleStatuses.ready;
   }
 
-  public get resetting(): boolean {
+  public get resetting() {
     return this.status === moduleStatuses.resetting;
   }
 

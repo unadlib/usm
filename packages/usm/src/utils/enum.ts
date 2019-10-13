@@ -21,7 +21,7 @@ interface Enum {
   [key: string]: any;
 }
 
-class Enum implements Enum {
+class Enum {
   constructor(keys: PropertyKeys = [], prefix: Prefix) {
     const properties: PropertyDescriptorMap = {
       prefix: {
