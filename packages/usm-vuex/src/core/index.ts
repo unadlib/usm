@@ -12,18 +12,16 @@ interface Module {
 
 }
 
-// interface StoreType {
-//   commit(type: string, args:[]): void;
-//   getters: Properties;
-// }
-
+interface VuexModule {
+  setStore(store: StoreOptions<any>): void;
+  _state?: Properties;
+};
 interface Module {
   _mutations?: any;
   _getters?: any;
-  setStore(store: StoreOptions<any>): void;
-  _state?: Properties;
 }
-class Module<T = {}> extends BaseModule<T> {
+
+class Module<T = {}> extends BaseModule<T> implements VuexModule {
   protected _setStore(_store: StoreOptions<any>) {
     if (this._store) return;
     Object.defineProperties(this,  {
