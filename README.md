@@ -179,6 +179,8 @@ export default connect(
 
 6. Open [http://localhost:3000/](http://localhost:3000/) to see the app.
 
+[Video](https://drive.google.com/file/d/1UOJL1axOiV8K3IWp8tylASztkzCbUmWD/view)
+
 ## Pros
 
 <details>
