@@ -16,7 +16,7 @@
 - [Quick Start for React](#quick-start-for-react)
 - [Usage](#usage)
 - [Pros](#pros)
-- [Articles & Presentation](#articles)
+- [Articles & Presentation](#articles--presentation)
 - [Examples](#examples)
 - [Migration](#migration)
 - [APIs](#apis)
