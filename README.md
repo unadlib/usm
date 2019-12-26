@@ -16,7 +16,7 @@
 - [Quick Start for React](#quick-start-for-react)
 - [Usage](#usage)
 - [Pros](#pros)
-- [Articles](#articles)
+- [Articles & Presentation](#articles)
 - [Examples](#examples)
 - [Migration](#migration)
 - [APIs](#apis)
@@ -287,8 +287,9 @@ class TodoList extends Module {
 
 `usm` will help you a lot on object-oriented programming using Redux, Vuex, MobX, etc. 
 
-## Articles
-
+## Articles & Presentation
+- [2019 JSConf China Video - Redux Based Modular Design](https://www.youtube.com/watch?v=_IxBd1O1-YM)
+- [2019 JSConf China Slides - Redux Based Modular Design](https://docs.google.com/presentation/d/1A28BN63NdODNlye8QVt6YY3fIFUVUYpeJBRSe2RIUms)
 - [Practice OOP to front-end universal state module with Redux/MobX/Vuex.](https://medium.com/@unadlib/practice-oop-to-front-end-universal-state-module-with-redux-mobx-vuex-af73e3a4cbfb)
 - [How to build a large Vue application with usm-vuex](https://medium.com/@unadlib/how-to-build-a-large-vue-application-3afa2aad4402)
 - [A concise design that completely changed Redux](https://medium.com/@unadlib/a-concise-design-that-completely-changed-redux-e95d6b76bd8b)
