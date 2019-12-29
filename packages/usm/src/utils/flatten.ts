@@ -11,6 +11,14 @@ function flatten(
   flattenModules: Properties<Module> = {}
 ): Properties<Module> {
   Object.entries(modulesTree._modules).forEach(([key, module]: ModulesTuple) => {
+    if (
+      typeof module === 'object' && (
+        module.__name__ === null ||
+        typeof module.__name__ === 'undefined'
+      )
+    ) {
+      module.__name__ = key;
+    }
     flattenModules[key] = module;
     if (
       typeof module._modules === 'object' &&

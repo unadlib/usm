@@ -44,6 +44,7 @@ export interface Store {
 };
 
 interface Module {
+  __name__: string;
   _state?: Properties;
   _store: Store;
   _status: string;
@@ -220,7 +221,7 @@ class Module<T = {}> {
   }
 
   private _getActionTypes() {
-    return getActionTypes(this.getActionTypes(), this.constructor.name);
+    return getActionTypes(this.getActionTypes(), this.__name__);
   }
 
   protected static _getModuleKey(module: Module): string|void {
