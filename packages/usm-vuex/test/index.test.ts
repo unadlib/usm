@@ -15,13 +15,13 @@ function run() {
       @state list: Todo[] = [{text: 'Learn Typescript', completed: false}];
     
       @action
-      add(todo: Todo, state?: any) {
-        state.list.push(todo);
+      add(todo: Todo) {
+        this.state.list.push(todo);
       }
     
       @action
-      toggle(index: number, state?: any) {
-        const todo: Todo = state.list[index];
+      toggle(index: number) {
+        const todo: Todo = this.state.list[index];
         todo.completed = !todo.completed;
       }
     
@@ -64,8 +64,8 @@ function run() {
       @state bar = 1;
       
       @action
-      add(state?: any) {
-        state.bar++;
+      add() {
+        this.state.bar++;
       }
     }
     class Index extends Module<{ todoList: TodoList }> {

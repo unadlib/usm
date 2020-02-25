@@ -35,15 +35,15 @@ function createState(target: Module, name: string, descriptor?: Descriptor<any>)
 function action(target: Module, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   target._mutations = target._mutations || {};
-  target._mutations[name] = (state: any, args: []) => {
-    return fn.call(target, ...args, state);
+  target._mutations[name] = (state: any, {  args, context }) => {
+    return fn.call({ ...context, state }, ...args);
   };
   target._actionTypes = [
     ...target._actionTypes || [],
     name,
   ]
   descriptor.value = function (this: Module, ...args:[]) {
-    return this.store.commit(this.actionTypes[name], args);
+    return this.store.commit(this.actionTypes[name], { args, context: this });
   }
   return descriptor;
 }

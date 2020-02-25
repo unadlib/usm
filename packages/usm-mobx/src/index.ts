@@ -14,8 +14,8 @@ interface Descriptor<T> extends TypedPropertyDescriptor<T> {
 function action(target: Module, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   descriptor.value = function (...args:[]) {
-    return fn(...args, this);
-  }
+    return fn.call({ ...this, state: this }, ...args);
+  };
   return mobxAction(target, name, descriptor);
 }
 

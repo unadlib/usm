@@ -43,7 +43,7 @@ function createState(target: Module, name: string, descriptor?: Descriptor<any>)
 function action(target: Module, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   descriptor.value = function (this: Module, ...args:[]) {
-    const result = fn.call(this, ...args, this._state);
+    const result = fn.call(this, ...args);
     if (event._events.state) {
       event.emit('state', { action: name, module: target.constructor.name });
     }

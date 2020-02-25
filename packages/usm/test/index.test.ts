@@ -9,8 +9,8 @@ function generate() {
     @state list: Todo[] = [{text: "Learn Typescript"}];
   
     @action
-    add(todo: Todo, state?: any) {
-      state.list.push(todo);
+    add(todo: Todo) {
+      this.state.list.push(todo);
     }
   
     async moduleDidInitialize() {
@@ -72,8 +72,8 @@ describe('parent-child set modules', () => {
       @state list: Todo[] = [{text: "Learn Typescript"}];
     
       @action
-      add(todo: Todo, state?: any) {
-        state.list.push(todo);
+      add(todo: Todo) {
+        this.state.list.push(todo);
       }
     
       async moduleDidInitialize() {
@@ -141,8 +141,8 @@ describe('inherit module create', () => {
         i = 0;
 
         @action
-        increase(state?) {
-          state.i += 1;
+        increase() {
+          this.state.i += 1;
         }
       }
 
@@ -167,15 +167,15 @@ describe('inherit module create', () => {
         i = 0;
 
         @action
-        increase(state?) {
-          state.i += 1;
+        increase() {
+          this.state.i += 1;
         }
       }
 
       class Foo extends BaseFoo {
         @action
-        increase(state?) {
-          state.i += 2;
+        increase() {
+          this.state.i += 2;
         }
 
         moduleDidInitialize() {
@@ -199,8 +199,8 @@ describe('inherit module create', () => {
         i = 0;
 
         @action
-        increase(state?) {
-          state.i += 1;
+        increase() {
+          this.state.i += 1;
         }
 
         moduleDidInitialize() {
@@ -213,16 +213,16 @@ describe('inherit module create', () => {
         i = 3;
 
         @action
-        increase(state?) {
-          state.i += 2;
+        increase() {
+          this.state.i += 2;
         }
 
         @state
         j = 10;
 
         @action
-        decrease(state?) {
-          state.j -= 1;
+        decrease() {
+          this.state.j -= 1;
         }
 
         moduleDidInitialize() {

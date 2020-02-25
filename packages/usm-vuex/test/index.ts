@@ -9,13 +9,13 @@ class TodoList extends Module<{ foo: Foo }> {
   @state list: Todo[] = [{text: 'Learn Typescript', completed: false}];
 
   @action
-  add(todo: Todo, state?: any) {
-    state.list.push(todo);
+  add(todo: Todo) {
+    this.state.list.push(todo);
   }
 
   @action
-  toggle(index: number, state?: any) {
-    const todo: Todo = state.list[index];
+  toggle(index: number) {
+    const todo: Todo = this.state.list[index];
     todo.completed = !todo.completed;
   }
 
@@ -56,8 +56,8 @@ class Foo extends Module {
   @state bar = 1;
 
   @action
-  add(state) {
-    state.bar++;
+  add() {
+    this.state.bar++;
   }
 }
 class Index extends Module<{ todoList: TodoList }> {

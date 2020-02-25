@@ -43,7 +43,7 @@ function createState(target: Module, name: string, descriptor?: Descriptor<any>)
 function action(target: Module, name: string, descriptor: TypedPropertyDescriptor<any>) {
   const fn = descriptor.value;
   descriptor.value = function (this: Module, ...args:[]) {
-    const states = produce(this.state, fn.bind(this, ...args));
+    const states = produce(this.state, (state) => fn.call({ ...this, state }, ...args));
     this._dispatch({
       type: Object.keys(this.state).map(key => this.actionTypes[key]),
       states,

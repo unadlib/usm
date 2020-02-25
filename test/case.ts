@@ -15,13 +15,13 @@ export default (Module: any, state: any, action: any, computed: any) => {
       }
 
       @action
-      add(todo: Todo, state?: any) {
-        state.list.push(todo);
+      add(todo: Todo) {
+        this.state.list.push(todo);
       }
     
       @action
-      toggle(index: number, state?: any) {
-        const todo: Todo = state.list[index];
+      toggle(index: number) {
+        const todo: Todo = this.state.list[index];
         todo.completed = !todo.completed;
       }
     
@@ -53,8 +53,8 @@ export default (Module: any, state: any, action: any, computed: any) => {
       i = 0;
 
       @action
-      increase(state?) {
-        state.i += 1;
+      increase() {
+        this.state.i += 1;
       }
     }
     class Counter extends BaseCounter {
@@ -62,8 +62,8 @@ export default (Module: any, state: any, action: any, computed: any) => {
       j = 0;
 
       @action
-      decrease(state?) {
-        state.j -= 1;
+      decrease() {
+        this.state.j -= 1;
       }
 
       moduleDidInitialize() {
