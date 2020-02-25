@@ -102,7 +102,7 @@ class Module<T = {}> extends BaseModule<T> {
   }
 
   public get state() {
-    return (this as any).__$$state$$__ || this._getState() || {};
+    return this.__$$state$$__ || this._getState() || {};
   }
 
   public setStore(store: Store) {
