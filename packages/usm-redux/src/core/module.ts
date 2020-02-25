@@ -11,6 +11,7 @@ interface Module {
   _initialValue: Properties;
   __seletors__: Properties;
   _reducersMaps: Attribute<Callback<ActionTypes, Reducer>>;
+  __$$state$$__: Record<string, any> | undefined;
 }
 interface Callback<T = undefined, S = void> {
   (params: T): S;
@@ -98,6 +99,10 @@ class Module<T = {}> extends BaseModule<T> {
       ...reducers,
       ...subReducers,
     };
+  }
+
+  public get state() {
+    return (this as any).__$$state$$__ || this._getState() || {};
   }
 
   public setStore(store: Store) {
