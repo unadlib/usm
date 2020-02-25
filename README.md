@@ -115,8 +115,8 @@ class Todos extends Module {
   @state list = [];
 
   @action
-  add(text, state) {
-    state.list.push({ text });
+  add(text) {
+    this.state.list.push({ text });
   }
 }
 
@@ -263,9 +263,9 @@ class TodoList extends Module {
   nextTodoId = 0;
 
   @action
-  add(text, state) {
+  add(text) {
     this.nextTodoId++;
-    state.todos.push({
+    this.state.todos.push({
       text,
       id: this.nextTodoId,
       completed: false,
@@ -273,14 +273,14 @@ class TodoList extends Module {
   }
 
   @action
-  toggle(id, state) {
-    const todo = state.todos.find(todo => todo.id === id);
+  toggle(id) {
+    const todo = this.state.todos.find(todo => todo.id === id);
     todo.completed = !todo.completed;
   }
 
   @action
-  setVisibility(filter, state) {
-    state.visibilityFilter = filter;
+  setVisibility(filter) {
+    this.state.visibilityFilter = filter;
   }
 }
 ```
@@ -301,13 +301,13 @@ class Counter extends Module {
   @state count = 0;
 
   @action
-  increase(state) {
-    state.count += 1;
+  increase() {
+    this.state.count += 1;
   }
 
   @action
-  decrease(state) {
-    state.count -= 1;
+  decrease() {
+    this.state.count -= 1;
   }
 }
 
@@ -359,14 +359,14 @@ class Shop extends Module {
   @state status = 'close';
 
   @action
-  operate(item, status, state) {
-    state.goods.push(item);
-    state.status = status;
+  operate(item, status) {
+    this.state.goods.push(item);
+    this.state.status = status;
   }
 
   @action
-  setList(list, state) {
-    state.goods = list;
+  setList(list) {
+    this.state.goods = list;
   }
 
   async getRemoteData(url) {
