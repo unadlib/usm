@@ -392,9 +392,9 @@ class Shop extends Module {
   @state status = 'close';
 
   @action
-  operate(item, status, state) {
-    state.goods.push(item);
-    state.status = status;
+  operate(item, status) {
+    this.state.goods.push(item);
+    this.state.status = status;
   }
   
   @reducer
