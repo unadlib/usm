@@ -1,6 +1,6 @@
 {
   "name": "usm-mobx",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "Universal state module - usm for mobx",
   "main": "lib/index.js",
   "module": "lib/index.js",
