@@ -28,7 +28,7 @@
     "module",
     "reactjs"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "mobx": "^5.9.0",
     "usm": "^2.0.0"
   },
