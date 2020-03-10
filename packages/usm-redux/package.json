@@ -28,7 +28,7 @@
     "module",
     "reactjs"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "immer": "^3.1.1",
     "redux": "^4.0.1",
     "reselect": "^2.5.4",
