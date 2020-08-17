@@ -1,0 +1,31 @@
+{
+  "name": "usm-redux",
+  "version": "3.0.0",
+  "description": "Universal state model for Redux",
+  "main": "dist/index.cjs.js",
+  "unpkg": "dist/index.umd.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/unadlib/usm/issues"
+  },
+  "homepage": "https://github.com/unadlib/usm#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unadlib/usm.git",
+    "directory": "packages/usm-redux"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "keywords": [
+    "USM",
+    "Redux",
+    "universal state model"
+  ],
+  "author": "unadlib",
+  "license": "MIT"
+}
