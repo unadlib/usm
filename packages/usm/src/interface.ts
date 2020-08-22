@@ -1,7 +1,12 @@
 import { stateKey, storeKey, subscriptionsKey } from './constant';
 
-export interface Store<T> {
+export interface StoreOptions {
+  modules: Service[];
+}
+
+export interface Store<T = any> {
   getState(): T;
+  subscribe(subscription: Subscription): Unsubscribe;
 }
 
 export interface Service<T extends Record<string, any> = Record<string, any>> {
@@ -10,6 +15,11 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
   readonly [subscriptionsKey]?: Subscriptions;
 }
 
-export interface Subscriptions {
+export type Subscription = () => void;
+export type Unsubscribe = () => void;
 
+export type Subscriptions = Subscription[];
+
+export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
+  initializer(): T;
 }
