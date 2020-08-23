@@ -57,9 +57,8 @@ export const createStore = (options: StoreOptions) => {
       value: identifier,
     });
     Object.defineProperty(module, stateKey, {
-      configurable: false,
       enumerable: false,
-      writable: false,
+      configurable: false,
       get(this: typeof module) {
         const stagedState = getStagedState();
         if (stagedState) return stagedState[this[identifierKey]!];
@@ -73,7 +72,6 @@ export const createStore = (options: StoreOptions) => {
     Object.defineProperty(module, storeKey, {
       configurable: false,
       enumerable: false,
-      writable: false,
       get() {
         return store;
       },

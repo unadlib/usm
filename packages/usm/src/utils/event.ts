@@ -67,15 +67,7 @@ export class EventEmitter {
 
   emit(eventType: EventType, ...args: any[]) {
     const listeners = this._events.get(eventType);
-    if (!Array.isArray(listeners)) {
-      throw new Error(
-        `Event type \'${eventType.toString()}\' should be registered before emit it.`
-      );
-    } else if (listeners.length === 0) {
-      throw new Error(
-        `Event type \'${eventType.toString()}\' has not any listener.`
-      );
-    }
+    if (!Array.isArray(listeners) || listeners.length === 0) return;
     [...listeners].forEach(({ callback, once }, index) => {
       if (once) {
         listeners.splice(index, 1);
