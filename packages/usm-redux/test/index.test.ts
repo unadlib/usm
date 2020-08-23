@@ -2,8 +2,6 @@ import { createStore, action, state, computed } from '../index';
 
 test('base', () => {
   class Counter {
-    name = 'counter';
-
     @state
     count = { sum: 0 };
 

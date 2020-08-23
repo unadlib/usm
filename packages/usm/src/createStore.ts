@@ -34,30 +34,8 @@ export const createStore = (options: StoreOptions) => {
   options.modules.forEach((module) => {
     if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey])
       return;
-      let identifier = module.name;
-      if (
-        typeof identifier !== 'string' ||
-        identifier === null ||
-        typeof identifier === 'undefined'
-      ) {
-        const className = Object.getPrototypeOf(module).constructor.name;
-        if (process.env.NODE_ENV !== 'production') {
-          console.error(`
-            Since '${className}' module has set the module state, '${className}' module must set a unique and valid class property 'name' to be used as the module index.
-            Example:
-              class FooBar {
-                name = 'FooBar'; // <- add the 'name' property.
-
-                state = { foo: 'bar' };
-              }
-          `);
-        } else {
-          throw new Error(
-            `'${className}' module 'name' property should be defined as a valid 'string'.`
-          );
-        }
-        identifier = `@@usm/${className}/${Math.random().toString(36)}`;
-      }
+    const className = Object.getPrototypeOf(module).constructor.name;
+    const identifier = `@@usm/${className}/${Math.random().toString(36)}`
     const descriptors: Record<string, PropertyDescriptor> = {
       [bootstrappedKey]: {
         enumerable: false,

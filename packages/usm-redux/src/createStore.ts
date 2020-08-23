@@ -35,7 +35,7 @@ export const createStore = (
       typeof identifier === 'undefined'
     ) {
       const className = Object.getPrototypeOf(module).constructor.name;
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV === 'development') {
         console.error(`
           Since '${className}' module has set the module state, '${className}' module must set a unique and valid class property 'name' to be used as the module index.
           Example:
