@@ -35,7 +35,7 @@ export const createStore = (options: StoreOptions) => {
     if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey])
       return;
     const className = Object.getPrototypeOf(module).constructor.name;
-    const identifier = `@@usm/${className}/${Math.random().toString(36)}`
+    const identifier = `@@usm/${className}/${Math.random().toString(36)}`;
     const descriptors: Record<string, PropertyDescriptor> = {
       [bootstrappedKey]: {
         enumerable: false,

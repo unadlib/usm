@@ -29,12 +29,11 @@ export const createStore = (
     if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey])
       return;
     let identifier = module.name;
-    if (
-      typeof identifier !== 'string' ||
-      identifier === null ||
-      typeof identifier === 'undefined'
-    ) {
-      const className = Object.getPrototypeOf(module).constructor.name;
+    const className = Object.getPrototypeOf(module).constructor.name;
+    if (identifier === null || typeof identifier === 'undefined') {
+      identifier = `@@usm-redux/${className}/${Math.random().toString(36)}`;
+    }
+    if (typeof identifier !== 'string') {
       if (process.env.NODE_ENV === 'development') {
         console.error(`
           Since '${className}' module has set the module state, '${className}' module must set a unique and valid class property 'name' to be used as the module index.
@@ -50,7 +49,6 @@ export const createStore = (
           `'${className}' module 'name' property should be defined as a valid 'string'.`
         );
       }
-      identifier = `@@usm-redux/${className}/${Math.random().toString(36)}`;
     }
     if (typeof reducers[identifier] === 'function') {
       identifier += `${index}`;
