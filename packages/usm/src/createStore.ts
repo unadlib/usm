@@ -17,6 +17,7 @@ export const createStore = (options: StoreOptions) => {
   const store: Store = {
     dispatch: (action: Action) => {
       state = action.state;
+      eventEmitter.emit(changeStateKey);
     },
     getState: () => state,
     subscribe: (subscription) => {
