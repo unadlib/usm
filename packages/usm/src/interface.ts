@@ -18,6 +18,7 @@ export interface Store<T = any> {
 }
 
 export interface Service<T extends Record<string, any> = Record<string, any>> {
+  name?: string;
   readonly [identifierKey]?: string;
   readonly [bootstrappedKey]?: boolean;
   readonly [stateKey]?: T;

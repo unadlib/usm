@@ -2,6 +2,8 @@ import { createStore, action, state, computed } from '../index';
 
 test('base', () => {
   class Counter {
+    name = 'counter';
+
     @state
     count = { sum: 0 };
 
@@ -17,6 +19,7 @@ test('base', () => {
     modules: [counter],
   });
   const [oldState] = Object.values(store.getState());
+  expect(oldState).toEqual({ count: { sum: 0 } });
   const fn = jest.fn();
   store.subscribe(() => {
     fn();

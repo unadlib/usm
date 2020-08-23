@@ -34,7 +34,30 @@ export const createStore = (options: StoreOptions) => {
   options.modules.forEach((module) => {
     if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey])
       return;
-    const identifier = Math.random().toString(32);
+      let identifier = module.name;
+      if (
+        typeof identifier !== 'string' ||
+        identifier === null ||
+        typeof identifier === 'undefined'
+      ) {
+        const className = Object.getPrototypeOf(module).constructor.name;
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(`
+            Since '${className}' module has set the module state, '${className}' module must set a unique and valid class property 'name' to be used as the module index.
+            Example:
+              class FooBar {
+                name = 'FooBar'; // <- add the 'name' property.
+
+                state = { foo: 'bar' };
+              }
+          `);
+        } else {
+          throw new Error(
+            `'${className}' module 'name' property should be defined as a valid 'string'.`
+          );
+        }
+        identifier = `@@usm/${className}/${Math.random().toString(36)}`;
+      }
     const descriptors: Record<string, PropertyDescriptor> = {
       [bootstrappedKey]: {
         enumerable: false,
@@ -44,20 +67,22 @@ export const createStore = (options: StoreOptions) => {
     };
     for (const key in module[stateKey]) {
       const descriptor = Object.getOwnPropertyDescriptor(module, key);
-      if (typeof descriptor === 'undefined') break;
+      if (typeof descriptor === 'undefined') continue;
       Object.assign(module[stateKey], {
         [key]: descriptor.value,
       });
-      descriptors[key] = {
-        enumerable: true,
-        configurable: false,
-        get(this: typeof module) {
-          return this[stateKey]![key];
+      Object.assign(descriptors, {
+        [key]: {
+          enumerable: true,
+          configurable: false,
+          get(this: typeof module) {
+            return this[stateKey]![key];
+          },
+          set(this: typeof module, value: unknown) {
+            this[stateKey]![key] = value;
+          },
         },
-        set(this: typeof module, value: unknown) {
-          this[stateKey]![key] = value;
-        },
-      };
+      });
     }
     state[identifier] = enableAutoFreeze
       ? produce({ ...module[stateKey] }, () => {})
