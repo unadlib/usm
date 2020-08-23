@@ -1,10 +1,8 @@
-import { StoreOptions, Service, Store, Action } from './interface';
-import { EventEmitter } from './utils';
+import produce, { setAutoFreeze } from 'immer';
 import { changeStateKey, identifierKey, stateKey, storeKey } from './constant';
 import { getStagedState } from './decorators';
-import produce, { setAutoFreeze } from 'immer';
-
-// const bootstrap = (module: Service) => {};
+import { Action, Store, StoreOptions } from './interface';
+import { EventEmitter } from './utils';
 
 export const createStore = (options: StoreOptions) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
