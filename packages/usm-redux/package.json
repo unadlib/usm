@@ -27,5 +27,8 @@
     "universal state model"
   ],
   "author": "unadlib",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "redux": "^4.0.5"
+  }
 }
