@@ -3,15 +3,12 @@ import {
   storeKey,
   subscriptionsKey,
   identifierKey,
+  bootstrappedKey,
 } from './constant';
 
 export interface StoreOptions {
   modules: Service[];
-  devOptions?: DevOptions;
-}
-
-export interface DevOptions {
-  autoFreeze?: boolean;
+  dev?: boolean;
 }
 
 export interface Store<T = any> {
@@ -21,7 +18,8 @@ export interface Store<T = any> {
 }
 
 export interface Service<T extends Record<string, any> = Record<string, any>> {
-  [identifierKey]?: string;
+  readonly [identifierKey]?: string;
+  readonly [bootstrappedKey]?: boolean;
   readonly [stateKey]?: T;
   readonly [storeKey]?: Store<T>;
   readonly [subscriptionsKey]?: Subscriptions;
