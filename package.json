@@ -65,6 +65,5 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  },
-  "name": "usm"
+  }
 }
