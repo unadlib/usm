@@ -9,7 +9,7 @@ import { Store } from 'redux';
 
 export interface StoreOptions {
   modules: Service[];
-  dev?: boolean;
+  strict?: boolean;
 }
 
 export interface Service<T extends Record<string, any> = Record<string, any>> {

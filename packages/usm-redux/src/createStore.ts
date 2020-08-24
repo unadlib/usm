@@ -21,7 +21,7 @@ export const createStore = (
       `'createStore' options should be a object with a property 'modules'`
     );
   }
-  const enableAutoFreeze = options.dev ?? false;
+  const enableAutoFreeze = options.strict ?? false;
   setAutoFreeze(enableAutoFreeze);
   const reducers: ReducersMapObject = {};
   let store: Store;

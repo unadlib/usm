@@ -8,7 +8,7 @@ import {
 
 export interface StoreOptions {
   modules: Service[];
-  dev?: boolean;
+  strict?: boolean;
 }
 
 export interface Store<T = any> {

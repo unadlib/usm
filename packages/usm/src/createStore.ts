@@ -16,7 +16,7 @@ export const createStore = (options: StoreOptions) => {
       `'createStore' options should be a object with a property 'modules'`
     );
   }
-  const enableAutoFreeze = options.dev ?? false;
+  const enableAutoFreeze = options.strict ?? false;
   setAutoFreeze(enableAutoFreeze);
   let state: Record<string, any> = {};
   const eventEmitter = new EventEmitter();
