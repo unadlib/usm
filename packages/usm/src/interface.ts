@@ -12,9 +12,9 @@ export interface StoreOptions {
   strict?: boolean;
 }
 
-export interface Store<T = any> {
+export interface Store<T = Record<string, any>> {
   dispatch(action: Action<T>): void;
-  getState(): T;
+  getState(): () => T;
   subscribe(subscription: Subscription): Unsubscribe;
 }
 

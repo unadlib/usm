@@ -1,3 +1,5 @@
+import { observable } from 'mobx';
+import { stateKey, observableKey } from '../constant';
 import { PropertyDescriptor, Service } from '../interface';
 
 export const state = (
@@ -20,5 +22,16 @@ export const state = (
     });
   } else {
     (target as Service)[stateKey]![key] = undefined;
+  }
+  if (typeof (target as Service)[observableKey] === 'undefined') {
+    Object.assign(target, {
+      [observableKey]: {
+        [key]: observable,
+      },
+    });
+  } else {
+    Object.assign((target as Service)[observableKey], {
+      [key]: observable,
+    });
   }
 };
