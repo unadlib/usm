@@ -59,8 +59,8 @@ const action = (
         this[storeKey]!.dispatch<Action>({
           type: this.name!,
           method: key,
-          state: state!,
-          lastState: this[storeKey]?.getState()!,
+          params: args,
+          _state: state!,
           _usm: actionKey,
           ...(enablePatches
             ? {

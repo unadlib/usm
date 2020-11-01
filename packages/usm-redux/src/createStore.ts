@@ -103,9 +103,8 @@ export const createStore = (
           });
         }
         const reducer = (state = value, action: Action) => {
-          return action._usm === actionKey &&
-            action.lastState[identifier!] !== action.state[identifier!]
-            ? action.state[identifier!][key]
+          return action._usm === actionKey
+            ? action._state[identifier!][key]
             : state;
         };
         return Object.assign(serviceReducersMapObject, {

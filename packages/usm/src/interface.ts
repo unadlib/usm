@@ -4,6 +4,7 @@ import {
   subscriptionsKey,
   identifierKey,
   bootstrappedKey,
+  actionKey
 } from './constant';
 
 export interface StoreOptions {
@@ -37,7 +38,10 @@ export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
 }
 
 export interface Action<T = Record<string, any>> {
-  state: T;
   type: string;
   method: string | symbol;
+  params: any[];
+  _state: T;
+  _usm: typeof actionKey;
 }
+

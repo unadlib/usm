@@ -32,10 +32,10 @@ export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
 }
 
 export interface Action<T = Record<string, any>> {
-  state: T;
-  lastState: T;
   type: string;
   method: string | symbol;
+  params: any[];
+  _state: T;
   _usm: typeof actionKey;
   _patches?: Patch[];
   _inversePatches?: Patch[];

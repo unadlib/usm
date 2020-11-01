@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 import { produce } from 'immer';
 import { Service } from '../interface';
-import { storeKey, stateKey, identifierKey } from '../constant';
+import { storeKey, stateKey, identifierKey, actionKey } from '../constant';
 
 let stagedState: Record<string, unknown> | undefined;
 
@@ -46,7 +46,9 @@ const action = (
         this[storeKey]!.dispatch({
           type: this[identifierKey]!,
           method: key,
-          state: state!,
+          params: args,
+          _state: state!,
+          _usm: actionKey,
         });
       } finally {
         stagedState = undefined;

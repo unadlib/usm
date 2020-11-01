@@ -22,7 +22,7 @@ export const createStore = (options: StoreOptions) => {
   const eventEmitter = new EventEmitter();
   const store: Store = {
     dispatch: (action: Action) => {
-      state = action.state;
+      state = action._state;
       eventEmitter.emit(changeStateKey);
     },
     getState: () => state,
