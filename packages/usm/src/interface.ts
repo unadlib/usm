@@ -14,7 +14,7 @@ export interface StoreOptions {
 
 export interface Store<T = Record<string, any>> {
   dispatch(action: Action<T>): void;
-  getState(): () => T;
+  getState(): T;
   subscribe(subscription: Subscription): Unsubscribe;
 }
 

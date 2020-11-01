@@ -38,13 +38,13 @@ export interface Action<T = Record<string, any>> {
   type: string;
   method: string | symbol;
   params: any[];
-  _changeState: () => void;
+  _changeState(): void;
 }
 
 export type Unsubscribe = () => void;
 
 export interface Store<T = Record<string, any>> {
-  dispatch: (action: Action) => void;
-  getState: () => T;
+  dispatch(action: Action): void;
+  getState(): T;
   subscribe: Subscription;
 }
