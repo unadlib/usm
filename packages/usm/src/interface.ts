@@ -38,7 +38,6 @@ export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
 
 export interface Action<T = Record<string, any>> {
   state: T;
-  lastState: T;
   type: string;
   method: string | symbol;
 }

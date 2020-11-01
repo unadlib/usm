@@ -47,7 +47,6 @@ const action = (
           type: this[identifierKey]!,
           method: key,
           state: state!,
-          lastState: this[storeKey]?.getState()!,
         });
       } finally {
         stagedState = undefined;

@@ -1,4 +1,7 @@
-import produce, { setAutoFreeze } from 'immer';
+import produce, {
+  setAutoFreeze,
+  enablePatches as enablePatchesWithImmer,
+} from 'immer';
 import {
   createStore as createStoreWithRedux,
   combineReducers,
@@ -6,15 +9,21 @@ import {
   Store,
   PreloadedState,
   StoreEnhancer,
+  Middleware,
+  applyMiddleware,
 } from 'redux';
 import { stateKey, storeKey, bootstrappedKey, actionKey } from './constant';
 import { getStagedState } from './decorators';
 import { Action, StoreOptions } from './interface';
 
+let enablePatches: boolean;
+
+export const getPatchesToggle = () => enablePatches;
+
 export const createStore = (
   options: StoreOptions,
   preloadedState?: PreloadedState<any>,
-  enhancer?: StoreEnhancer
+  middleware: Middleware[] = []
 ) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(
@@ -22,6 +31,8 @@ export const createStore = (
     );
   }
   const enableAutoFreeze = options.strict ?? false;
+  enablePatches = options.enablePatches ?? false;
+  if (enablePatches) enablePatchesWithImmer();
   setAutoFreeze(enableAutoFreeze);
   const reducers: ReducersMapObject = {};
   let store: Store;
@@ -141,7 +152,7 @@ export const createStore = (
   store = createStoreWithRedux(
     combineReducers(reducers),
     preloadedState,
-    enhancer
+    applyMiddleware(...middleware)
   );
   return store;
 };

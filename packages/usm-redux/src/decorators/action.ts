@@ -1,7 +1,9 @@
 /* eslint-disable func-names */
-import { produce } from 'immer';
+import { produceWithPatches, produce, Patch } from 'immer';
 import { Service } from '../interface';
 import { storeKey, stateKey, actionKey } from '../constant';
+import { getPatchesToggle } from '../createStore';
+import { Action } from '../interface';
 
 let stagedState: Record<string, unknown> | undefined;
 
@@ -25,13 +27,22 @@ const action = (
     }
     if (typeof stagedState === 'undefined') {
       try {
-        const state = produce(
-          this[storeKey]?.getState(),
-          (draftState: Record<string, unknown>) => {
-            stagedState = draftState;
-            fn.apply(this, args);
-          }
-        );
+        let state: Record<string, any> | undefined;
+        let patches: Patch[] = [];
+        let inversePatches: Patch[] = [];
+        const recipe = (draftState: Record<string, unknown>) => {
+          stagedState = draftState;
+          fn.apply(this, args);
+        };
+        const enablePatches = getPatchesToggle();
+        if (enablePatches) {
+          [state, patches, inversePatches] = produceWithPatches(
+            this[storeKey]?.getState(),
+            recipe
+          );
+        } else {
+          state = produce(this[storeKey]?.getState(), recipe);
+        }
         stagedState = undefined;
         if (process.env.NODE_ENV !== 'production') {
           if (this[stateKey] === state) {
@@ -45,12 +56,18 @@ const action = (
             );
           // performance detail: https://immerjs.github.io/immer/docs/performance
         }
-        this[storeKey]!.dispatch({
+        this[storeKey]!.dispatch<Action>({
           type: this.name!,
           method: key,
           state: state!,
           lastState: this[storeKey]?.getState()!,
           _usm: actionKey,
+          ...(enablePatches
+            ? {
+                _patches: patches,
+                _inversePatches: inversePatches,
+              }
+            : {}),
         });
       } finally {
         stagedState = undefined;

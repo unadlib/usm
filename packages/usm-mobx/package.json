@@ -27,5 +27,8 @@
     "universal state model"
   ],
   "author": "unadlib",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "mobx": "^6.0.1"
+  }
 }
