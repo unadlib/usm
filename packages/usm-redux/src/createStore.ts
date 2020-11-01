@@ -51,8 +51,6 @@ export const createStore = (
           Example:
             class FooBar {
               name = 'FooBar'; // <- add the 'name' property.
-
-              state = { foo: 'bar' };
             }
         `);
       } else {

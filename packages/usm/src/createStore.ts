@@ -31,11 +31,32 @@ export const createStore = (options: StoreOptions) => {
       return () => eventEmitter.off(changeStateKey, subscription);
     },
   };
-  options.modules.forEach((module) => {
+  options.modules.forEach((module, index) => {
     if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey])
       return;
     const className = Object.getPrototypeOf(module).constructor.name;
-    const identifier = `@@usm/${className}/${Math.random().toString(36)}`;
+    let identifier = module.name;
+    if (identifier === null || typeof identifier === 'undefined') {
+      identifier = `@@usm/${className}/${Math.random().toString(36)}`;
+    }
+    if (typeof identifier !== 'string') {
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`
+          Since '${className}' module has set the module state, '${className}' module must set a unique and valid class property 'name' to be used as the module index.
+          Example:
+            class FooBar {
+              name = 'FooBar'; // <- add the 'name' property.
+            }
+        `);
+      } else {
+        throw new Error(
+          `'${className}' module 'name' property should be defined as a valid 'string'.`
+        );
+      }
+    }
+    if (typeof state[identifier] !== 'undefined') {
+      identifier += `${index}`;
+    }
     const descriptors: Record<string, PropertyDescriptor> = {
       [bootstrappedKey]: {
         enumerable: false,
