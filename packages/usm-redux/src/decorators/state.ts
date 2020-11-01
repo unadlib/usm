@@ -6,7 +6,6 @@ export const state = (
   key: string | symbol,
   descriptor?: PropertyDescriptor<any>
 ) => {
-  const service: Service = target;
   if (typeof key !== 'string') {
     throw new Error(
       `'@state' decorate ${key.toString()} error in ${
@@ -14,14 +13,13 @@ export const state = (
       } class, it only supports class properties that decorate keys for string types.`
     );
   }
-  if (typeof service[stateKey] === 'undefined') {
+  if (typeof (target as Service)[stateKey] === 'undefined') {
     Object.assign(target, {
       [stateKey]: {
         [key]: undefined,
       },
     });
   } else {
-    // eslint-disable-next-line no-param-reassign
-    service[stateKey]![key] = undefined;
+    (target as Service)[stateKey]![key] = undefined;
   }
 };
