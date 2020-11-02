@@ -27,5 +27,11 @@
     "universal state model"
   ],
   "author": "unadlib",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "vuex": "^4.0.0-rc.1"
+  },
+  "devDependencies": {
+    "vue": "^3.0.2"
+  }
 }
