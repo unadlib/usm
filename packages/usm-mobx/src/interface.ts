@@ -38,7 +38,7 @@ export interface Action<T = Record<string, any>> {
   type: string;
   method: string | symbol;
   params: any[];
-  _changeState(): void;
+  _changeState(...args: any[]): void;
 }
 
 export type Unsubscribe = () => void;

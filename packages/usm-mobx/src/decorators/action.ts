@@ -27,7 +27,7 @@ export const action = (
       type: this[identifierKey]!,
       method: key,
       params: args,
-      _changeState: () => fn.apply(this, args),
+      _changeState: (...args) => fn.apply(this, args),
     });
   };
   return {
