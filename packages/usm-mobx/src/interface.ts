@@ -23,7 +23,7 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
   readonly [identifierKey]?: string;
   readonly [stateKey]?: T;
   readonly [storeKey]?: Store<T>;
-  readonly [subscriptionsKey]?: Subscriptions;
+  readonly [subscriptionsKey]?: Subscription[];
   [K: string]: any;
 }
 
@@ -32,9 +32,8 @@ export interface StoreOptions {
   strict?: boolean;
 }
 
-export type Subscriptions = Subscription[];
-
-export type Subscription = (subscription: () => void) => Unsubscribe;
+export type Unsubscribe = () => void;
+export type Subscription = () => void;
 
 export interface Action<T = Record<string, any>> {
   type: string;
@@ -43,10 +42,9 @@ export interface Action<T = Record<string, any>> {
   _changeState(...args: any[]): void;
 }
 
-export type Unsubscribe = () => void;
 
 export interface Store<T = Record<string, any>> {
   dispatch(action: Action): void;
   getState(): T;
-  subscribe: Subscription;
+  subscribe(listener: Subscription): Unsubscribe;
 }

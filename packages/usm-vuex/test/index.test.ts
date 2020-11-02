@@ -1,13 +1,22 @@
 import { createStore } from 'vuex'
 
 const store = createStore({
-  state () {
-    return {
-      count: 1
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+      state.count++
     }
   }
 })
 
-test('', () => {
-  console.log(store);
+test('', (r) => {
+  console.log(store.subscribe(() => {
+    console.log('=====');
+  }))
+  store.commit('increment')
+  console.log(store.state);
+  setTimeout(r);
 });

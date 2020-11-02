@@ -6,15 +6,13 @@ import {
   createStore as createStoreWithRedux,
   combineReducers,
   ReducersMapObject,
-  Store,
   PreloadedState,
-  StoreEnhancer,
   Middleware,
   applyMiddleware,
 } from 'redux';
 import { stateKey, storeKey, bootstrappedKey, actionKey } from './constant';
 import { getStagedState } from './decorators';
-import { Action, StoreOptions } from './interface';
+import { Action, StoreOptions, Store } from './interface';
 
 let enablePatches: boolean;
 
@@ -154,10 +152,15 @@ export const createStore = (
     });
     Object.defineProperties(module, descriptors);
   });
-  store = createStoreWithRedux(
+  const storeWithRedux = createStoreWithRedux(
     combineReducers(reducers),
     preloadedState,
     applyMiddleware(...middleware)
   );
+  store = {
+    dispatch: storeWithRedux.dispatch,
+    getState: storeWithRedux.getState,
+    subscribe: storeWithRedux.subscribe,
+  };
   return store;
 };

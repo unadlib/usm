@@ -15,7 +15,7 @@ export interface StoreOptions {
 export interface Store<T = Record<string, any>> {
   dispatch(action: Action<T>): void;
   getState(): T;
-  subscribe(subscription: Subscription): Unsubscribe;
+  subscribe(listener: Subscription): Unsubscribe;
 }
 
 export interface Service<T extends Record<string, any> = Record<string, any>> {
@@ -24,14 +24,12 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
   readonly [bootstrappedKey]?: boolean;
   readonly [stateKey]?: T;
   readonly [storeKey]?: Store<T>;
-  readonly [subscriptionsKey]?: Subscriptions;
+  readonly [subscriptionsKey]?: Subscription[];
   [K: string]: any;
 }
 
 export type Subscription = () => void;
 export type Unsubscribe = () => void;
-
-export type Subscriptions = Subscription[];
 
 export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
