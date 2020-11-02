@@ -37,10 +37,18 @@ export const createStore = (
   const reducers: ReducersMapObject = {};
   let store: Store;
   options.modules.forEach((module, index) => {
-    if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey])
-      return;
-    let identifier = module.name;
     const className = Object.getPrototypeOf(module).constructor.name;
+    if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey]) {
+      if (__DEV__) {
+        if (module[bootstrappedKey]) {
+          console.warn(
+            `The module with an index of ${index} and a name of ${className} in the module list is a duplicate module.`
+          );
+        }
+      }
+      return;
+    }
+    let identifier = module.name;
     if (identifier === null || typeof identifier === 'undefined') {
       identifier = `@@usm-redux/${className}/${Math.random().toString(36)}`;
     }

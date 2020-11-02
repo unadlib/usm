@@ -7,6 +7,7 @@ import {
   observableKey,
   storeKey,
   subscriptionsKey,
+  bootstrappedKey
 } from './constant';
 
 export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
@@ -18,6 +19,7 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
   readonly [actionKey]?: Record<string | symbol, typeof action>;
   readonly [computedKey]?: Record<string | symbol, typeof computed>;
   readonly [observableKey]?: Record<string | symbol, typeof observable>;
+  readonly [bootstrappedKey]?: boolean;
   readonly [identifierKey]?: string;
   readonly [stateKey]?: T;
   readonly [storeKey]?: Store<T>;

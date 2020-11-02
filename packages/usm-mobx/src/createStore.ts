@@ -8,6 +8,7 @@ import {
   computedKey,
   observableKey,
   actionKey,
+  bootstrappedKey,
 } from './constant';
 import type { StoreOptions, Store, Action } from './interface';
 
@@ -33,8 +34,17 @@ export const createStore = (options: StoreOptions) => {
     },
   };
   options.modules.forEach((module, index) => {
-    if (typeof module[stateKey] === 'undefined') return;
     const className = Object.getPrototypeOf(module).constructor.name;
+    if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey]) {
+      if (__DEV__) {
+        if (module[bootstrappedKey]) {
+          console.warn(
+            `The module with an index of ${index} and a name of ${className} in the module list is a duplicate module.`
+          );
+        }
+      }
+      return;
+    }
     let identifier = module.name;
     if (identifier === null || typeof identifier === 'undefined') {
       identifier = `@@usm-mobx/${className}/${Math.random().toString(36)}`;
@@ -58,7 +68,13 @@ export const createStore = (options: StoreOptions) => {
       identifier += `${index}`;
     }
     state[identifier] = {};
-    const descriptors: Record<string, PropertyDescriptor> = {};
+    const descriptors: Record<string, PropertyDescriptor> = {
+      [bootstrappedKey]: {
+        enumerable: false,
+        configurable: false,
+        value: true,
+      },
+    };
     const initialValue: Record<string, any> = {};
     for (const key in module[stateKey]) {
       Object.defineProperty(state[identifier], key, {

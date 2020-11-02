@@ -6,4 +6,4 @@ export const computedKey: unique symbol = Symbol('computed');
 export const observableKey: unique symbol = Symbol('observableKey');
 export const changeStateKey: unique symbol = Symbol('changeState');
 export const identifierKey: unique symbol = Symbol('identifier');
-// export const bootstrappedKey: unique symbol = Symbol('bootstrapped');
+export const bootstrappedKey: unique symbol = Symbol('bootstrapped');
