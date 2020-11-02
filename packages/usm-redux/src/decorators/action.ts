@@ -56,7 +56,7 @@ const action = (
             );
           // performance detail: https://immerjs.github.io/immer/docs/performance
         }
-        this[storeKey]!.dispatch<Action>({
+        this[storeKey]!.dispatch({
           type: this.name!,
           method: key,
           params: args,
@@ -68,7 +68,7 @@ const action = (
                 _inversePatches: inversePatches,
               }
             : {}),
-        });
+        } as Action);
       } finally {
         stagedState = undefined;
       }

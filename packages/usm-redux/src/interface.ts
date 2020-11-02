@@ -41,7 +41,7 @@ export interface Action<T = Record<string, any>> {
 }
 
 export interface Store<T = Record<string, any>> {
-  dispatch<P = Action>(action: P): void;
+  dispatch(action: Action): void;
   getState(): T;
   subscribe(listener: Subscription): Unsubscribe;
 }
