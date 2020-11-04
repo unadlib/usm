@@ -1,10 +1,14 @@
+import type { Store as StoreWithVuex } from 'vuex';
 import {
   stateKey,
   storeKey,
   subscriptionsKey,
   identifierKey,
   bootstrappedKey,
-  actionKey
+  actionKey,
+  actionsKey,
+  storeWithVuexKey,
+  gettersKey
 } from './constant';
 
 export interface StoreOptions {
@@ -25,6 +29,9 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
   readonly [stateKey]?: T;
   readonly [storeKey]?: Store<T>;
   readonly [subscriptionsKey]?: Subscription[];
+  readonly [storeWithVuexKey]?: StoreWithVuex<Record<string, any>>;
+  readonly [gettersKey]?: Record<string, () => any>;
+  readonly [actionsKey]?: Record<string, (...args: any) => void>;
   [K: string]: any;
 }
 
@@ -37,7 +44,7 @@ export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
 
 export interface Action<T = Record<string, any>> {
   type: string;
-  method: string | symbol;
+  method: string;
   params: any[];
   _state: T;
   _usm: typeof actionKey;

@@ -1,10 +1,12 @@
-import { createStore as createStoreWithVuex, Module } from 'vuex';
+import { createStore as createStoreWithVuex, Module, Store as StoreWithVuex } from 'vuex';
 import {
-  changeStateKey,
   identifierKey,
   stateKey,
   storeKey,
   bootstrappedKey,
+  gettersKey,
+  storeWithVuexKey,
+  actionsKey
 } from './constant';
 import { Action, Store, StoreOptions } from './interface';
 
@@ -16,10 +18,11 @@ export const createStore = (options: StoreOptions) => {
   }
   const strict = options.strict ?? false;
   let store: Store;
+  let storeWithVuex: StoreWithVuex<Record<string, any>>;
   const modules: Record<string, Module<any, any>> = {};
   options.modules.forEach((module, index) => {
     const className = Object.getPrototypeOf(module).constructor.name;
-    if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey]) {
+    if (module[bootstrappedKey]) {
       if (__DEV__) {
         if (module[bootstrappedKey]) {
           console.warn(
@@ -31,7 +34,7 @@ export const createStore = (options: StoreOptions) => {
     }
     let identifier = module.name;
     if (identifier === null || typeof identifier === 'undefined') {
-      identifier = `@@usm/${className}/${Math.random().toString(36)}`;
+      identifier = `@@usm-vuex/${className}/${Math.random().toString(36)}`;
     }
     if (typeof identifier !== 'string') {
       if (process.env.NODE_ENV === 'development') {
@@ -58,20 +61,79 @@ export const createStore = (options: StoreOptions) => {
         value: true,
       },
     };
-    //
+    modules[identifier] = {
+      state: {},
+      getters: {},
+      mutations: {},
+    };
+    if (module[stateKey]) {
+      for (const key in module[stateKey]) {
+        modules[identifier].state[key] = module[key];
+        Object.assign(descriptors, {
+          [key]: {
+            enumerable: true,
+            configurable: false,
+            get(this: typeof module) {
+              return this[storeWithVuexKey]!.state[identifier!]![key];
+            },
+          },
+        });
+      }
+    }
+    if (module[gettersKey]) {
+      for (const key in module[gettersKey]) {
+        modules[identifier].getters![key] = module[gettersKey]![key].bind(module);
+      }
+    }
+    if (module[actionsKey]) {
+      for (const key in module[gettersKey]) {
+        modules[identifier].mutations![key] = module[actionsKey]![key].bind(module);
+      }
+    }
+    Object.assign(descriptors, {
+      [identifierKey]: {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: identifier,
+      },
+      [stateKey]: {
+        enumerable: false,
+        configurable: false,
+        get(this: typeof module) {
+          return this[storeWithVuexKey]!.state[identifier!];
+        },
+      },
+      [storeKey]: {
+        configurable: false,
+        enumerable: false,
+        get() {
+          return store;
+        },
+      },
+      [storeWithVuexKey]: {
+        configurable: false,
+        enumerable: false,
+        get() {
+          return storeWithVuex;
+        },
+      },
+    });
+    Object.defineProperties(module, descriptors);
   });
-  const storeWithVuex = createStoreWithVuex<Record<string, any>>({
+  storeWithVuex = createStoreWithVuex<Record<string, any>>({
     modules,
     strict,
   });
   store = {
     dispatch: (action: Action) => {
-      //
+      const name = `${action.type}/${action.method}`;
+      storeWithVuex.commit(name, ...action.params);
     },
     getState: () => storeWithVuex.state,
     subscribe: (subscription) => {
       return storeWithVuex.subscribe(subscription);
     },
-  }
+  };
   return store;
 };
