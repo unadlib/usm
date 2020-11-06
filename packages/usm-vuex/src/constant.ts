@@ -5,6 +5,5 @@ export const identifierKey: unique symbol = Symbol('identifier');
 export const bootstrappedKey: unique symbol = Symbol('bootstrapped');
 export const actionKey: unique symbol = Symbol('action');
 
-export const storeWithVuexKey: unique symbol = Symbol('storeWithVuex');
 export const gettersKey: unique symbol = Symbol('getters');
 export const actionsKey: unique symbol = Symbol('actions');

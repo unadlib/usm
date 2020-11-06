@@ -1,4 +1,4 @@
-import { storeWithVuexKey, identifierKey, gettersKey } from '../constant';
+import { storeKey, identifierKey, gettersKey } from '../constant';
 import { Service } from '../interface';
 
 export const computed = (
@@ -22,7 +22,7 @@ export const computed = (
   }
   function get(this: Service) {
     const name = `${this[identifierKey]}/${key}`;
-    return this[storeWithVuexKey]!.getters[name];
+    return this[storeKey]!.getters[name];
   }
   return {
     ...descriptor,
