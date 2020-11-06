@@ -58,7 +58,7 @@ const action = (
           // performance detail: https://immerjs.github.io/immer/docs/performance
         }
         this[storeKey]!.dispatch({
-          type: this.[identifierKey]!,
+          type: this[identifierKey]!,
           method: key,
           params: args,
           _state: state!,
