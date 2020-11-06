@@ -7,3 +7,4 @@ Universal State Model
 - subscribe
 - watch
 - middleware
+- build script
