@@ -18,5 +18,11 @@
     "node": ">=0.8.0"
   },
   "author": "unadlib",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "usm": "^3.0.0",
+    "usm-mobx": "^3.0.0",
+    "usm-redux": "^3.0.0",
+    "usm-vuex": "^3.0.0"
+  }
 }
