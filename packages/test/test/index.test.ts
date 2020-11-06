@@ -43,6 +43,45 @@ test('base', () => {
   }
 });
 
+test('base with single action', () => {
+  for (const key in packages) {
+    const { createStore, action, state } = packages[
+      key as keyof typeof packages
+    ];
+    class Counter {
+      @state
+      count = { sum: 0 };
+    }
+
+    class Foo {
+      constructor(public counter: Counter) {}
+
+      @action
+      increase() {
+        this.counter.count.sum += 1;
+      }
+    }
+
+    const counter = new Counter();
+    const foo = new Foo(counter);
+
+    const store = createStore({
+      modules: [counter, foo],
+    });
+
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+    const fn = jest.fn();
+    store.subscribe(() => {
+      fn();
+    });
+    foo.increase();
+    const newState = Object.values(store.getState())[0] as Counter;
+    expect(newState.count).toEqual({ sum: 1 });
+    expect(fn.mock.calls.length).toBe(1);
+  }
+});
+
 test('base with { strict: true }', () => {
   for (const key in packages) {
     const { createStore, action, state } = packages[
@@ -122,10 +161,18 @@ test('base with immutable computed', () => {
     store.subscribe(() => {
       fn();
     });
+    expect(computedFn.mock.calls.length).toBe(0);
+    expect(counter.sum).toBe(1);
+    expect(counter.sum).toBe(1);
+    expect(computedFn.mock.calls.length).toBe(1);
     counter.increase();
     const newState = Object.values(store.getState())[0] as Counter;
     expect(newState.count).toEqual({ sum: 1 });
     expect(fn.mock.calls.length).toBe(1);
+    expect(computedFn.mock.calls.length).toBe(1);
+    expect(counter.sum).toBe(2);
+    expect(counter.sum).toBe(2);
+    expect(computedFn.mock.calls.length).toBe(2);
   }
 });
 
@@ -163,9 +210,115 @@ test('base with observable computed', () => {
     store.subscribe(() => {
       fn();
     });
+    expect(counter.sum).toBe(1);
+    expect(counter.sum).toBe(1);
+    expect(computedFn.mock.calls.length).toBe(1);
     counter.increase();
     const newState = Object.values(store.getState())[0] as Counter;
     expect(newState.count).toEqual({ sum: 1 });
     expect(fn.mock.calls.length).toBe(1);
+    expect(counter.sum).toBe(2);
+    expect(counter.sum).toBe(2);
+    expect(computedFn.mock.calls.length).toBe(2);
+  }
+});
+
+test('base with immutable single computed', () => {
+  for (const key in packagesWithImmutable) {
+    const { createStore, action, state, computed } = packagesWithImmutable[
+      key as keyof typeof packagesWithImmutable
+    ];
+    const computedFn = jest.fn();
+    class Counter {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    class Foo {
+      constructor(public counter: Counter) {
+
+      }
+
+      @computed(({ counter }: Foo) => [counter.count.sum])
+      get sum() {
+        computedFn();
+        return this.counter.count.sum + 1;
+      }
+    }
+
+    const counter = new Counter();
+    const foo = new Foo(counter);
+
+    const store = createStore({
+      modules: [counter, foo],
+    });
+
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+    const fn = jest.fn();
+    store.subscribe(() => {
+      fn();
+    });
+    counter.increase();
+    const newState = Object.values(store.getState())[0] as Counter;
+    expect(newState.count).toEqual({ sum: 1 });
+    expect(fn.mock.calls.length).toBe(1);
+  }
+});
+
+test('base with observable single computed', () => {
+  for (const key in packagesWithObservable) {
+    const { createStore, action, state, computed } = packagesWithObservable[
+      key as keyof typeof packagesWithObservable
+    ];
+    const computedFn = jest.fn();
+    class Counter {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    class Foo {
+      constructor(public counter: Counter) {}
+
+      @computed
+      get sum() {
+        computedFn();
+        return this.counter.count.sum + 1;
+      }
+    }
+
+    const counter = new Counter();
+    const foo = new Foo(counter);
+
+    const store = createStore({
+      modules: [counter, foo],
+    });
+
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+    const fn = jest.fn();
+    store.subscribe(() => {
+      fn();
+    });
+    expect(foo.sum).toBe(1);
+    expect(foo.sum).toBe(1);
+    expect(computedFn.mock.calls.length).toBe(1);
+    counter.increase();
+    const newState = Object.values(store.getState())[0] as Counter;
+    expect(newState.count).toEqual({ sum: 1 });
+    expect(fn.mock.calls.length).toBe(1);
+    expect(foo.sum).toBe(2);
+    expect(foo.sum).toBe(2);
+    expect(computedFn.mock.calls.length).toBe(2);
   }
 });

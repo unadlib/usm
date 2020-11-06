@@ -31,8 +31,16 @@ test('base', () => {
   store.subscribe(() => {
     fn();
   });
+  expect(computedFn.mock.calls.length).toBe(1);
+  expect(counter.sum).toBe(1);
+  expect(counter.sum).toBe(1);
+  expect(computedFn.mock.calls.length).toBe(1);
   counter.increase();
   const newState = Object.values(store.getState())[0] as Counter;
   expect(newState.count).toEqual({ sum: 1 });
   expect(fn.mock.calls.length).toBe(1);
+  expect(computedFn.mock.calls.length).toBe(2);
+  expect(counter.sum).toBe(2);
+  expect(counter.sum).toBe(2);
+  expect(computedFn.mock.calls.length).toBe(2);
 });
