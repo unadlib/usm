@@ -23,21 +23,15 @@ test('base', () => {
   const store = createStore({
     modules: [counter],
   });
-  const [oldState] = Object.values(store.getState());
-  expect(oldState).toEqual({ count: { sum: 0 } });
+
+  const oldState = Object.values(store.getState())[0] as Counter;
+  expect(oldState.count).toEqual({ sum: 0 });
   const fn = jest.fn();
   store.subscribe(() => {
     fn();
   });
-  expect(counter.sum).toBe(1);
-  expect(computedFn.mock.calls.length).toBe(1);
   counter.increase();
-  expect(counter.sum).toBe(2);
-  const [newState] = Object.values(store.getState());
-  expect(newState).toEqual({ count: { sum: 1 } });
+  const newState = Object.values(store.getState())[0] as Counter;
+  expect(newState.count).toEqual({ sum: 1 });
   expect(fn.mock.calls.length).toBe(1);
-  expect(computedFn.mock.calls.length).toBe(2);
-  counter.sum;
-  counter.sum;
-  expect(computedFn.mock.calls.length).toBe(2);
 });

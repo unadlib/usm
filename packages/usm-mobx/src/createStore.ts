@@ -1,4 +1,4 @@
-import { configure, makeObservable, runInAction } from 'mobx';
+import { configure, makeObservable, runInAction, autorun } from 'mobx';
 import { EventEmitter } from './utils';
 import {
   changeStateKey,
@@ -13,14 +13,17 @@ import {
 import type { StoreOptions, Store, Action } from './interface';
 
 export const createStore = (options: StoreOptions) => {
+  const autoRunComputed = options.autoRunComputed ?? true;
+  const strict = options.strict ?? false;
   configure({
     enforceActions: 'always',
-    computedRequiresReaction: false,
-    reactionRequiresObservable: options.strict,
-    observableRequiresReaction: options.strict,
-    disableErrorBoundaries: options.strict,
+    computedRequiresReaction: !autoRunComputed,
+    reactionRequiresObservable: strict,
+    observableRequiresReaction: strict,
+    disableErrorBoundaries: strict,
   });
   let state: Record<string, any> = {};
+  const autoComputedList: (() => void)[] = [];
   const eventEmitter = new EventEmitter();
   const store: Store = {
     dispatch: (action: Action) => {
@@ -123,6 +126,11 @@ export const createStore = (options: StoreOptions) => {
         module[key] = initialValue[key];
       }
     });
+    if (autoRunComputed) {
+      for (const key in module[computedKey]) {
+        autorun(() => module[key]);
+      }
+    }
   });
   if (options.strict) {
     Object.freeze(state);
