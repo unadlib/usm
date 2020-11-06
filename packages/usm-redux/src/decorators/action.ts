@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 import { produceWithPatches, produce, Patch } from 'immer';
 import { Service } from '../interface';
-import { storeKey, stateKey, actionKey } from '../constant';
+import { storeKey, actionKey, identifierKey } from '../constant';
 import { getPatchesToggle } from '../createStore';
 import { Action } from '../interface';
 
@@ -27,6 +27,7 @@ const action = (
     }
     if (typeof stagedState === 'undefined') {
       try {
+        const lastState = this[storeKey]?.getState();
         let state: Record<string, any> | undefined;
         let patches: Patch[] = [];
         let inversePatches: Patch[] = [];
@@ -37,16 +38,16 @@ const action = (
         const enablePatches = getPatchesToggle();
         if (enablePatches) {
           [state, patches, inversePatches] = produceWithPatches(
-            this[storeKey]?.getState(),
+            lastState,
             recipe
           );
         } else {
-          state = produce(this[storeKey]?.getState(), recipe);
+          state = produce(lastState, recipe);
         }
         stagedState = undefined;
         if (process.env.NODE_ENV !== 'production') {
-          if (this[stateKey] === state) {
-            console.warn(`There are no state updates to method ${fn.name}`);
+          if (lastState === state) {
+            console.warn(`There are no state updates to method '${fn.name}'`);
           }
           // performance checking
           const executionTime = Date.now() - time!;
@@ -57,7 +58,7 @@ const action = (
           // performance detail: https://immerjs.github.io/immer/docs/performance
         }
         this[storeKey]!.dispatch({
-          type: this.name!,
+          type: this.[identifierKey]!,
           method: key,
           params: args,
           _state: state!,

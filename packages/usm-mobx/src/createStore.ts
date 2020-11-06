@@ -23,7 +23,7 @@ export const createStore = (options: StoreOptions) => {
     disableErrorBoundaries: strict,
   });
   let state: Record<string, any> = {};
-  const autoComputedList: (() => void)[] = [];
+  const identifiers = new Set<string>();
   const eventEmitter = new EventEmitter();
   const store: Store = {
     dispatch: (action: Action) => {
@@ -46,7 +46,6 @@ export const createStore = (options: StoreOptions) => {
           );
         }
       }
-      return;
     }
     let identifier = module.name;
     if (identifier === null || typeof identifier === 'undefined') {
@@ -67,10 +66,10 @@ export const createStore = (options: StoreOptions) => {
         );
       }
     }
-    if (typeof state[identifier] !== 'undefined') {
+    if (identifiers.has(identifier)) {
       identifier += `${index}`;
     }
-    state[identifier] = {};
+    identifiers.add(identifier);
     const descriptors: Record<string, PropertyDescriptor> = {
       [bootstrappedKey]: {
         enumerable: false,
@@ -79,19 +78,31 @@ export const createStore = (options: StoreOptions) => {
       },
     };
     const initialValue: Record<string, any> = {};
-    for (const key in module[stateKey]) {
-      Object.defineProperty(state[identifier], key, {
-        get() {
-          return module[key];
-        },
-        set(value: unknown) {
-          runInAction(() => {
-            module[key] = value;
-          });
+    if (module[stateKey]) {
+      state[identifier] = {};
+      for (const key in module[stateKey]) {
+        Object.defineProperty(state[identifier], key, {
+          get() {
+            return module[key];
+          },
+          set(value: unknown) {
+            runInAction(() => {
+              module[key] = value;
+            });
+          },
+        });
+        initialValue[key] = module[key];
+        module[key] = null;
+      }
+      Object.assign(descriptors, {
+        [stateKey]: {
+          enumerable: false,
+          configurable: false,
+          get(this: typeof module) {
+            return state[identifier!];
+          },
         },
       });
-      initialValue[key] = module[key];
-      module[key] = null;
     }
     Object.assign(descriptors, {
       [identifierKey]: {
@@ -99,13 +110,6 @@ export const createStore = (options: StoreOptions) => {
         enumerable: false,
         writable: false,
         value: identifier,
-      },
-      [stateKey]: {
-        enumerable: false,
-        configurable: false,
-        get(this: typeof module) {
-          return state[identifier!];
-        },
       },
       [storeKey]: {
         configurable: false,
@@ -117,16 +121,18 @@ export const createStore = (options: StoreOptions) => {
     });
     Object.defineProperties(module, descriptors);
     makeObservable(module, {
-      ...module[computedKey],
-      ...module[observableKey],
-      ...module[actionKey],
+      ...(module[computedKey] ?? {}),
+      ...(module[observableKey] ?? {}),
+      ...(module[actionKey] ?? {}),
     });
-    runInAction(() => {
-      for (const key in initialValue) {
-        module[key] = initialValue[key];
-      }
-    });
-    if (autoRunComputed) {
+    if (module[stateKey]) {
+      runInAction(() => {
+        for (const key in initialValue) {
+          module[key] = initialValue[key];
+        }
+      });
+    }
+    if (autoRunComputed && module[computedKey]) {
       for (const key in module[computedKey]) {
         autorun(() => module[key]);
       }

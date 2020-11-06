@@ -1,5 +1,5 @@
 import { createSelectorWithArray } from '../utils';
-import { storeKey, stateKey } from '../constant';
+import { storeKey } from '../constant';
 import { Service } from '../interface';
 
 export const computed = (depsCallback: (instance: any) => any[]) => (
@@ -18,7 +18,7 @@ export const computed = (depsCallback: (instance: any) => any[]) => (
     }
   }
   const depsCallbackSelector = createSelectorWithArray(
-    (that: Service) => [that[storeKey]!.getState(), that[stateKey]],
+    (that: Service) => [that[storeKey]!.getState()],
     // eslint-disable-next-line func-names
     function(this: Service) {
       return depsCallback(this);

@@ -16,6 +16,7 @@ export const createStore = (options: StoreOptions) => {
     );
   }
   const strict = options.strict ?? false;
+  const identifiers = new Set<string>();
   let store: Store;
   const modules: Record<string, Module<any, any>> = {};
   options.modules.forEach((module, index) => {
@@ -28,7 +29,6 @@ export const createStore = (options: StoreOptions) => {
           );
         }
       }
-      return;
     }
     let identifier = module.name;
     if (identifier === null || typeof identifier === 'undefined') {
@@ -49,9 +49,10 @@ export const createStore = (options: StoreOptions) => {
         );
       }
     }
-    if (typeof modules[identifier] !== 'undefined') {
+    if (identifiers.has(identifier)) {
       identifier += `${index}`;
     }
+    identifiers.add(identifier);
     const descriptors: Record<string, PropertyDescriptor> = {
       [bootstrappedKey]: {
         enumerable: false,
@@ -78,6 +79,16 @@ export const createStore = (options: StoreOptions) => {
           },
         });
       }
+
+      Object.assign(descriptors, {
+        [stateKey]: {
+          enumerable: false,
+          configurable: false,
+          get(this: typeof module) {
+            return this[storeKey]!.state[identifier!];
+          },
+        },
+      });
     }
     if (module[gettersKey]) {
       for (const key in module[gettersKey]) {
@@ -99,13 +110,6 @@ export const createStore = (options: StoreOptions) => {
         enumerable: false,
         writable: false,
         value: identifier,
-      },
-      [stateKey]: {
-        enumerable: false,
-        configurable: false,
-        get(this: typeof module) {
-          return this[storeKey]!.state[identifier!];
-        },
       },
       [storeKey]: {
         configurable: false,

@@ -10,7 +10,7 @@ import {
   Middleware,
   applyMiddleware,
 } from 'redux';
-import { stateKey, storeKey, bootstrappedKey, actionKey } from './constant';
+import { stateKey, storeKey, bootstrappedKey, actionKey, identifierKey } from './constant';
 import { getStagedState } from './decorators';
 import { Action, StoreOptions, Store } from './interface';
 
@@ -32,6 +32,7 @@ export const createStore = (
   enablePatches = options.enablePatches ?? false;
   if (enablePatches) enablePatchesWithImmer();
   setAutoFreeze(enableAutoFreeze);
+  const identifiers = new Set<string>();
   const reducers: ReducersMapObject = {};
   let store: Store;
   options.modules.forEach((module, index) => {
@@ -44,7 +45,6 @@ export const createStore = (
           );
         }
       }
-      return;
     }
     let identifier = module.name;
     if (identifier === null || typeof identifier === 'undefined') {
@@ -65,9 +65,10 @@ export const createStore = (
         );
       }
     }
-    if (typeof reducers[identifier] === 'function') {
+    if (identifiers.has(identifier)) {
       identifier += `${index}`;
     }
+    identifiers.add(identifier);
     const descriptors: Record<string, PropertyDescriptor> = {
       [bootstrappedKey]: {
         enumerable: false,
@@ -75,72 +76,76 @@ export const createStore = (
         value: true,
       },
     };
-    for (const key in module[stateKey]) {
-      const descriptor = Object.getOwnPropertyDescriptor(module, key);
-      if (typeof descriptor === 'undefined') continue;
-      Object.assign(module[stateKey], {
-        [key]: descriptor.value,
+    if (module[stateKey]) {
+      for (const key in module[stateKey]) {
+        const descriptor = Object.getOwnPropertyDescriptor(module, key);
+        if (typeof descriptor === 'undefined') continue;
+        Object.assign(module[stateKey], {
+          [key]: descriptor.value,
+        });
+        Object.assign(descriptors, {
+          [key]: {
+            enumerable: true,
+            configurable: false,
+            get(this: typeof module) {
+              return this[stateKey]![key];
+            },
+            set(this: typeof module, value: unknown) {
+              this[stateKey]![key] = value;
+            },
+          },
+        });
+      }
+      const initState = enableAutoFreeze
+        ? produce({ ...module[stateKey] }, () => {})
+        : module[stateKey];
+
+      const serviceReducers = Object.entries(initState!).reduce(
+        (serviceReducersMapObject: ReducersMapObject, [key, value]) => {
+          // support pure reducer
+          if (typeof value === 'function') {
+            return Object.assign(serviceReducersMapObject, {
+              [key]: value,
+            });
+          }
+          const reducer = (state = value, action: Action) => {
+            return action._usm === actionKey
+              ? action._state[identifier!][key]
+              : state;
+          };
+          return Object.assign(serviceReducersMapObject, {
+            [key]: reducer,
+          });
+        },
+        {}
+      );
+      const reducer = combineReducers(serviceReducers);
+      Object.assign(reducers, {
+        [identifier]: reducer,
       });
+
       Object.assign(descriptors, {
-        [key]: {
-          enumerable: true,
+        [stateKey]: {
+          enumerable: false,
           configurable: false,
           get(this: typeof module) {
-            return this[stateKey]![key];
-          },
-          set(this: typeof module, value: unknown) {
-            this[stateKey]![key] = value;
+            const stagedState = getStagedState();
+            if (stagedState) return stagedState[identifier!];
+            const currentState = this[storeKey]?.getState()[identifier!];
+            if (enableAutoFreeze && !Object.isFrozen(currentState)) {
+              return Object.freeze(currentState);
+            }
+            return currentState;
           },
         },
       });
     }
-    const initState = enableAutoFreeze
-      ? produce({ ...module[stateKey] }, () => {})
-      : module[stateKey];
-
-    const serviceReducers = Object.entries(initState!).reduce(
-      (serviceReducersMapObject: ReducersMapObject, [key, value]) => {
-        // support pure reducer
-        if (typeof value === 'function') {
-          return Object.assign(serviceReducersMapObject, {
-            [key]: value,
-          });
-        }
-        const reducer = (state = value, action: Action) => {
-          return action._usm === actionKey
-            ? action._state[identifier!][key]
-            : state;
-        };
-        return Object.assign(serviceReducersMapObject, {
-          [key]: reducer,
-        });
-      },
-      {}
-    );
-    const reducer = combineReducers(serviceReducers);
-    Object.assign(reducers, {
-      [identifier]: reducer,
-    });
-
     Object.assign(descriptors, {
-      name: {
+      [identifierKey]: {
         configurable: false,
         enumerable: false,
         writable: false,
         value: identifier,
-      },
-      [stateKey]: {
-        enumerable: false,
-        configurable: false,
-        get(this: typeof module) {
-          const stagedState = getStagedState();
-          if (stagedState) return stagedState[identifier!];
-          const currentState = this[storeKey]?.getState()[identifier!];
-          if (enableAutoFreeze && !Object.isFrozen(currentState)) {
-            return Object.freeze(currentState);
-          }
-          return currentState;
-        },
       },
       [storeKey]: {
         configurable: false,

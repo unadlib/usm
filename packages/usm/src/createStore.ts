@@ -19,6 +19,7 @@ export const createStore = (options: StoreOptions) => {
   const enableAutoFreeze = options.strict ?? false;
   setAutoFreeze(enableAutoFreeze);
   let state: Record<string, any> = {};
+  const identifiers = new Set<string>();
   const eventEmitter = new EventEmitter();
   const store: Store = {
     dispatch: (action: Action) => {
@@ -41,7 +42,6 @@ export const createStore = (options: StoreOptions) => {
           );
         }
       }
-      return;
     }
     let identifier = module.name;
     if (identifier === null || typeof identifier === 'undefined') {
@@ -62,9 +62,10 @@ export const createStore = (options: StoreOptions) => {
         );
       }
     }
-    if (typeof state[identifier] !== 'undefined') {
+    if (identifiers.has(identifier)) {
       identifier += `${index}`;
     }
+    identifiers.add(identifier);
     const descriptors: Record<string, PropertyDescriptor> = {
       [bootstrappedKey]: {
         enumerable: false,
@@ -72,47 +73,53 @@ export const createStore = (options: StoreOptions) => {
         value: true,
       },
     };
-    for (const key in module[stateKey]) {
-      const descriptor = Object.getOwnPropertyDescriptor(module, key);
-      if (typeof descriptor === 'undefined') continue;
-      Object.assign(module[stateKey], {
-        [key]: descriptor.value,
-      });
+    if (module[stateKey]) {
+      for (const key in module[stateKey]) {
+        const descriptor = Object.getOwnPropertyDescriptor(module, key);
+        if (typeof descriptor === 'undefined') continue;
+        Object.assign(module[stateKey], {
+          [key]: descriptor.value,
+        });
+        Object.assign(descriptors, {
+          [key]: {
+            enumerable: true,
+            configurable: false,
+            get(this: typeof module) {
+              return this[stateKey]![key];
+            },
+            set(this: typeof module, value: unknown) {
+              this[stateKey]![key] = value;
+            },
+          },
+        });
+      }
+      state[identifier] = enableAutoFreeze
+        ? produce({ ...module[stateKey] }, () => {})
+        : module[stateKey];
       Object.assign(descriptors, {
-        [key]: {
-          enumerable: true,
+        [stateKey]: {
+          enumerable: false,
           configurable: false,
           get(this: typeof module) {
-            return this[stateKey]![key];
-          },
-          set(this: typeof module, value: unknown) {
-            this[stateKey]![key] = value;
+            const stagedState = getStagedState();
+            if (stagedState) return stagedState[this[identifierKey]!];
+            const currentState = this[storeKey]?.getState()[
+              this[identifierKey]!
+            ];
+            if (enableAutoFreeze && !Object.isFrozen(currentState)) {
+              return Object.freeze(currentState);
+            }
+            return currentState;
           },
         },
       });
     }
-    state[identifier] = enableAutoFreeze
-      ? produce({ ...module[stateKey] }, () => {})
-      : module[stateKey];
     Object.assign(descriptors, {
       [identifierKey]: {
         configurable: false,
         enumerable: false,
         writable: false,
         value: identifier,
-      },
-      [stateKey]: {
-        enumerable: false,
-        configurable: false,
-        get(this: typeof module) {
-          const stagedState = getStagedState();
-          if (stagedState) return stagedState[this[identifierKey]!];
-          const currentState = this[storeKey]?.getState()[this[identifierKey]!];
-          if (enableAutoFreeze && !Object.isFrozen(currentState)) {
-            return Object.freeze(currentState);
-          }
-          return currentState;
-        },
       },
       [storeKey]: {
         configurable: false,

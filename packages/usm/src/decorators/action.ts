@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 import { produce } from 'immer';
 import { Service } from '../interface';
-import { storeKey, stateKey, identifierKey, actionKey } from '../constant';
+import { storeKey, identifierKey, actionKey } from '../constant';
 
 let stagedState: Record<string, unknown> | undefined;
 
@@ -23,8 +23,9 @@ const action = (
     }
     if (typeof stagedState === 'undefined') {
       try {
+        const lastState = this[storeKey]?.getState();
         const state = produce(
-          this[storeKey]?.getState(),
+          lastState,
           (draftState: Record<string, unknown>) => {
             stagedState = draftState;
             fn.apply(this, args);
@@ -32,7 +33,7 @@ const action = (
         );
         stagedState = undefined;
         if (process.env.NODE_ENV !== 'production') {
-          if (this[stateKey] === state) {
+          if (lastState === state) {
             console.warn(`There are no state updates to method ${fn.name}`);
           }
           // performance checking

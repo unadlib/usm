@@ -5,6 +5,7 @@ import {
   subscriptionsKey,
   bootstrappedKey,
   actionKey,
+  identifierKey
 } from './constant';
 
 export interface StoreOptions {
@@ -16,6 +17,7 @@ export interface StoreOptions {
 export interface Service<T extends Record<string, any> = Record<string, any>> {
   name?: string;
   readonly [bootstrappedKey]?: boolean;
+  readonly [identifierKey]?: string;
   readonly [stateKey]?: T;
   readonly [storeKey]?: Store<T>;
   readonly [subscriptionsKey]?: Subscription[];
