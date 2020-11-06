@@ -52,7 +52,7 @@ export const createStore = (options: StoreOptions) => {
       identifier = `@@usm-mobx/${className}/${Math.random().toString(36)}`;
     }
     if (typeof identifier !== 'string') {
-      if (process.env.NODE_ENV === 'development') {
+      if (__DEV__) {
         console.error(`
           Since '${className}' module has set the module state, '${className}' module must set a unique and valid class property 'name' to be used as the module index.
           Example:

@@ -6,7 +6,7 @@ export const computed = (
   key: string,
   descriptor: TypedPropertyDescriptor<any>
 ) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (__DEV__) {
     if (typeof descriptor.get !== 'function') {
       throw new Error(`'@computed' should decorate a getter.`);
     }
