@@ -28,7 +28,7 @@ export const createStore = (
       `'createStore' options should be a object with a property 'modules'`
     );
   }
-  const enableAutoFreeze = options.strict ?? false;
+  const enableAutoFreeze = options.strict ?? __DEV__;
   enablePatches = options.enablePatches ?? false;
   if (enablePatches) enablePatchesWithImmer();
   setAutoFreeze(enableAutoFreeze);

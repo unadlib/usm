@@ -15,7 +15,7 @@ export const createStore = (options: StoreOptions) => {
       `'createStore' options should be a object with a property 'modules'`
     );
   }
-  const strict = options.strict ?? false;
+  const strict = options.strict ?? __DEV__;
   const identifiers = new Set<string>();
   let store: Store;
   const modules: Record<string, Module<any, any>> = {};

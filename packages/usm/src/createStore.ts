@@ -16,7 +16,7 @@ export const createStore = (options: StoreOptions) => {
       `'createStore' options should be a object with a property 'modules'`
     );
   }
-  const enableAutoFreeze = options.strict ?? false;
+  const enableAutoFreeze = options.strict ?? __DEV__;
   setAutoFreeze(enableAutoFreeze);
   let state: Record<string, any> = {};
   const identifiers = new Set<string>();

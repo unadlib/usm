@@ -14,7 +14,7 @@ import type { StoreOptions, Store, Action } from './interface';
 
 export const createStore = (options: StoreOptions) => {
   const autoRunComputed = options.autoRunComputed ?? true;
-  const strict = options.strict ?? false;
+  const strict = options.strict ?? __DEV__;
   configure({
     enforceActions: 'always',
     computedRequiresReaction: !autoRunComputed,
