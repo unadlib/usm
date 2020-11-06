@@ -11,8 +11,8 @@
     "commit": "yarn git-cz",
     "test:dev": "cross-env NODE_ENV=development jest --config ./scripts/jest/dev.config.json",
     "test:useES2015": "cross-env NODE_ENV=development jest --config ./scripts/jest/useES2015.config.json",
-    "test": "yarn check && yarn test:dev",
-    "check": "tsc --noEmit",
+    "test": "yarn test:dev",
+    "check:type": "tsc --noEmit",
     "build": "cross-env NODE_ENV=production ts-node scripts/build.ts",
     "clean": "lerna exec rimraf ./dist ./build"
   },
