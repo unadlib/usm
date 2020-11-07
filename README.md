@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/unadlib/usm.svg)](https://travis-ci.org/unadlib/usm)
 [![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
 
-USM is a universal state modular library, supports Redux, MobX, Vuex and Angular.
+USM is a universal state modular library, supports Redux(v4.x), MobX(v6.x), Vuex(v4.x) and Angular(v2.0+).
 
 ## Support
 
@@ -146,11 +146,11 @@ Creates a `usm` store that holds the complete shared state.
 
 #### Arguments
 
-- `options`(object)
-  - `modules`(array): an array with all modules instances
-  - [`strict`](boolean): enable strict mode
-- [`preloadedState`](any): preloaded state
-- [`plugins`/`middleware`](any[]): vuex's plugins or redux's middleware
+- `options`(*object*)
+  - `modules`(*array*): an array with all modules instances
+  - [`strict`] (*boolean*): enable strict mode
+- [`preloadedState`] (*any*): preloaded state
+- [`plugins`/`middleware`] (*any*[]): vuex's plugins or redux's middleware
 
 For example,
 
