@@ -14,7 +14,9 @@
     "test": "yarn test:dev",
     "check:type": "tsc --noEmit",
     "build": "cross-env NODE_ENV=production ts-node scripts/build.ts",
-    "clean": "lerna exec rimraf ./dist ./build"
+    "clean": "lerna exec rimraf ./dist ./build",
+    "update:version": "lerna version --amend --no-git-tag-version",
+    "publish": "lerna exec --no-private --no-bail -- npm publish"
   },
   "repository": {
     "type": "git",
