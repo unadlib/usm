@@ -10,9 +10,16 @@ import {
   Middleware,
   applyMiddleware,
 } from 'redux';
-import { stateKey, storeKey, bootstrappedKey, actionKey, identifierKey } from './constant';
+import {
+  stateKey,
+  storeKey,
+  bootstrappedKey,
+  actionKey,
+  identifierKey,
+  subscriptionsKey,
+} from './constant';
 import { getStagedState } from './utils/index';
-import { Action, StoreOptions, Store } from './interface';
+import { Action, StoreOptions, Store, Subscription } from './interface';
 
 let enablePatches: boolean;
 
@@ -34,6 +41,7 @@ export const createStore = (
   setAutoFreeze(enableAutoFreeze);
   const identifiers = new Set<string>();
   const reducers: ReducersMapObject = {};
+  const subscriptions: Subscription[] = [];
   let store: Store;
   options.modules.forEach((module, index) => {
     const className = Object.getPrototypeOf(module).constructor.name;
@@ -156,6 +164,9 @@ export const createStore = (
       },
     });
     Object.defineProperties(module, descriptors);
+    if (Array.isArray(module[subscriptionsKey])) {
+      subscriptions.push(...module[subscriptionsKey]);
+    }
   });
   const storeWithRedux = createStoreWithRedux(
     combineReducers(reducers),
@@ -167,5 +178,8 @@ export const createStore = (
     getState: storeWithRedux.getState,
     subscribe: storeWithRedux.subscribe,
   };
+  for (const subscribe of subscriptions) {
+    subscribe();
+  }
   return store;
 };

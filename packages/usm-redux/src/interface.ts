@@ -47,3 +47,14 @@ export interface Store<T = Record<string, any>> {
   getState(): T;
   subscribe(listener: Subscription): Unsubscribe;
 }
+
+export type Subscribe = (
+  service: Service,
+  listener: () => void
+) => Unsubscribe;
+
+export type Watch = <T>(
+  service: Service,
+  selector: () => T,
+  watcher: (newValue: T, oldValue: T) => void
+) => Unsubscribe;
