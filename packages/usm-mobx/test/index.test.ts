@@ -1,4 +1,3 @@
-import { autorun } from 'mobx';
 import { createStore, action, state, computed } from '../index';
 
 test('base', () => {

@@ -9,8 +9,9 @@ import {
   observableKey,
   actionKey,
   bootstrappedKey,
+  subscriptionsKey
 } from './constant';
-import type { StoreOptions, Store, Action } from './interface';
+import type { StoreOptions, Store, Action, Subscription } from './interface';
 
 export const createStore = (
   options: StoreOptions,
@@ -26,6 +27,7 @@ export const createStore = (
     disableErrorBoundaries: strict,
   });
   let state: Record<string, any> = {};
+  const subscriptions: Subscription[] = [];
   const identifiers = new Set<string>();
   const eventEmitter = new EventEmitter();
   const store: Store = {
@@ -147,9 +149,15 @@ export const createStore = (
         autorun(() => module[key]);
       }
     }
+    if (Array.isArray(module[subscriptionsKey])) {
+      subscriptions.push(...module[subscriptionsKey]);
+    }
   });
   if (options.strict) {
     Object.freeze(state);
+  }
+  for (const subscribe of subscriptions) {
+    subscribe();
   }
   return store;
 };
