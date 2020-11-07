@@ -1,6 +1,6 @@
 # USM
 
-[![Travis](https://img.shields.io/travis/unadlib/usm.svg)](https://travis-ci.org/unadlib/usm)
+![Node CI](https://github.com/unadlib/usm/workflows/Node%20CI/badge.svg)
 [![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
 
 USM is a universal state modular library, supports Redux(4.x), MobX(6.x), Vuex(4.x) and Angular(2.0+).
