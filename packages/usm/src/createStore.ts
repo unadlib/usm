@@ -5,9 +5,10 @@ import {
   stateKey,
   storeKey,
   bootstrappedKey,
+  subscriptionsKey
 } from './constant';
 import { getStagedState } from './decorators/index';
-import { Action, Store, StoreOptions } from './interface';
+import { Action, Store, StoreOptions, Subscription } from './interface';
 import { EventEmitter } from './utils/index';
 
 export const createStore = (
@@ -22,6 +23,7 @@ export const createStore = (
   const enableAutoFreeze = options.strict ?? __DEV__;
   setAutoFreeze(enableAutoFreeze);
   let state: Record<string, any> = {};
+  const subscriptions: Subscription[] = [];
   const identifiers = new Set<string>();
   const eventEmitter = new EventEmitter();
   const store: Store = {
@@ -141,6 +143,12 @@ export const createStore = (
       },
     });
     Object.defineProperties(module, descriptors);
+    if (Array.isArray(module[subscriptionsKey])) {
+      subscriptions.push(...module[subscriptionsKey]);
+    }
   });
+  for (const subscribe of subscriptions) {
+    subscribe();
+  }
   return store;
 };

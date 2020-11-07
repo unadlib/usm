@@ -43,3 +43,13 @@ export interface Action<T = Record<string, any>> {
   _usm: typeof actionKey;
 }
 
+export type Subscribe = (
+  service: Service,
+  listener: () => void
+) => Unsubscribe;
+
+export type Watch = <T>(
+  service: Service,
+  selector: () => T,
+  watcher: (newValue: T, oldValue: T) => void
+) => Unsubscribe;
