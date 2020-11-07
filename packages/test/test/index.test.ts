@@ -401,3 +401,82 @@ test('base with preloadedState', () => {
     expect(oldState.count1).toEqual({ sum: 0 });
   }
 });
+
+test('base with subscribe', () => {
+  for (const key in packages) {
+    const fn = jest.fn();
+    const { createStore, action, state, subscribe } = packages[
+      key as keyof typeof packages
+    ];
+    class Counter {
+      constructor() {
+        subscribe(this, () => {
+          fn();
+        });
+      }
+
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    const counter = new Counter();
+
+    const store = createStore({
+      modules: [counter],
+    });
+
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+    counter.increase();
+    const newState = Object.values(store.getState())[0] as Counter;
+    expect(newState.count).toEqual({ sum: 1 });
+    expect(fn.mock.calls.length).toBe(1);
+  }
+});
+
+test('base with watch', () => {
+  for (const key in packages) {
+    const { createStore, action, state, watch } = packages[
+      key as keyof typeof packages
+    ];
+    const fn = jest.fn();
+    class Counter {
+      constructor() {
+        (watch as usm.Watch)(
+          this,
+          () => this.count.sum,
+          (...args) => {
+            fn(...args);
+          }
+        );
+      }
+
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    const counter = new Counter();
+
+    const store = createStore({
+      modules: [counter],
+    });
+
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+
+    counter.increase();
+    const newState = Object.values(store.getState())[0] as Counter;
+    expect(newState.count).toEqual({ sum: 1 });
+    expect(fn.mock.calls).toEqual([[1, 0]]);
+  }
+});
