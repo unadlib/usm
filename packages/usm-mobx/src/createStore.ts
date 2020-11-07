@@ -12,7 +12,7 @@ import {
 } from './constant';
 import type { StoreOptions, Store, Action } from './interface';
 
-export const createStore = (options: StoreOptions) => {
+export const createStore = (options: StoreOptions, preloadedState?: Record<string, any>) => {
   const autoRunComputed = options.autoRunComputed ?? true;
   const strict = options.strict ?? __DEV__;
   configure({

@@ -10,7 +10,7 @@ import { getStagedState } from './decorators/index';
 import { Action, Store, StoreOptions } from './interface';
 import { EventEmitter } from './utils/index';
 
-export const createStore = (options: StoreOptions) => {
+export const createStore = (options: StoreOptions, preloadedState?: Record<string, any>) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(
       `'createStore' options should be a object with a property 'modules'`

@@ -13,6 +13,7 @@ import {
 export interface StoreOptions {
   modules: Service[];
   strict?: boolean;
+  devtools?: boolean;
 }
 
 export type Store<T = Record<string, any>> = {

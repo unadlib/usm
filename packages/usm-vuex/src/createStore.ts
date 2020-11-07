@@ -1,4 +1,4 @@
-import { createStore as createStoreWithVuex, Module } from 'vuex';
+import { createStore as createStoreWithVuex, Module, Plugin } from 'vuex';
 import {
   identifierKey,
   stateKey,
@@ -9,13 +9,18 @@ import {
 } from './constant';
 import { Action, Store, StoreOptions } from './interface';
 
-export const createStore = (options: StoreOptions) => {
+export const createStore = (
+  options: StoreOptions,
+  preloadedState?: Record<string, any>,
+  plugins: Plugin<Record<string, any>>[] = []
+) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(
       `'createStore' options should be a object with a property 'modules'`
     );
   }
   const strict = options.strict ?? __DEV__;
+  const devtools = options.devtools ?? __DEV__;
   const identifiers = new Set<string>();
   let store: Store;
   const modules: Record<string, Module<any, any>> = {};
@@ -125,6 +130,8 @@ export const createStore = (options: StoreOptions) => {
     createStoreWithVuex<Record<string, any>>({
       modules,
       strict,
+      plugins,
+      devtools,
     }),
     {
       dispatch: (action: Action) => {
