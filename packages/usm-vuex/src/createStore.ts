@@ -74,6 +74,13 @@ export const createStore = (
     if (module[stateKey]) {
       for (const key in module[stateKey]) {
         modules[identifier].state[key] = module[key];
+        if (
+          preloadedState &&
+          preloadedState[identifier] &&
+          Object.hasOwnProperty.call(preloadedState[identifier], key)
+        ) {
+          modules[identifier].state[key] = preloadedState[identifier][key];
+        }
         Object.assign(descriptors, {
           [key]: {
             enumerable: true,

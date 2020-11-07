@@ -10,7 +10,10 @@ import { getStagedState } from './decorators/index';
 import { Action, Store, StoreOptions } from './interface';
 import { EventEmitter } from './utils/index';
 
-export const createStore = (options: StoreOptions, preloadedState?: Record<string, any>) => {
+export const createStore = (
+  options: StoreOptions,
+  preloadedState?: Record<string, any>
+) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(
       `'createStore' options should be a object with a property 'modules'`
@@ -77,8 +80,16 @@ export const createStore = (options: StoreOptions, preloadedState?: Record<strin
       for (const key in module[stateKey]) {
         const descriptor = Object.getOwnPropertyDescriptor(module, key);
         if (typeof descriptor === 'undefined') continue;
+        let initialValue = descriptor.value;
+        if (
+          preloadedState &&
+          preloadedState[identifier] &&
+          Object.hasOwnProperty.call(preloadedState[identifier], key)
+        ) {
+          initialValue = preloadedState[identifier][key];
+        }
         Object.assign(module[stateKey], {
-          [key]: descriptor.value,
+          [key]: initialValue,
         });
         Object.assign(descriptors, {
           [key]: {

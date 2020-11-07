@@ -360,3 +360,40 @@ test('base with multi-instance', () => {
     expect(fn.mock.calls.length).toBe(1);
   }
 });
+
+test('base with preloadedState', () => {
+  for (const key in packages) {
+    const { createStore, action, state } = packages[
+      key as keyof typeof packages
+    ];
+    class Counter {
+      name = 'counter';
+
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    const counter = new Counter();
+
+    const store = createStore(
+      {
+        modules: [counter],
+      },
+      {
+        counter: {
+          count: {
+            sum: 10,
+          },
+        },
+      }
+    );
+
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 10 });
+  }
+});

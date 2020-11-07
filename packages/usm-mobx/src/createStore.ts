@@ -12,7 +12,10 @@ import {
 } from './constant';
 import type { StoreOptions, Store, Action } from './interface';
 
-export const createStore = (options: StoreOptions, preloadedState?: Record<string, any>) => {
+export const createStore = (
+  options: StoreOptions,
+  preloadedState?: Record<string, any>
+) => {
   const autoRunComputed = options.autoRunComputed ?? true;
   const strict = options.strict ?? __DEV__;
   configure({
@@ -93,6 +96,13 @@ export const createStore = (options: StoreOptions, preloadedState?: Record<strin
         });
         initialValue[key] = module[key];
         module[key] = null;
+        if (
+          preloadedState &&
+          preloadedState[identifier] &&
+          Object.hasOwnProperty.call(preloadedState[identifier], key)
+        ) {
+          initialValue[key] = preloadedState[identifier][key];
+        }
       }
       Object.assign(descriptors, {
         [stateKey]: {
