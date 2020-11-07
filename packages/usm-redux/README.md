@@ -19,4 +19,4 @@ Or npm:
 npm install --save usm-redux
 ```
 
-Read more: [https://github.com/unadlib/usm](https://github.com/unadlib/usm)
+For more details, see: [https://github.com/unadlib/usm](https://github.com/unadlib/usm)
