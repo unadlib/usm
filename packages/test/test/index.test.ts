@@ -372,6 +372,9 @@ test('base with preloadedState', () => {
       @state
       count = { sum: 0 };
 
+      @state
+      count1 = { sum: 0 };
+
       @action
       increase() {
         this.count.sum += 1;
@@ -395,5 +398,6 @@ test('base with preloadedState', () => {
 
     const oldState = Object.values(store.getState())[0] as Counter;
     expect(oldState.count).toEqual({ sum: 10 });
+    expect(oldState.count1).toEqual({ sum: 0 });
   }
 });
