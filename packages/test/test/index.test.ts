@@ -240,9 +240,7 @@ test('base with immutable single computed', () => {
     }
 
     class Foo {
-      constructor(public counter: Counter) {
-
-      }
+      constructor(public counter: Counter) {}
 
       @computed(({ counter }: Foo) => [counter.count.sum])
       get sum() {
@@ -320,5 +318,45 @@ test('base with observable single computed', () => {
     expect(foo.sum).toBe(2);
     expect(foo.sum).toBe(2);
     expect(computedFn.mock.calls.length).toBe(2);
+  }
+});
+
+test('base with multi-instance', () => {
+  for (const key in packages) {
+    const { createStore, action, state } = packages[
+      key as keyof typeof packages
+    ];
+    class Counter {
+      name = 'counter';
+
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    const counter = new Counter();
+    const counter1 = new Counter();
+
+    const store = createStore({
+      modules: [counter, counter1],
+    });
+
+    const oldState = Object.values(store.getState())[1] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+    expect(Object.keys(store.getState())[1]).toBe('counter1');
+    expect(counter1.name).toBe('counter');
+    expect(counter.name).toBe('counter');
+    const fn = jest.fn();
+    store.subscribe(() => {
+      fn();
+    });
+    counter1.increase();
+    const newState = Object.values(store.getState())[1] as Counter;
+    expect(newState.count).toEqual({ sum: 1 });
+    expect(fn.mock.calls.length).toBe(1);
   }
 });
