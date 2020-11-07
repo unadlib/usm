@@ -6,9 +6,9 @@ import {
   storeKey,
   bootstrappedKey,
 } from './constant';
-import { getStagedState } from './decorators';
+import { getStagedState } from './decorators/index';
 import { Action, Store, StoreOptions } from './interface';
-import { EventEmitter } from './utils';
+import { EventEmitter } from './utils/index';
 
 export const createStore = (options: StoreOptions) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {

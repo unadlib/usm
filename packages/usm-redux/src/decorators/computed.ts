@@ -1,4 +1,4 @@
-import { createSelectorWithArray } from '../utils';
+import { createSelectorWithArray } from '../utils/index';
 import { storeKey } from '../constant';
 import { Service } from '../interface';
 

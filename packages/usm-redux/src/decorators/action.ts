@@ -4,12 +4,9 @@ import { Service } from '../interface';
 import { storeKey, actionKey, identifierKey } from '../constant';
 import { getPatchesToggle } from '../createStore';
 import { Action } from '../interface';
+import { getStagedState, setStagedState } from '../utils/index';
 
-let stagedState: Record<string, unknown> | undefined;
-
-const getStagedState = () => stagedState;
-
-const action = (
+export const action = (
   target: object,
   key: string | symbol,
   descriptor: TypedPropertyDescriptor<(...args: any[]) => void>
@@ -25,14 +22,14 @@ const action = (
     if (__DEV__) {
       time = Date.now();
     }
-    if (typeof stagedState === 'undefined') {
+    if (typeof getStagedState() === 'undefined') {
       try {
         const lastState = this[storeKey]?.getState();
         let state: Record<string, any> | undefined;
         let patches: Patch[] = [];
         let inversePatches: Patch[] = [];
         const recipe = (draftState: Record<string, unknown>) => {
-          stagedState = draftState;
+          setStagedState(draftState);
           fn.apply(this, args);
         };
         const enablePatches = getPatchesToggle();
@@ -44,7 +41,7 @@ const action = (
         } else {
           state = produce(lastState, recipe);
         }
-        stagedState = undefined;
+        setStagedState(undefined);
         if (__DEV__) {
           if (lastState === state) {
             console.warn(`There are no state updates to method '${fn.name}'`);
@@ -71,7 +68,7 @@ const action = (
             : {}),
         } as Action);
       } finally {
-        stagedState = undefined;
+        setStagedState(undefined);
       }
     } else {
       // enable staged state mode.
@@ -83,5 +80,3 @@ const action = (
     value,
   };
 };
-
-export { getStagedState, action };

@@ -1,5 +1,5 @@
 import { configure, makeObservable, runInAction, autorun } from 'mobx';
-import { EventEmitter } from './utils';
+import { EventEmitter } from './utils/index';
 import {
   changeStateKey,
   identifierKey,

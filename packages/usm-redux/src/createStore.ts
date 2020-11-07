@@ -11,7 +11,7 @@ import {
   applyMiddleware,
 } from 'redux';
 import { stateKey, storeKey, bootstrappedKey, actionKey, identifierKey } from './constant';
-import { getStagedState } from './decorators';
+import { getStagedState } from './utils/index';
 import { Action, StoreOptions, Store } from './interface';
 
 let enablePatches: boolean;
