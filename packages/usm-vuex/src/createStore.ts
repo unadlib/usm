@@ -6,8 +6,9 @@ import {
   bootstrappedKey,
   gettersKey,
   actionsKey,
+  subscriptionsKey,
 } from './constant';
-import { Action, Store, StoreOptions } from './interface';
+import { Action, Store, StoreOptions, Subscription } from './interface';
 
 export const createStore = (
   options: StoreOptions,
@@ -23,6 +24,7 @@ export const createStore = (
   const devtools = options.devtools ?? __DEV__;
   const identifiers = new Set<string>();
   let store: Store;
+  const subscriptions: Subscription[] = [];
   const modules: Record<string, Module<any, any>> = {};
   options.modules.forEach((module, index) => {
     const className = Object.getPrototypeOf(module).constructor.name;
@@ -132,6 +134,9 @@ export const createStore = (
       },
     });
     Object.defineProperties(module, descriptors);
+    if (Array.isArray(module[subscriptionsKey])) {
+      subscriptions.push(...module[subscriptionsKey]);
+    }
   });
   store = Object.assign(
     createStoreWithVuex<Record<string, any>>({
@@ -148,5 +153,8 @@ export const createStore = (
       getState: () => store.state,
     }
   );
+  for (const subscribe of subscriptions) {
+    subscribe();
+  }
   return store;
 };
