@@ -19,4 +19,4 @@ Or npm:
 npm install --save usm-mobx
 ```
 
-Read More: [https://github.com/unadlib/usm](https://github.com/unadlib/usm)
+Read more: [https://github.com/unadlib/usm](https://github.com/unadlib/usm)
