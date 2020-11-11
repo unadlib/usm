@@ -480,3 +480,60 @@ test('base with watch', () => {
     expect(fn.mock.calls).toEqual([[1, 0]]);
   }
 });
+
+test('Multiple inheritance and multiple instances', () => {
+  for (const key in packages) {
+    const { createStore, action, state } = packages[
+      key as keyof typeof packages
+    ];
+    class Counter {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    class Counter1 extends Counter {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    class Counter2 extends Counter {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    const counter = new Counter();
+    const counter0 = new Counter();
+    const counter1 = new Counter1();
+    const counter2 = new Counter2();
+
+    const store = createStore({
+      modules: [counter, counter0, counter1, counter2],
+    });
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+    counter.increase();
+    const newState = Object.values(store.getState())[0] as Counter;
+    expect(newState.count).toEqual({ sum: 1 });
+    const newState1 = Object.values(store.getState())[1] as Counter;
+    expect(newState1.count).toEqual({ sum: 0 });
+    const newState2 = Object.values(store.getState())[2] as Counter;
+    expect(newState2.count).toEqual({ sum: 0 });
+    const newState3 = Object.values(store.getState())[3] as Counter;
+    expect(newState3.count).toEqual({ sum: 0 });
+  }
+});
