@@ -1,4 +1,3 @@
-import { timeStamp } from 'console';
 import * as usm from 'usm';
 import * as usmMobx from 'usm-mobx';
 import * as usmRedux from 'usm-redux';
@@ -607,7 +606,6 @@ test('call super with Multiple inheritance and multiple instances', () => {
     expect(fn.mock.calls.length).toBe(1);
   }
 });
-
 
 test('base with cross-action and cross-module', () => {
   for (const key in packages) {
