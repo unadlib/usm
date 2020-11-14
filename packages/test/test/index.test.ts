@@ -1,3 +1,4 @@
+import { timeStamp } from 'console';
 import * as usm from 'usm';
 import * as usmMobx from 'usm-mobx';
 import * as usmRedux from 'usm-redux';
@@ -531,9 +532,130 @@ test('Multiple inheritance and multiple instances', () => {
     expect(newState.count).toEqual({ sum: 1 });
     const newState1 = Object.values(store.getState())[1] as Counter;
     expect(newState1.count).toEqual({ sum: 0 });
-    const newState2 = Object.values(store.getState())[2] as Counter;
+    const newState2 = Object.values(store.getState())[2] as Counter1;
     expect(newState2.count).toEqual({ sum: 0 });
-    const newState3 = Object.values(store.getState())[3] as Counter;
+    const newState3 = Object.values(store.getState())[3] as Counter2;
     expect(newState3.count).toEqual({ sum: 0 });
   }
 });
+
+test('call super with Multiple inheritance and multiple instances', () => {
+  for (const key in packages) {
+    const { createStore, action, state } = packages[
+      key as keyof typeof packages
+    ];
+    class Counter {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    class Counter1 extends Counter {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 1;
+      }
+    }
+
+    class Counter2 extends Counter {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        super.increase();
+        this.count.sum += 1;
+      }
+    }
+
+    const counter = new Counter();
+    const counter0 = new Counter();
+    const counter1 = new Counter1();
+    const counter2 = new Counter2();
+
+    const store = createStore({
+      modules: [counter, counter0, counter1, counter2],
+    });
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+    const oldState1 = Object.values(store.getState())[0] as Counter;
+    expect(oldState1.count).toEqual({ sum: 0 });
+    const oldState2 = Object.values(store.getState())[0] as Counter1;
+    expect(oldState2.count).toEqual({ sum: 0 });
+    const oldState3 = Object.values(store.getState())[0] as Counter2;
+    expect(oldState3.count).toEqual({ sum: 0 });
+    const fn = jest.fn();
+    store.subscribe(() => {
+      fn();
+    });
+    counter2.increase();
+    const newState = Object.values(store.getState())[0] as Counter;
+    expect(newState.count).toEqual({ sum: 0 });
+    const newState1 = Object.values(store.getState())[1] as Counter;
+    expect(newState1.count).toEqual({ sum: 0 });
+    const newState2 = Object.values(store.getState())[2] as Counter1;
+    expect(newState2.count).toEqual({ sum: 0 });
+    const newState3 = Object.values(store.getState())[3] as Counter2;
+    expect(newState3.count).toEqual({ sum: 2 });
+    expect(fn.mock.calls.length).toBe(1);
+  }
+});
+
+
+test('base with cross-action and cross-module', () => {
+  for (const key in packages) {
+    const { createStore, action, state } = packages[
+      key as keyof typeof packages
+    ];
+    class Counter0 {
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.count.sum += 2;
+      }
+    }
+
+    class Counter {
+      constructor(public counter: Counter0) {}
+
+      @state
+      count = { sum: 0 };
+
+      @action
+      increase() {
+        this.counter.increase();
+        this.count.sum += 1;
+      }
+    }
+
+    const counter0 = new Counter0();
+    const counter = new Counter(counter0);
+
+    const store = createStore({
+      modules: [counter, counter0],
+    });
+
+    const oldState = Object.values(store.getState())[0] as Counter;
+    expect(oldState.count).toEqual({ sum: 0 });
+    const fn = jest.fn();
+    store.subscribe(() => {
+      fn();
+    });
+    counter.increase();
+    const newState = Object.values(store.getState())[0] as Counter;
+    const newState1 = Object.values(store.getState())[1] as Counter;
+    expect(newState.count).toEqual({ sum: 1 });
+    expect(newState1.count).toEqual({ sum: 2 });
+    expect(fn.mock.calls.length).toBe(1);
+  }
+});
+

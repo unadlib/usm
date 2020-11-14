@@ -1,6 +1,8 @@
 import { Service } from '../interface';
 import { identifierKey, actionKey, actionsKey, storeKey } from '../constant';
 
+let changing = false;
+
 export const action = (
   target: object,
   key: string,
@@ -20,13 +22,21 @@ export const action = (
     (target as Service)[actionsKey]![key] = fn!;
   }
   const value = function (this: Service, ...args: unknown[]) {
-    this[storeKey]!.dispatch({
-      type: this[identifierKey]!,
-      method: key,
-      params: args,
-      _state: this[storeKey]!.state,
-      _usm: actionKey,
-    });
+    if (changing) {
+      return fn.apply(this, args);
+    }
+    try {
+      changing = true;
+      this[storeKey]!.dispatch({
+        type: this[identifierKey]!,
+        method: key,
+        params: args,
+        _state: this[storeKey]!.state,
+        _usm: actionKey,
+      });
+    } finally {
+      changing = false;
+    }
   };
   return {
     ...descriptor,

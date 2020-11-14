@@ -2,6 +2,8 @@ import { action as actionWithMobx } from 'mobx';
 import { actionKey, identifierKey, storeKey } from '../constant';
 import { Service } from '../interface';
 
+let changing = false;
+
 export const action = (
   target: object,
   key: string | symbol,
@@ -23,12 +25,20 @@ export const action = (
     });
   }
   const value = function (this: Service, ...args: unknown[]) {
-    this[storeKey]?.dispatch({
-      type: this[identifierKey]!,
-      method: key,
-      params: args,
-      _changeState: (...args) => fn.apply(this, args),
-    });
+    if (changing) {
+      return fn.apply(this, args);
+    }
+    try {
+      changing = true;
+      this[storeKey]?.dispatch({
+        type: this[identifierKey]!,
+        method: key,
+        params: args,
+        _changeState: (...args) => fn.apply(this, args),
+      });
+    } finally {
+      changing = false;
+    }
   };
   return {
     ...descriptor,
