@@ -1,7 +1,7 @@
 {
   "name": "test",
   "private": true,
-  "version": "3.0.3",
+  "version": "3.1.1",
   "bugs": {
     "url": "https://github.com/unadlib/usm/issues"
   },
@@ -20,9 +20,9 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "usm": "^3.0.3",
-    "usm-mobx": "^3.0.3",
-    "usm-redux": "^3.0.3",
-    "usm-vuex": "^3.0.3"
+    "usm": "^3.1.1",
+    "usm-mobx": "^3.1.1",
+    "usm-redux": "^3.1.1",
+    "usm-vuex": "^3.1.1"
   }
 }
