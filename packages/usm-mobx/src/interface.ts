@@ -10,6 +10,10 @@ import {
   bootstrappedKey
 } from './constant';
 
+export interface Config {
+  //
+}
+
 export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
   initializer(): T;
 }

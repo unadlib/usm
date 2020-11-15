@@ -52,14 +52,16 @@ test('enablePatches', () => {
       enablePatches: true,
     },
     undefined,
-    [
-      ({ getState }) => (next) => (action) => {
-        const lastState = getState();
-        const result = next(action);
-        snapshots.push(applyPatches(lastState, action._patches));
-        return result;
-      },
-    ]
+    {
+      reduxMiddleware: [
+        ({ getState }) => (next) => (action) => {
+          const lastState = getState();
+          const result = next(action);
+          snapshots.push(applyPatches(lastState, action._patches));
+          return result;
+        },
+      ],
+    }
   );
   counter.increase();
   expect(Object.values(snapshots[0])).toEqual([{ count: { sum: 1 } }]);

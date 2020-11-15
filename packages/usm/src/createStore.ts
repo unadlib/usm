@@ -5,15 +5,16 @@ import {
   stateKey,
   storeKey,
   bootstrappedKey,
-  subscriptionsKey
+  subscriptionsKey,
 } from './constant';
 import { getStagedState } from './decorators/index';
-import { Action, Store, StoreOptions, Subscription } from './interface';
+import { Action, Store, StoreOptions, Subscription, Config } from './interface';
 import { EventEmitter } from './utils/index';
 
 export const createStore = (
   options: StoreOptions,
-  preloadedState?: Record<string, any>
+  preloadedState?: Record<string, any>,
+  config: Config = {}
 ) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(

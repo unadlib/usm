@@ -1,4 +1,4 @@
-import { createStore as createStoreWithVuex, Module, Plugin } from 'vuex';
+import { createStore as createStoreWithVuex, Module } from 'vuex';
 import {
   identifierKey,
   stateKey,
@@ -8,12 +8,12 @@ import {
   actionsKey,
   subscriptionsKey,
 } from './constant';
-import { Action, Store, StoreOptions, Subscription } from './interface';
+import { Action, Store, StoreOptions, Subscription, Config } from './interface';
 
 export const createStore = (
   options: StoreOptions,
   preloadedState?: Record<string, any>,
-  plugins: Plugin<Record<string, any>>[] = []
+  { plugins = [] }: Config = {}
 ) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(

@@ -1,4 +1,4 @@
-import type { Store as StoreWithVuex } from 'vuex';
+import type { Store as StoreWithVuex, Plugin } from 'vuex';
 import {
   stateKey,
   storeKey,
@@ -9,6 +9,10 @@ import {
   actionsKey,
   gettersKey,
 } from './constant';
+
+export interface Config {
+  plugins?: Plugin<Record<string, any>>[];
+}
 
 export interface StoreOptions {
   modules: Service[];

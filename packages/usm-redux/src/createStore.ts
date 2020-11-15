@@ -7,7 +7,6 @@ import {
   combineReducers,
   ReducersMapObject,
   PreloadedState,
-  Middleware,
   applyMiddleware,
 } from 'redux';
 import {
@@ -19,7 +18,7 @@ import {
   subscriptionsKey,
 } from './constant';
 import { getStagedState } from './utils/index';
-import { Action, StoreOptions, Store, Subscription } from './interface';
+import { Action, StoreOptions, Store, Subscription, Config } from './interface';
 
 let enablePatches: boolean;
 
@@ -28,7 +27,10 @@ export const getPatchesToggle = () => enablePatches;
 export const createStore = (
   options: StoreOptions,
   preloadedState?: PreloadedState<any>,
-  middleware: Middleware[] = []
+  {
+    reduxMiddleware = [],
+    handleReducers = (reducers) => combineReducers(reducers),
+  }: Config = {}
 ) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(
@@ -169,9 +171,9 @@ export const createStore = (
     }
   });
   const storeWithRedux = createStoreWithRedux(
-    combineReducers(reducers),
+    handleReducers(reducers),
     preloadedState,
-    applyMiddleware(...middleware)
+    applyMiddleware(...reduxMiddleware)
   );
   store = {
     dispatch: storeWithRedux.dispatch,

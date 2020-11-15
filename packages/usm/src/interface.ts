@@ -7,6 +7,10 @@ import {
   actionKey
 } from './constant';
 
+export interface Config {
+  //
+}
+
 export interface StoreOptions {
   modules: Service[];
   strict?: boolean;

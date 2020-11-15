@@ -11,11 +11,12 @@ import {
   bootstrappedKey,
   subscriptionsKey
 } from './constant';
-import type { StoreOptions, Store, Action, Subscription } from './interface';
+import type { StoreOptions, Store, Action, Subscription, Config } from './interface';
 
 export const createStore = (
   options: StoreOptions,
-  preloadedState?: Record<string, any>
+  preloadedState?: Record<string, any>,
+  config: Config = {},
 ) => {
   const autoRunComputed = options.autoRunComputed ?? true;
   const strict = options.strict ?? __DEV__;
