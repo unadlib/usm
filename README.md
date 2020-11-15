@@ -31,6 +31,7 @@ yarn add usm # npm install --save usm
 
 ```ts
 import { state, action, createStore } from 'usm';
+// You can also use `usm-redux`, `usm-mobx`, or`usm-vuex`.
 
 class Counter {
   @state
