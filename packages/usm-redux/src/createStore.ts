@@ -167,7 +167,7 @@ export const createStore = (
     });
     Object.defineProperties(module, descriptors);
     if (Array.isArray(module[subscriptionsKey])) {
-      subscriptions.push(...module[subscriptionsKey]);
+      Array.prototype.push.apply(subscriptions, module[subscriptionsKey]!);
     }
   });
   const storeWithRedux = createStoreWithRedux(

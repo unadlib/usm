@@ -151,7 +151,7 @@ export const createStore = (
       }
     }
     if (Array.isArray(module[subscriptionsKey])) {
-      subscriptions.push(...module[subscriptionsKey]);
+      Array.prototype.push.apply(subscriptions, module[subscriptionsKey]!);
     }
   });
   if (options.strict) {
