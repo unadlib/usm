@@ -8,6 +8,7 @@ import {
   ReducersMapObject,
   PreloadedState,
   applyMiddleware,
+  Store as ReduxStore,
 } from 'redux';
 import {
   stateKey,
@@ -183,5 +184,5 @@ export const createStore = (
   for (const subscribe of subscriptions) {
     subscribe();
   }
-  return store;
+  return store as ReduxStore;
 };
