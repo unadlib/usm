@@ -1,4 +1,5 @@
-import { createStore as createStoreWithVuex, Module } from 'vuex';
+import Vuex, { Module } from 'vuex';
+import Vue from 'vue';
 import {
   identifierKey,
   stateKey,
@@ -138,8 +139,9 @@ export const createStore = (
       Array.prototype.push.apply(subscriptions, module[subscriptionsKey]!);
     }
   });
+  Vue.use(Vuex);
   store = Object.assign(
-    createStoreWithVuex<Record<string, any>>({
+    new Vuex.Store<Record<string, any>>({
       modules,
       strict,
       plugins,

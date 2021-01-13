@@ -1,6 +1,6 @@
 {
   "name": "usm-vuex",
-  "version": "3.2.1",
+  "version": "2.1.0",
   "description": "Universal state model for Vuex",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.umd.js",
@@ -28,10 +28,11 @@
   ],
   "author": "unadlib",
   "license": "MIT",
-  "dependencies": {
-    "vuex": "^4.0.0-rc.1"
+  "peerDependencies": {
+    "vue": "^3.6.0"
   },
-  "devDependencies": {
-    "vue": "^3.0.2"
+  "dependencies": {
+    "vue": "^2.6.12",
+    "vuex": "^3.6.0"
   }
 }
