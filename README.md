@@ -55,6 +55,11 @@ const newState = Object.values(store.getState())[0] as Counter;
 expect(newState.count).toEqual({ sum: 1 });
 ```
 
+## Examples
+
+- [React](https://github.com/unadlib/usm-redux-demo)
+- [Vue](https://github.com/unadlib/usm-vuex-demo)
+
 ## APIs
 
 ### `@state`
