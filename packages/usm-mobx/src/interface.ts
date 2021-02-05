@@ -11,7 +11,7 @@ import {
 } from './constant';
 
 export interface Config {
-  //
+  autoRunComputed?: boolean;
 }
 
 export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
@@ -34,7 +34,6 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
 export interface StoreOptions {
   modules: Service[];
   strict?: boolean;
-  autoRunComputed?: boolean;
 }
 
 export type Unsubscribe = () => void;

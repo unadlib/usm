@@ -9,16 +9,22 @@ import {
   observableKey,
   actionKey,
   bootstrappedKey,
-  subscriptionsKey
+  subscriptionsKey,
 } from './constant';
-import type { StoreOptions, Store, Action, Subscription, Config } from './interface';
+import type {
+  StoreOptions,
+  Store,
+  Action,
+  Subscription,
+  Config,
+} from './interface';
 
 export const createStore = (
   options: StoreOptions,
   preloadedState?: Record<string, any>,
-  config: Config = {},
+  config: Config = {}
 ) => {
-  const autoRunComputed = options.autoRunComputed ?? true;
+  const autoRunComputed = config.autoRunComputed ?? true;
   const strict = options.strict ?? __DEV__;
   configure({
     enforceActions: 'always',
