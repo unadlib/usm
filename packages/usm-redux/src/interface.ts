@@ -10,6 +10,7 @@ import {
 } from './constant';
 
 export interface Config {
+  enablePatches?: boolean;
   reduxMiddleware?: Middleware[];
   handleReducers?: (reducers: ReducersMapObject) => Reducer;
 }
@@ -17,7 +18,6 @@ export interface Config {
 export interface StoreOptions {
   modules: Service[];
   strict?: boolean;
-  enablePatches?: boolean;
 }
 
 export interface Service<T extends Record<string, any> = Record<string, any>> {

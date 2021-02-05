@@ -28,18 +28,19 @@ export const getPatchesToggle = () => enablePatches;
 export const createStore = (
   options: StoreOptions,
   preloadedState?: PreloadedState<any>,
-  {
+  config: Config = {}
+) => {
+  const {
     reduxMiddleware = [],
     handleReducers = (reducers) => combineReducers(reducers),
-  }: Config = {}
-) => {
+  } = config;
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(
       `'createStore' options should be a object with a property 'modules'`
     );
   }
   const enableAutoFreeze = options.strict ?? __DEV__;
-  enablePatches = options.enablePatches ?? false;
+  enablePatches = config.enablePatches ?? false;
   if (enablePatches) enablePatchesWithImmer();
   setAutoFreeze(enableAutoFreeze);
   const identifiers = new Set<string>();

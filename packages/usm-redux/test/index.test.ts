@@ -49,10 +49,10 @@ test('enablePatches', () => {
   const store = createStore(
     {
       modules: [counter],
-      enablePatches: true,
     },
     undefined,
     {
+      enablePatches: true,
       reduxMiddleware: [
         ({ getState }) => (next) => (action) => {
           const lastState = getState();
