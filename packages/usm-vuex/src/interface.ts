@@ -12,12 +12,12 @@ import {
 
 export interface Config {
   plugins?: Plugin<Record<string, any>>[];
+  devtools?: boolean;
 }
 
 export interface StoreOptions {
   modules: Service[];
   strict?: boolean;
-  devtools?: boolean;
 }
 
 export type Store<T = Record<string, any>> = {

@@ -13,7 +13,7 @@ import { Action, Store, StoreOptions, Subscription, Config } from './interface';
 export const createStore = (
   options: StoreOptions,
   preloadedState?: Record<string, any>,
-  { plugins = [] }: Config = {}
+  config: Config = {}
 ) => {
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
     throw new Error(
@@ -21,7 +21,8 @@ export const createStore = (
     );
   }
   const strict = options.strict ?? __DEV__;
-  const devtools = options.devtools ?? __DEV__;
+  const devtools = config.devtools ?? __DEV__;
+  const plugins = config.plugins ?? [];
   const identifiers = new Set<string>();
   let store: Store;
   const subscriptions: Subscription[] = [];
