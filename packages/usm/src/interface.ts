@@ -1,14 +1,16 @@
+import { Patch } from 'immer';
 import {
   stateKey,
   storeKey,
   subscriptionsKey,
   identifierKey,
   bootstrappedKey,
-  actionKey
+  actionKey,
 } from './constant';
 
 export interface Config {
-  //
+  enablePatches?: boolean;
+  hook?(store: Store, action: Action): Action;
 }
 
 export interface StoreOptions {
@@ -45,12 +47,11 @@ export interface Action<T = Record<string, any>> {
   params: any[];
   _state: T;
   _usm: typeof actionKey;
+  _patches?: Patch[];
+  _inversePatches?: Patch[];
 }
 
-export type Subscribe = (
-  service: Service,
-  listener: () => void
-) => Unsubscribe;
+export type Subscribe = (service: Service, listener: () => void) => Unsubscribe;
 
 export type Watch = <T>(
   service: Service,

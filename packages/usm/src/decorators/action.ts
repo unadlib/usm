@@ -1,13 +1,11 @@
 /* eslint-disable func-names */
-import { produce } from 'immer';
-import { Service } from '../interface';
+import { produceWithPatches, produce, Patch } from 'immer';
+import { Action, Service } from '../interface';
 import { storeKey, identifierKey, actionKey } from '../constant';
+import { getStagedState, setStagedState } from '../utils/index';
+import { getPatchesToggle } from '../createStore';
 
-let stagedState: Record<string, unknown> | undefined;
-
-const getStagedState = () => stagedState;
-
-const action = (
+export const action = (
   target: object,
   key: string | symbol,
   descriptor: TypedPropertyDescriptor<(...args: any[]) => void>
@@ -21,17 +19,26 @@ const action = (
     if (__DEV__) {
       time = Date.now();
     }
-    if (typeof stagedState === 'undefined') {
+    if (typeof getStagedState() === 'undefined') {
       try {
         const lastState = this[storeKey]?.getState();
-        const state = produce(
-          lastState,
-          (draftState: Record<string, unknown>) => {
-            stagedState = draftState;
-            fn.apply(this, args);
-          }
-        );
-        stagedState = undefined;
+        let state: Record<string, any> | undefined;
+        let patches: Patch[] = [];
+        let inversePatches: Patch[] = [];
+        const recipe = (draftState: Record<string, unknown>) => {
+          setStagedState(draftState);
+          fn.apply(this, args);
+        };
+        const enablePatches = getPatchesToggle();
+        if (enablePatches) {
+          [state, patches, inversePatches] = produceWithPatches(
+            lastState,
+            recipe
+          );
+        } else {
+          state = produce(lastState, recipe);
+        }
+        setStagedState(undefined);
         if (__DEV__) {
           if (lastState === state) {
             console.warn(`There are no state updates to method ${fn.name}`);
@@ -50,9 +57,15 @@ const action = (
           params: args,
           _state: state!,
           _usm: actionKey,
-        });
+          ...(enablePatches
+            ? {
+                _patches: patches,
+                _inversePatches: inversePatches,
+              }
+            : {}),
+        } as Action);
       } finally {
-        stagedState = undefined;
+        setStagedState(undefined);
       }
     } else {
       // enable staged state mode.
@@ -64,5 +77,3 @@ const action = (
     value,
   };
 };
-
-export { getStagedState, action };

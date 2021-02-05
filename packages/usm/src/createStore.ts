@@ -1,4 +1,7 @@
-import produce, { setAutoFreeze } from 'immer';
+import produce, {
+  setAutoFreeze,
+  enablePatches as enablePatchesWithImmer,
+} from 'immer';
 import {
   changeStateKey,
   identifierKey,
@@ -7,9 +10,12 @@ import {
   bootstrappedKey,
   subscriptionsKey,
 } from './constant';
-import { getStagedState } from './decorators/index';
 import { Action, Store, StoreOptions, Subscription, Config } from './interface';
-import { EventEmitter } from './utils/index';
+import { EventEmitter, getStagedState } from './utils/index';
+
+let enablePatches: boolean;
+
+export const getPatchesToggle = () => enablePatches;
 
 export const createStore = (
   options: StoreOptions,
@@ -23,12 +29,19 @@ export const createStore = (
   }
   const enableAutoFreeze = options.strict ?? __DEV__;
   setAutoFreeze(enableAutoFreeze);
+  enablePatches = config.enablePatches ?? false;
+  if (enablePatches) {
+    enablePatchesWithImmer();
+  }
   let state: Record<string, any> = {};
   const subscriptions: Subscription[] = [];
   const identifiers = new Set<string>();
   const eventEmitter = new EventEmitter();
   const store: Store = {
     dispatch: (action: Action) => {
+      if (config.hook) {
+        action = config.hook(store, action);
+      }
       state = action._state;
       eventEmitter.emit(changeStateKey);
     },
