@@ -1,6 +1,6 @@
 {
   "name": "usm",
-  "version": "3.2.3",
+  "version": "3.3.0",
   "description": "Universal state model",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.umd.js",
@@ -28,6 +28,6 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "immer": "^8.0.1"
+    "immer": "^9.0.1"
   }
 }
