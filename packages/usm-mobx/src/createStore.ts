@@ -1,4 +1,10 @@
-import { configure, makeObservable, runInAction, autorun } from 'mobx';
+import {
+  configure,
+  makeObservable,
+  runInAction,
+  autorun,
+  observable,
+} from 'mobx';
 import { EventEmitter } from './utils/index';
 import {
   changeStateKey,
@@ -92,7 +98,11 @@ export const createStore = (
     const initialValue: Record<string, any> = {};
     if (module[stateKey]) {
       state[identifier] = {};
+      Object.assign(module, {
+        [observableKey]: {},
+      });
       for (const key in module[stateKey]) {
+        module[observableKey]![key] = observable;
         Object.defineProperty(state[identifier], key, {
           get() {
             return module[key];

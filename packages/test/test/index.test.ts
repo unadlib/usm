@@ -498,6 +498,9 @@ test('Multiple inheritance and multiple instances', () => {
 
     class Counter1 extends Counter {
       @state
+      counter1 = 0;
+
+      @state
       count = { sum: 0 };
 
       @action
@@ -507,6 +510,9 @@ test('Multiple inheritance and multiple instances', () => {
     }
 
     class Counter2 extends Counter {
+      @state
+      counter2 = 0;
+
       @state
       count = { sum: 0 };
 
@@ -533,8 +539,16 @@ test('Multiple inheritance and multiple instances', () => {
     expect(newState1.count).toEqual({ sum: 0 });
     const newState2 = Object.values(store.getState())[2] as Counter1;
     expect(newState2.count).toEqual({ sum: 0 });
+    expect(newState2.counter1).toEqual(0);
+    expect(
+      Object.prototype.hasOwnProperty.call(newState2, 'counter2')
+    ).toBeFalsy();
     const newState3 = Object.values(store.getState())[3] as Counter2;
     expect(newState3.count).toEqual({ sum: 0 });
+    expect(newState3.counter2).toEqual(0);
+    expect(
+      Object.prototype.hasOwnProperty.call(newState3, 'counter1')
+    ).toBeFalsy();
   }
 });
 
@@ -656,4 +670,3 @@ test('base with cross-action and cross-module', () => {
     expect(fn.mock.calls.length).toBe(1);
   }
 });
-

@@ -13,13 +13,10 @@ export const state = (
       } class, it only supports class properties that decorate keys for string types.`
     );
   }
-  if (typeof (target as Service)[stateKey] === 'undefined') {
-    Object.assign(target, {
-      [stateKey]: {
-        [key]: undefined,
-      },
-    });
-  } else {
-    (target as Service)[stateKey]![key] = undefined;
-  }
+  Object.assign(target, {
+    [stateKey]: {
+      ...(target as Service)[stateKey],
+      [key]: undefined,
+    },
+  });
 };
