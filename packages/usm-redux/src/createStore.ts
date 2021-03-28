@@ -25,6 +25,10 @@ let enablePatches: boolean;
 
 export const getPatchesToggle = () => enablePatches;
 
+export const setPatchesToggle = (toggle: boolean) => {
+  enablePatches = toggle;
+};
+
 export const createStore = (
   options: StoreOptions,
   preloadedState?: PreloadedState<any>,
