@@ -160,7 +160,6 @@ export const createStore = (
       [identifierKey]: {
         configurable: false,
         enumerable: false,
-        writable: false,
         value: identifier,
       },
       [storeKey]: {
