@@ -38,7 +38,7 @@ export const createStore = (
         }
       }
     }
-    let identifier = module.name;
+    let identifier = module[identifierKey] ?? module.name;
     if (identifier === null || typeof identifier === 'undefined') {
       identifier = `@@usm-vuex/${className}/${Math.random().toString(36)}`;
     }

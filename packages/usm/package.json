@@ -1,6 +1,6 @@
 {
   "name": "usm",
-  "version": "3.5.3",
+  "version": "3.5.4",
   "description": "Universal state model",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.umd.js",
