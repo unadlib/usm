@@ -27,7 +27,16 @@ test('base', () => {
     const counter = new Counter();
 
     const store = createStore({
-      modules: [counter],
+      modules: [
+        counter,
+        'test',
+        null,
+        undefined,
+        42,
+        Symbol('test'),
+        Symbol.for('test'),
+        false,
+      ],
     });
 
     const oldState = Object.values(store.getState())[0] as Counter;

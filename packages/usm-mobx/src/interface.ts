@@ -7,7 +7,7 @@ import {
   observableKey,
   storeKey,
   subscriptionsKey,
-  bootstrappedKey
+  bootstrappedKey,
 } from './constant';
 
 export interface Config {
@@ -32,7 +32,7 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
 }
 
 export interface StoreOptions {
-  modules: Service[];
+  modules: (Service | string | number | boolean | symbol | null | undefined)[];
   strict?: boolean;
 }
 
@@ -46,17 +46,13 @@ export interface Action<T = Record<string, any>> {
   _changeState(...args: any[]): void;
 }
 
-
 export interface Store<T = Record<string, any>> {
   dispatch(action: Action): void;
   getState(): T;
   subscribe(listener: Subscription): Unsubscribe;
 }
 
-export type Subscribe = (
-  service: Service,
-  listener: () => void
-) => Unsubscribe;
+export type Subscribe = (service: Service, listener: () => void) => Unsubscribe;
 
 export type Watch = <T>(
   service: Service,

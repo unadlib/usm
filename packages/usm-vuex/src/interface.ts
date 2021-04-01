@@ -16,7 +16,7 @@ export interface Config {
 }
 
 export interface StoreOptions {
-  modules: Service[];
+  modules: (Service | string | number | boolean | symbol | null | undefined)[];
   strict?: boolean;
 }
 

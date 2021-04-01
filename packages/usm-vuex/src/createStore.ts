@@ -28,6 +28,7 @@ export const createStore = (
   const subscriptions: Subscription[] = [];
   const modules: Record<string, Module<any, any>> = {};
   options.modules.forEach((module, index) => {
+    if (typeof module !== 'object' || module === null) return;
     const className = Object.getPrototypeOf(module).constructor.name;
     if (module[bootstrappedKey]) {
       if (__DEV__) {
