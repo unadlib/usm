@@ -18,11 +18,11 @@ export const computed = (
       },
     });
   } else {
-    (target as Service)[gettersKey]![key] = descriptor.get!;
+    (target as Service)[gettersKey][key] = descriptor.get!;
   }
   function get(this: Service) {
     const name = `${this[identifierKey]}/${key}`;
-    return this[storeKey]!.getters[name];
+    return this[storeKey].getters[name];
   }
   return {
     ...descriptor,

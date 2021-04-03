@@ -20,19 +20,19 @@ export interface PropertyDescriptor<T> extends TypedPropertyDescriptor<T> {
 
 export interface Service<T extends Record<string, any> = Record<string, any>> {
   name?: string;
-  readonly [actionKey]?: Record<string | symbol, typeof action>;
-  readonly [computedKey]?: Record<string | symbol, typeof computed>;
-  readonly [observableKey]?: Record<string | symbol, typeof observable>;
-  readonly [bootstrappedKey]?: boolean;
-  readonly [identifierKey]?: string;
-  readonly [stateKey]?: T;
-  readonly [storeKey]?: Store<T>;
-  readonly [subscriptionsKey]?: Subscription[];
+  readonly [actionKey]: Record<string | symbol, typeof action>;
+  readonly [computedKey]: Record<string | symbol, typeof computed>;
+  readonly [observableKey]: Record<string | symbol, typeof observable>;
+  readonly [bootstrappedKey]: boolean;
+  readonly [identifierKey]: string;
+  readonly [stateKey]: T;
+  readonly [storeKey]: Store<T>;
+  readonly [subscriptionsKey]: Subscription[];
   [K: string]: any;
 }
 
 export interface StoreOptions {
-  modules: (Service | string | number | boolean | symbol | null | undefined)[];
+  modules: any[];
   strict?: boolean;
 }
 
@@ -52,10 +52,10 @@ export interface Store<T = Record<string, any>> {
   subscribe(listener: Subscription): Unsubscribe;
 }
 
-export type Subscribe = (service: Service, listener: () => void) => Unsubscribe;
+export type Subscribe = (module: any, listener: () => void) => Unsubscribe;
 
 export type Watch = <T>(
-  service: Service,
+  module: any,
   selector: () => T,
   watcher: (newValue: T, oldValue: T) => void
 ) => Unsubscribe;

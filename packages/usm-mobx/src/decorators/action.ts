@@ -30,8 +30,8 @@ export const action = (
     }
     try {
       changing = true;
-      this[storeKey]?.dispatch({
-        type: this[identifierKey]!,
+      this[storeKey].dispatch({
+        type: this[identifierKey],
         method: key,
         params: args,
         _changeState: (...args) => fn.apply(this, args),
@@ -42,6 +42,6 @@ export const action = (
   };
   return {
     ...descriptor,
-    value
+    value,
   };
 };

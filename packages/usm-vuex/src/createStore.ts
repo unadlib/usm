@@ -8,7 +8,14 @@ import {
   actionsKey,
   subscriptionsKey,
 } from './constant';
-import { Action, Store, StoreOptions, Subscription, Config } from './interface';
+import {
+  Action,
+  Store,
+  StoreOptions,
+  Subscription,
+  Config,
+  Service,
+} from './interface';
 
 export const createStore = (
   options: StoreOptions,
@@ -29,17 +36,18 @@ export const createStore = (
   const modules: Record<string, Module<any, any>> = {};
   options.modules.forEach((module, index) => {
     if (typeof module !== 'object' || module === null) return;
-    const className = Object.getPrototypeOf(module).constructor.name;
-    if (module[bootstrappedKey]) {
+    const service: Service = module;
+    const className = Object.getPrototypeOf(service).constructor.name;
+    if (service[bootstrappedKey]) {
       if (__DEV__) {
-        if (module[bootstrappedKey]) {
+        if (service[bootstrappedKey]) {
           console.warn(
             `The module with an index of ${index} and a name of ${className} in the module list is a duplicate module.`
           );
         }
       }
     }
-    let identifier = module[identifierKey] ?? module.name;
+    let identifier = service[identifierKey] ?? service.name;
     if (identifier === null || typeof identifier === 'undefined') {
       identifier = `@@usm-vuex/${className}/${Math.random().toString(36)}`;
     }
@@ -75,9 +83,9 @@ export const createStore = (
       getters: {},
       mutations: {},
     };
-    if (module[stateKey]) {
-      for (const key in module[stateKey]) {
-        modules[identifier].state[key] = module[key];
+    if (service[stateKey]) {
+      for (const key in service[stateKey]) {
+        modules[identifier].state[key] = service[key];
         if (
           preloadedState &&
           preloadedState[identifier] &&
@@ -89,8 +97,8 @@ export const createStore = (
           [key]: {
             enumerable: true,
             configurable: false,
-            get(this: typeof module) {
-              return this[storeKey]!.state[identifier!]![key];
+            get(this: typeof service) {
+              return this[storeKey].state[identifier][key];
             },
           },
         });
@@ -100,23 +108,23 @@ export const createStore = (
         [stateKey]: {
           enumerable: false,
           configurable: false,
-          get(this: typeof module) {
-            return this[storeKey]!.state[identifier!];
+          get(this: typeof service) {
+            return this[storeKey].state[identifier];
           },
         },
       });
     }
-    if (module[gettersKey]) {
-      for (const key in module[gettersKey]) {
-        modules[identifier].getters![key] = module[gettersKey]![key].bind(
-          module
+    if (service[gettersKey]) {
+      for (const key in service[gettersKey]) {
+        modules[identifier].getters![key] = service[gettersKey][key].bind(
+          service
         );
       }
     }
-    if (module[actionsKey]) {
-      for (const key in module[actionsKey]) {
-        modules[identifier].mutations![key] = module[actionsKey]![key].bind(
-          module
+    if (service[actionsKey]) {
+      for (const key in service[actionsKey]) {
+        modules[identifier].mutations![key] = service[actionsKey][key].bind(
+          service
         );
       }
     }
@@ -134,9 +142,9 @@ export const createStore = (
         },
       },
     });
-    Object.defineProperties(module, descriptors);
-    if (Array.isArray(module[subscriptionsKey])) {
-      Array.prototype.push.apply(subscriptions, module[subscriptionsKey]!);
+    Object.defineProperties(service, descriptors);
+    if (Array.isArray(service[subscriptionsKey])) {
+      Array.prototype.push.apply(subscriptions, service[subscriptionsKey]);
     }
   });
   store = Object.assign(

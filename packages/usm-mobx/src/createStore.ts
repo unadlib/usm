@@ -23,6 +23,7 @@ import type {
   Action,
   Subscription,
   Config,
+  Service,
 } from './interface';
 
 export const createStore = (
@@ -56,17 +57,18 @@ export const createStore = (
   };
   options.modules.forEach((module, index) => {
     if (typeof module !== 'object' || module === null) return;
-    const className = Object.getPrototypeOf(module).constructor.name;
-    if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey]) {
+    const service: Service = module;
+    const className = Object.getPrototypeOf(service).constructor.name;
+    if (typeof service[stateKey] === 'undefined' || service[bootstrappedKey]) {
       if (__DEV__) {
-        if (module[bootstrappedKey]) {
+        if (service[bootstrappedKey]) {
           console.warn(
             `The module with an index of ${index} and a name of ${className} in the module list is a duplicate module.`
           );
         }
       }
     }
-    let identifier = module[identifierKey] ?? module.name;
+    let identifier = service[identifierKey] ?? service.name;
     if (identifier === null || typeof identifier === 'undefined') {
       identifier = `@@usm-mobx/${className}/${Math.random().toString(36)}`;
     }
@@ -97,25 +99,25 @@ export const createStore = (
       },
     };
     const initialValue: Record<string, any> = {};
-    if (module[stateKey]) {
+    if (service[stateKey]) {
       state[identifier] = {};
-      Object.assign(module, {
+      Object.assign(service, {
         [observableKey]: {},
       });
-      for (const key in module[stateKey]) {
-        module[observableKey]![key] = observable;
+      for (const key in service[stateKey]) {
+        service[observableKey][key] = observable;
         Object.defineProperty(state[identifier], key, {
           get() {
-            return module[key];
+            return service[key];
           },
           set(value: unknown) {
             runInAction(() => {
-              module[key] = value;
+              service[key] = value;
             });
           },
         });
-        initialValue[key] = module[key];
-        module[key] = null;
+        initialValue[key] = service[key];
+        service[key] = null;
         if (
           preloadedState &&
           preloadedState[identifier] &&
@@ -128,8 +130,8 @@ export const createStore = (
         [stateKey]: {
           enumerable: false,
           configurable: false,
-          get(this: typeof module) {
-            return state[identifier!];
+          get(this: typeof service) {
+            return state[identifier];
           },
         },
       });
@@ -148,26 +150,26 @@ export const createStore = (
         },
       },
     });
-    Object.defineProperties(module, descriptors);
-    makeObservable(module, {
-      ...(module[computedKey] ?? {}),
-      ...(module[observableKey] ?? {}),
-      ...(module[actionKey] ?? {}),
+    Object.defineProperties(service, descriptors);
+    makeObservable(service, {
+      ...(service[computedKey] ?? {}),
+      ...(service[observableKey] ?? {}),
+      ...(service[actionKey] ?? {}),
     });
-    if (module[stateKey]) {
+    if (service[stateKey]) {
       runInAction(() => {
         for (const key in initialValue) {
-          module[key] = initialValue[key];
+          service[key] = initialValue[key];
         }
       });
     }
-    if (autoRunComputed && module[computedKey]) {
-      for (const key in module[computedKey]) {
-        autorun(() => module[key]);
+    if (autoRunComputed && service[computedKey]) {
+      for (const key in service[computedKey]) {
+        autorun(() => service[key]);
       }
     }
-    if (Array.isArray(module[subscriptionsKey])) {
-      Array.prototype.push.apply(subscriptions, module[subscriptionsKey]!);
+    if (Array.isArray(service[subscriptionsKey])) {
+      Array.prototype.push.apply(subscriptions, service[subscriptionsKey]);
     }
   });
   if (options.strict) {

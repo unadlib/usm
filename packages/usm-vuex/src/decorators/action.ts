@@ -19,7 +19,7 @@ export const action = (
       },
     });
   } else {
-    (target as Service)[actionsKey]![key] = fn!;
+    (target as Service)[actionsKey][key] = fn;
   }
   const value = function (this: Service, ...args: unknown[]) {
     if (changing) {
@@ -27,11 +27,11 @@ export const action = (
     }
     try {
       changing = true;
-      this[storeKey]!.dispatch({
-        type: this[identifierKey]!,
+      this[storeKey].dispatch({
+        type: this[identifierKey],
         method: key,
         params: args,
-        _state: this[storeKey]!.state,
+        _state: this[storeKey].state,
         _usm: actionKey,
       });
     } finally {

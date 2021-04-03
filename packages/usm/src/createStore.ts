@@ -10,7 +10,14 @@ import {
   bootstrappedKey,
   subscriptionsKey,
 } from './constant';
-import { Action, Store, StoreOptions, Subscription, Config } from './interface';
+import {
+  Action,
+  Store,
+  StoreOptions,
+  Subscription,
+  Config,
+  Service,
+} from './interface';
 import { EventEmitter, getStagedState } from './utils/index';
 
 let enablePatches: boolean;
@@ -53,17 +60,18 @@ export const createStore = (
   };
   options.modules.forEach((module, index) => {
     if (typeof module !== 'object' || module === null) return;
-    const className = Object.getPrototypeOf(module).constructor.name;
-    if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey]) {
+    const service: Service = module;
+    const className = Object.getPrototypeOf(service).constructor.name;
+    if (typeof service[stateKey] === 'undefined' || service[bootstrappedKey]) {
       if (__DEV__) {
-        if (module[bootstrappedKey]) {
+        if (service[bootstrappedKey]) {
           console.warn(
             `The module with an index of ${index} and a name of ${className} in the module list is a duplicate module.`
           );
         }
       }
     }
-    let identifier = module[identifierKey] ?? module.name;
+    let identifier = service[identifierKey] ?? service.name;
     if (identifier === null || typeof identifier === 'undefined') {
       identifier = `@@usm/${className}/${Math.random().toString(36)}`;
     }
@@ -93,9 +101,9 @@ export const createStore = (
         value: true,
       },
     };
-    if (module[stateKey]) {
-      for (const key in module[stateKey]) {
-        const descriptor = Object.getOwnPropertyDescriptor(module, key);
+    if (service[stateKey]) {
+      for (const key in service[stateKey]) {
+        const descriptor = Object.getOwnPropertyDescriptor(service, key);
         if (typeof descriptor === 'undefined') continue;
         let initialValue = descriptor.value;
         if (
@@ -105,35 +113,33 @@ export const createStore = (
         ) {
           initialValue = preloadedState[identifier][key];
         }
-        Object.assign(module[stateKey], {
+        Object.assign(service[stateKey], {
           [key]: initialValue,
         });
         Object.assign(descriptors, {
           [key]: {
             enumerable: true,
             configurable: false,
-            get(this: typeof module) {
-              return this[stateKey]![key];
+            get(this: typeof service) {
+              return this[stateKey][key];
             },
-            set(this: typeof module, value: unknown) {
-              this[stateKey]![key] = value;
+            set(this: typeof service, value: unknown) {
+              this[stateKey][key] = value;
             },
           },
         });
       }
       state[identifier] = enableAutoFreeze
-        ? produce({ ...module[stateKey] }, () => {})
-        : module[stateKey];
+        ? produce({ ...service[stateKey] }, () => {})
+        : service[stateKey];
       Object.assign(descriptors, {
         [stateKey]: {
           enumerable: false,
           configurable: false,
-          get(this: typeof module) {
+          get(this: typeof service) {
             const stagedState = getStagedState();
-            if (stagedState) return stagedState[this[identifierKey]!];
-            const currentState = this[storeKey]?.getState()[
-              this[identifierKey]!
-            ];
+            if (stagedState) return stagedState[this[identifierKey]];
+            const currentState = this[storeKey].getState()[this[identifierKey]];
             if (enableAutoFreeze && !Object.isFrozen(currentState)) {
               return Object.freeze(currentState);
             }
@@ -156,9 +162,9 @@ export const createStore = (
         },
       },
     });
-    Object.defineProperties(module, descriptors);
-    if (Array.isArray(module[subscriptionsKey])) {
-      Array.prototype.push.apply(subscriptions, module[subscriptionsKey]!);
+    Object.defineProperties(service, descriptors);
+    if (Array.isArray(service[subscriptionsKey])) {
+      Array.prototype.push.apply(subscriptions, service[subscriptionsKey]);
     }
   });
   for (const subscribe of subscriptions) {

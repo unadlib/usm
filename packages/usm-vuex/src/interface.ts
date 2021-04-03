@@ -16,7 +16,7 @@ export interface Config {
 }
 
 export interface StoreOptions {
-  modules: (Service | string | number | boolean | symbol | null | undefined)[];
+  modules: any[];
   strict?: boolean;
 }
 
@@ -27,13 +27,13 @@ export type Store<T = Record<string, any>> = {
 
 export interface Service<T extends Record<string, any> = Record<string, any>> {
   name?: string;
-  readonly [identifierKey]?: string;
-  readonly [bootstrappedKey]?: boolean;
-  readonly [stateKey]?: T;
-  readonly [storeKey]?: Store<T>;
-  readonly [subscriptionsKey]?: Subscription[];
-  readonly [gettersKey]?: Record<string, () => any>;
-  readonly [actionsKey]?: Record<string, (...args: any) => void>;
+  readonly [identifierKey]: string;
+  readonly [bootstrappedKey]: boolean;
+  readonly [stateKey]: T;
+  readonly [storeKey]: Store<T>;
+  readonly [subscriptionsKey]: Subscription[];
+  readonly [gettersKey]: Record<string, () => any>;
+  readonly [actionsKey]: Record<string, (...args: any) => void>;
   [K: string]: any;
 }
 
@@ -52,10 +52,10 @@ export interface Action<T = Record<string, any>> {
   _usm: typeof actionKey;
 }
 
-export type Subscribe = (service: Service, listener: () => void) => Unsubscribe;
+export type Subscribe = (module: any, listener: () => void) => Unsubscribe;
 
 export type Watch = <T>(
-  service: Service,
+  module: any,
   selector: () => T,
   watcher: (newValue: T, oldValue: T) => void
 ) => Unsubscribe;

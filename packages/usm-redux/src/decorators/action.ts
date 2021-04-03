@@ -24,7 +24,7 @@ export const action = (
     }
     if (typeof getStagedState() === 'undefined') {
       try {
-        const lastState = this[storeKey]?.getState();
+        const lastState = this[storeKey].getState();
         let state: Record<string, any> | undefined;
         let patches: Patch[] = [];
         let inversePatches: Patch[] = [];
@@ -54,11 +54,11 @@ export const action = (
             );
           // performance detail: https://immerjs.github.io/immer/docs/performance
         }
-        this[storeKey]!.dispatch({
-          type: this[identifierKey]!,
+        this[storeKey].dispatch({
+          type: this[identifierKey],
           method: key,
           params: args,
-          _state: state!,
+          _state: state,
           _usm: actionKey,
           ...(enablePatches
             ? {

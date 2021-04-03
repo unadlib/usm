@@ -19,7 +19,7 @@ import {
   subscriptionsKey,
 } from './constant';
 import { getStagedState } from './utils/index';
-import { Action, StoreOptions, Store, Subscription, Config } from './interface';
+import { Action, StoreOptions, Store, Subscription, Config, Service } from './interface';
 
 let enablePatches: boolean;
 
@@ -53,17 +53,18 @@ export const createStore = (
   let store: Store;
   options.modules.forEach((module, index) => {
     if (typeof module !== 'object' || module === null) return;
-    const className = Object.getPrototypeOf(module).constructor.name;
-    if (typeof module[stateKey] === 'undefined' || module[bootstrappedKey]) {
+    const service: Service = module;
+    const className = Object.getPrototypeOf(service).constructor.name;
+    if (typeof service[stateKey] === 'undefined' || service[bootstrappedKey]) {
       if (__DEV__) {
-        if (module[bootstrappedKey]) {
+        if (service[bootstrappedKey]) {
           console.warn(
             `The module with an index of ${index} and a name of ${className} in the module list is a duplicate module.`
           );
         }
       }
     }
-    let identifier = module[identifierKey] ?? module.name;
+    let identifier = service[identifierKey] ?? service.name;
     if (identifier === null || typeof identifier === 'undefined') {
       identifier = `@@usm-redux/${className}/${Math.random().toString(36)}`;
     }
@@ -93,31 +94,31 @@ export const createStore = (
         value: true,
       },
     };
-    if (module[stateKey]) {
-      for (const key in module[stateKey]) {
-        const descriptor = Object.getOwnPropertyDescriptor(module, key);
+    if (service[stateKey]) {
+      for (const key in service[stateKey]) {
+        const descriptor = Object.getOwnPropertyDescriptor(service, key);
         if (typeof descriptor === 'undefined') continue;
-        Object.assign(module[stateKey], {
+        Object.assign(service[stateKey], {
           [key]: descriptor.value,
         });
         Object.assign(descriptors, {
           [key]: {
             enumerable: true,
             configurable: false,
-            get(this: typeof module) {
-              return this[stateKey]![key];
+            get(this: typeof service) {
+              return this[stateKey][key];
             },
-            set(this: typeof module, value: unknown) {
-              this[stateKey]![key] = value;
+            set(this: typeof service, value: unknown) {
+              this[stateKey][key] = value;
             },
           },
         });
       }
       const initState = enableAutoFreeze
-        ? produce({ ...module[stateKey] }, () => {})
-        : module[stateKey];
+        ? produce({ ...service[stateKey] }, () => {})
+        : service[stateKey];
 
-      const serviceReducers = Object.entries(initState!).reduce(
+      const serviceReducers = Object.entries(initState).reduce(
         (serviceReducersMapObject: ReducersMapObject, [key, value]) => {
           // support pure reducer
           if (typeof value === 'function') {
@@ -127,7 +128,7 @@ export const createStore = (
           }
           const reducer = (state = value, action: Action) => {
             return action._usm === actionKey
-              ? action._state[identifier!][key]
+              ? action._state[identifier][key]
               : state;
           };
           return Object.assign(serviceReducersMapObject, {
@@ -145,10 +146,10 @@ export const createStore = (
         [stateKey]: {
           enumerable: false,
           configurable: false,
-          get(this: typeof module) {
+          get(this: typeof service) {
             const stagedState = getStagedState();
-            if (stagedState) return stagedState[identifier!];
-            const currentState = this[storeKey]?.getState()[identifier!];
+            if (stagedState) return stagedState[identifier];
+            const currentState = this[storeKey].getState()[identifier];
             if (enableAutoFreeze && !Object.isFrozen(currentState)) {
               return Object.freeze(currentState);
             }
@@ -171,9 +172,9 @@ export const createStore = (
         },
       },
     });
-    Object.defineProperties(module, descriptors);
-    if (Array.isArray(module[subscriptionsKey])) {
-      Array.prototype.push.apply(subscriptions, module[subscriptionsKey]!);
+    Object.defineProperties(service, descriptors);
+    if (Array.isArray(service[subscriptionsKey])) {
+      Array.prototype.push.apply(subscriptions, service[subscriptionsKey]);
     }
   });
   const storeWithRedux = createStoreWithRedux(
