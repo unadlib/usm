@@ -149,7 +149,7 @@ export const createStore = (
           get(this: typeof service) {
             const stagedState = getStagedState();
             if (stagedState) return stagedState[identifier];
-            const currentState = this[storeKey].getState()[identifier];
+            const currentState = this[storeKey]?.getState()[identifier];
             if (enableAutoFreeze && !Object.isFrozen(currentState)) {
               return Object.freeze(currentState);
             }
