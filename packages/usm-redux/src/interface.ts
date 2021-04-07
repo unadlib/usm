@@ -1,5 +1,5 @@
 import { Patch } from 'immer';
-import { Middleware, ReducersMapObject, Reducer } from 'redux';
+import { ReducersMapObject, Reducer, StoreEnhancer } from 'redux';
 import {
   stateKey,
   storeKey,
@@ -11,7 +11,7 @@ import {
 
 export interface Config {
   enablePatches?: boolean;
-  reduxMiddleware?: Middleware[];
+  reduxEnhancer?: StoreEnhancer<any, any>;
   handleReducers?: (reducers: ReducersMapObject) => Reducer;
 }
 

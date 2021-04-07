@@ -1,5 +1,6 @@
 import { applyPatches } from 'immer';
-import { createStore, action, state, computed } from '../index';
+import { applyMiddleware } from 'redux';
+import { createStore, action, state } from '../index';
 
 test('base', () => {
   class Counter {
@@ -53,14 +54,12 @@ test('enablePatches', () => {
     undefined,
     {
       enablePatches: true,
-      reduxMiddleware: [
-        ({ getState }) => (next) => (action) => {
-          const lastState = getState();
-          const result = next(action);
-          snapshots.push(applyPatches(lastState, action._patches));
-          return result;
-        },
-      ],
+      reduxEnhancer: applyMiddleware(({ getState }) => (next) => (action) => {
+        const lastState: any = getState();
+        const result = next(action);
+        snapshots.push(applyPatches(lastState, action._patches));
+        return result;
+      }),
     }
   );
   counter.increase();

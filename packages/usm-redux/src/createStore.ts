@@ -7,7 +7,6 @@ import {
   combineReducers,
   ReducersMapObject,
   PreloadedState,
-  applyMiddleware,
   Store as ReduxStore,
 } from 'redux';
 import {
@@ -42,7 +41,7 @@ export const createStore = (
   config: Config = {}
 ) => {
   const {
-    reduxMiddleware = [],
+    reduxEnhancer,
     handleReducers = (reducers) => combineReducers(reducers),
   } = config;
   if (typeof options !== 'object' || !Array.isArray(options.modules)) {
@@ -185,7 +184,7 @@ export const createStore = (
   const storeWithRedux = createStoreWithRedux(
     handleReducers(reducers),
     preloadedState,
-    applyMiddleware(...reduxMiddleware)
+    reduxEnhancer
   );
   store = {
     dispatch: storeWithRedux.dispatch,
