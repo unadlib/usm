@@ -1,6 +1,6 @@
 {
   "name": "usm-vuex",
-  "version": "3.7.0",
+  "version": "3.7.1",
   "description": "Universal state model for Vuex",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.umd.js",
