@@ -14,12 +14,19 @@ import {
   stateKey,
   storeKey,
   bootstrappedKey,
-  actionKey,
   identifierKey,
   subscriptionsKey,
+  usm,
 } from './constant';
 import { getStagedState } from './utils/index';
-import { Action, StoreOptions, Store, Subscription, Config, Service } from './interface';
+import {
+  Action,
+  StoreOptions,
+  Store,
+  Subscription,
+  Config,
+  Service,
+} from './interface';
 
 let enablePatches: boolean;
 
@@ -127,9 +134,7 @@ export const createStore = (
             });
           }
           const reducer = (state = value, action: Action) => {
-            return action._usm === actionKey
-              ? action._state[identifier][key]
-              : state;
+            return action._usm === usm ? action._state[identifier][key] : state;
           };
           return Object.assign(serviceReducersMapObject, {
             [key]: reducer,

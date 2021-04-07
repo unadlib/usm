@@ -5,7 +5,7 @@ import {
   subscriptionsKey,
   identifierKey,
   bootstrappedKey,
-  actionKey,
+  usm,
   actionsKey,
   gettersKey,
 } from './constant';
@@ -49,7 +49,7 @@ export interface Action<T = Record<string, any>> {
   method: string;
   params: any[];
   _state: T;
-  _usm: typeof actionKey;
+  _usm: typeof usm;
 }
 
 export type Subscribe = (module: any, listener: () => void) => Unsubscribe;

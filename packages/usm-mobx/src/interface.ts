@@ -8,6 +8,7 @@ import {
   storeKey,
   subscriptionsKey,
   bootstrappedKey,
+  usm,
 } from './constant';
 
 export interface Config {
@@ -44,6 +45,7 @@ export interface Action<T = Record<string, any>> {
   method: string | symbol;
   params: any[];
   _changeState(...args: any[]): void;
+  _usm: typeof usm;
 }
 
 export interface Store<T = Record<string, any>> {

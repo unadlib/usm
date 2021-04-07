@@ -1,5 +1,5 @@
 import { action as actionWithMobx } from 'mobx';
-import { actionKey, identifierKey, storeKey } from '../constant';
+import { actionKey, identifierKey, storeKey, usm } from '../constant';
 import { Service } from '../interface';
 
 let changing = false;
@@ -35,6 +35,7 @@ export const action = (
         method: key,
         params: args,
         _changeState: (...args) => fn.apply(this, args),
+        _usm: usm,
       });
     } finally {
       changing = false;

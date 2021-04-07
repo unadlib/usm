@@ -5,7 +5,7 @@ import {
   storeKey,
   subscriptionsKey,
   bootstrappedKey,
-  actionKey,
+  usm,
   identifierKey,
 } from './constant';
 
@@ -43,7 +43,7 @@ export interface Action<T = Record<string, any>> {
   method: string | symbol;
   params: any[];
   _state: T;
-  _usm: typeof actionKey;
+  _usm: typeof usm;
   _patches?: Patch[];
   _inversePatches?: Patch[];
 }

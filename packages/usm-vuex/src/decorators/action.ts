@@ -1,5 +1,5 @@
 import { Service } from '../interface';
-import { identifierKey, actionKey, actionsKey, storeKey } from '../constant';
+import { identifierKey, usm, actionsKey, storeKey } from '../constant';
 
 let changing = false;
 
@@ -32,7 +32,7 @@ export const action = (
         method: key,
         params: args,
         _state: this[storeKey].state,
-        _usm: actionKey,
+        _usm: usm,
       });
     } finally {
       changing = false;

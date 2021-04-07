@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 import { produceWithPatches, produce, Patch } from 'immer';
 import { Service } from '../interface';
-import { storeKey, actionKey, identifierKey } from '../constant';
+import { storeKey, identifierKey, usm } from '../constant';
 import { getPatchesToggle } from '../createStore';
 import { Action } from '../interface';
 import { getStagedState, setStagedState } from '../utils/index';
@@ -59,7 +59,7 @@ export const action = (
           method: key,
           params: args,
           _state: state,
-          _usm: actionKey,
+          _usm: usm,
           ...(enablePatches
             ? {
                 _patches: patches,
