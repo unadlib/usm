@@ -28,6 +28,6 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "immer": "^9.0.1"
+    "immer": "^9.0.3"
   }
 }
