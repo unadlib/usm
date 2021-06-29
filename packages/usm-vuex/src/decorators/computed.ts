@@ -1,6 +1,8 @@
 import { storeKey, identifierKey, gettersKey } from '../constant';
 import { Service } from '../interface';
 
+// TODO: https://github.com/vuejs/vuex/issues/1890
+// https://github.com/vuejs/rfcs/pull/212
 export const computed = (
   target: object,
   key: string,
