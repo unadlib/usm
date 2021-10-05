@@ -100,6 +100,9 @@ export const createStore = (
             get(this: typeof service) {
               return this[storeKey].state[identifier][key];
             },
+            set(this: typeof service, value: unknown) {
+              this[storeKey].state[identifier][key] = value;
+            },
           },
         });
       }

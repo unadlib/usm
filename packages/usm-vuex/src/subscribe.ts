@@ -42,7 +42,7 @@ const subscribe: Subscribe = (module, listener) => {
   return unsubscribe;
 };
 
-const watch: Watch = (module, selector, watcher) => {
+const watch: Watch = (module, selector, watcher, options = {}) => {
   if (typeof watcher !== 'function') {
     const className = Object.getPrototypeOf(module).constructor.name;
     throw new Error(
@@ -50,6 +50,26 @@ const watch: Watch = (module, selector, watcher) => {
     );
   }
   let oldValue = selector();
+  if (options.multiple) {
+    if (!Array.isArray(oldValue)) {
+      const className = Object.getPrototypeOf(module).constructor.name;
+      throw new Error(
+        `The 'selector' should be a function that returns an array in the class '${className}'.`,
+      );
+    }
+    return subscribe(module, () => {
+      const newValue = selector();
+      const length = oldValue.length;
+      for (let i = 0; i < length; i++) {
+        if (!isEqual(newValue[i], oldValue[i])) {
+          const lastValues = oldValue;
+          oldValue = newValue;
+          watcher(newValue, lastValues);
+          break;
+        }
+      }
+    });
+  }
   // !don't use Vuex store's watch function, because it is asynchronous.
   return subscribe(module, () => {
     const newValue = selector();
