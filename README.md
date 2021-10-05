@@ -152,11 +152,11 @@ Creates a `usm` store that holds the complete shared state.
 
 #### Arguments
 
-- `options`(*object*)
-  - `modules`(*array*): an array with all modules instances
-  - [`strict`] (*boolean*): enable strict mode
-- [`preloadedState`] (*any*): preloaded state
-- [`plugins`/`middleware`] (*any*[]): vuex's plugins or redux's middleware
+- `options`(_object_)
+  - `modules`(_array_): an array with all modules instances
+  - [`strict`] (_boolean_): enable strict mode
+- [`preloadedState`] (_any_): preloaded state
+- [`plugins`/`middleware`] (_any_[]): vuex's plugins or redux's middleware
 
 For example,
 
@@ -232,6 +232,9 @@ class Counter {
       () => [this.count0, this.count1],
       ([newCount0, newCount1], [oldCount0, oldCount0]) => {
         //
+      },
+      {
+        multiple: true,
       }
     );
   }
