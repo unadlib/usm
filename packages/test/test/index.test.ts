@@ -16,11 +16,11 @@ test('base', () => {
     ];
     class Counter {
       @state
-      count = { sum: 0 };
+      count = 0;
 
       @action
       increase() {
-        this.count.sum += 1;
+        this.count += 1;
       }
     }
 
@@ -40,14 +40,14 @@ test('base', () => {
     });
 
     const oldState = Object.values(store.getState())[0] as Counter;
-    expect(oldState.count).toEqual({ sum: 0 });
+    expect(oldState.count).toEqual(0);
     const fn = jest.fn();
     store.subscribe(() => {
       fn();
     });
     counter.increase();
     const newState = Object.values(store.getState())[0] as Counter;
-    expect(newState.count).toEqual({ sum: 1 });
+    expect(newState.count).toEqual(1);
     expect(fn.mock.calls.length).toBe(1);
   }
 });
@@ -487,6 +487,90 @@ test('base with watch', () => {
     const newState = Object.values(store.getState())[0] as Counter;
     expect(newState.count).toEqual({ sum: 1 });
     expect(fn.mock.calls).toEqual([[1, 0]]);
+  }
+});
+
+test('base with watch multiple values', () => {
+  for (const key in packages) {
+    const { createStore, action, state, watch } = packages[
+      key as keyof typeof packages
+    ];
+    const watchFn = jest.fn();
+
+    class Counter {
+      constructor() {
+        watch(this, () => [this.count0, this.count1], watchFn, {
+          multiple: true,
+        });
+      }
+  
+      @state
+      count0 = { c: 0 };
+  
+      @state
+      count1 = 0;
+  
+      @state
+      count2 = 0;
+  
+      @action
+      increase0() {
+        this.count0.c += 1;
+      }
+  
+      @action
+      increase1() {
+        this.count1 += 1;
+      }
+  
+      @action
+      increase2() {
+        this.count2 += 1;
+      }
+    }
+  
+    const counter = new Counter();
+  
+    const store = createStore({
+      modules: [counter],
+    });
+  
+    const [oldState] = Object.values(store.getState());
+    // expect(oldState).toEqual({
+    //   count0: 0,
+    //   count1: 0,
+    //   count2: 0,
+    // });
+    expect(watchFn.mock.calls.length).toBe(0);
+    const fn = jest.fn();
+    store.subscribe(() => {
+      fn();
+    });
+    expect(fn.mock.calls.length).toBe(0);
+    counter.increase0();
+    // expect(Object.values(store.getState())[0]).toEqual({
+    //   count0: 1,
+    //   count1: 0,
+    //   count2: 0,
+    // });
+    // expect(watchFn.mock.calls.length).toBe(1);
+    // expect(fn.mock.calls.length).toBe(1);
+    // counter.increase2();
+    // expect(Object.values(store.getState())[0]).toEqual({
+    //   count0: 1,
+    //   count1: 0,
+    //   count2: 1,
+    // });
+    // expect(watchFn.mock.calls.length).toBe(1);
+    // expect(fn.mock.calls.length).toBe(2);
+    // counter.increase1();
+    // expect(Object.values(store.getState())[0]).toEqual({
+    //   count0: 1,
+    //   count1: 1,
+    //   count2: 1,
+    // });
+    // expect(watchFn.mock.calls.length).toBe(2);
+    // expect(fn.mock.calls.length).toBe(3);
   }
 });
 

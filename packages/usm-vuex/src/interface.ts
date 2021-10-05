@@ -54,8 +54,11 @@ export interface Action<T = Record<string, any>> {
 
 export type Subscribe = (module: any, listener: () => void) => Unsubscribe;
 
-export type Watch = <T>(
+export type Watch = <P extends boolean, T extends P extends true ? any[] : any>(
   module: any,
-  selector: () => T,
-  watcher: (newValue: T, oldValue: T) => void
+  selector: () => P extends true ? [...T] : T,
+  watcher: (newValue: T, oldValue: T) => void,
+  options?: {
+    multiple?: P;
+  }
 ) => Unsubscribe;
