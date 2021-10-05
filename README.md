@@ -219,3 +219,27 @@ class Counter {
   count = { sum: 0 };
 }
 ```
+
+You can pass the option `{ multiple: true }`, which will support watching multiple values.
+
+For example,
+
+```ts
+class Counter {
+  constructor() {
+    watch(
+      this,
+      () => [this.count0, this.count1],
+      ([newCount0, newCount1], [oldCount0, oldCount0]) => {
+        //
+      }
+    );
+  }
+
+  @state
+  count0 = 0;
+
+  @state
+  count1 = 0;
+}
+```
