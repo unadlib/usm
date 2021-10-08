@@ -246,3 +246,5 @@ class Counter {
   count1 = 0;
 }
 ```
+
+> `watch` option supports passing in `isEqual` function for custom equal.
