@@ -11,9 +11,8 @@ const packages = { ...packagesWithImmutable, ...packagesWithObservable };
 
 test('base', () => {
   for (const key in packages) {
-    const { createStore, action, state } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state } =
+      packages[key as keyof typeof packages];
     class Counter {
       @state
       count = 0;
@@ -54,9 +53,8 @@ test('base', () => {
 
 test('base with single action', () => {
   for (const key in packages) {
-    const { createStore, action, state } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state } =
+      packages[key as keyof typeof packages];
     class Counter {
       @state
       count = { sum: 0 };
@@ -93,9 +91,8 @@ test('base with single action', () => {
 
 test('base with { strict: true }', () => {
   for (const key in packages) {
-    const { createStore, action, state } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state } =
+      packages[key as keyof typeof packages];
     class Counter {
       @state
       count = { sum: 0 };
@@ -138,9 +135,8 @@ test('base with { strict: true }', () => {
 
 test('base with immutable computed', () => {
   for (const key in packagesWithImmutable) {
-    const { createStore, action, state, computed } = packagesWithImmutable[
-      key as keyof typeof packagesWithImmutable
-    ];
+    const { createStore, action, state, computed } =
+      packagesWithImmutable[key as keyof typeof packagesWithImmutable];
     const computedFn = jest.fn();
     class Counter {
       @state
@@ -187,9 +183,8 @@ test('base with immutable computed', () => {
 
 test('base with observable computed', () => {
   for (const key in packagesWithObservable) {
-    const { createStore, action, state, computed } = packagesWithObservable[
-      key as keyof typeof packagesWithObservable
-    ];
+    const { createStore, action, state, computed } =
+      packagesWithObservable[key as keyof typeof packagesWithObservable];
     const computedFn = jest.fn();
     class Counter {
       @state
@@ -234,9 +229,8 @@ test('base with observable computed', () => {
 
 test('base with immutable single computed', () => {
   for (const key in packagesWithImmutable) {
-    const { createStore, action, state, computed } = packagesWithImmutable[
-      key as keyof typeof packagesWithImmutable
-    ];
+    const { createStore, action, state, computed } =
+      packagesWithImmutable[key as keyof typeof packagesWithImmutable];
     const computedFn = jest.fn();
     class Counter {
       @state
@@ -280,9 +274,8 @@ test('base with immutable single computed', () => {
 
 test('base with observable single computed', () => {
   for (const key in packagesWithObservable) {
-    const { createStore, action, state, computed } = packagesWithObservable[
-      key as keyof typeof packagesWithObservable
-    ];
+    const { createStore, action, state, computed } =
+      packagesWithObservable[key as keyof typeof packagesWithObservable];
     const computedFn = jest.fn();
     class Counter {
       @state
@@ -332,9 +325,8 @@ test('base with observable single computed', () => {
 
 test('base with multi-instance', () => {
   for (const key in packages) {
-    const { createStore, action, state } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state } =
+      packages[key as keyof typeof packages];
     class Counter {
       name = 'counter';
 
@@ -372,9 +364,8 @@ test('base with multi-instance', () => {
 
 test('base with preloadedState', () => {
   for (const key in packages) {
-    const { createStore, action, state } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state } =
+      packages[key as keyof typeof packages];
     class Counter {
       name = 'counter';
 
@@ -414,9 +405,8 @@ test('base with preloadedState', () => {
 test('base with subscribe', () => {
   for (const key in packages) {
     const fn = jest.fn();
-    const { createStore, action, state, subscribe } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state, subscribe } =
+      packages[key as keyof typeof packages];
     class Counter {
       constructor() {
         subscribe(this, () => {
@@ -450,9 +440,8 @@ test('base with subscribe', () => {
 
 test('base with watch', () => {
   for (const key in packages) {
-    const { createStore, action, state, watch } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state, watch } =
+      packages[key as keyof typeof packages];
     const fn = jest.fn();
     class Counter {
       constructor() {
@@ -492,9 +481,8 @@ test('base with watch', () => {
 
 test('base with watch multiple values', () => {
   for (const key in packages) {
-    const { createStore, action, state, watch } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state, watch } =
+      packages[key as keyof typeof packages];
     const watchFn = jest.fn();
 
     class Counter {
@@ -503,38 +491,38 @@ test('base with watch multiple values', () => {
           multiple: true,
         });
       }
-  
+
       @state
       count0 = { c: 0 };
-  
+
       @state
       count1 = 0;
-  
+
       @state
       count2 = 0;
-  
+
       @action
       increase0() {
         this.count0.c += 1;
       }
-  
+
       @action
       increase1() {
         this.count1 += 1;
       }
-  
+
       @action
       increase2() {
         this.count2 += 1;
       }
     }
-  
+
     const counter = new Counter();
-  
+
     const store = createStore({
       modules: [counter],
     });
-  
+
     const [oldState] = Object.values(store.getState());
     // expect(oldState).toEqual({
     //   count0: 0,
@@ -576,9 +564,8 @@ test('base with watch multiple values', () => {
 
 test('Multiple inheritance and multiple instances', () => {
   for (const key in packages) {
-    const { createStore, action, state } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state } =
+      packages[key as keyof typeof packages];
     class Counter {
       @state
       count = { sum: 0 };
@@ -647,9 +634,8 @@ test('Multiple inheritance and multiple instances', () => {
 
 test('call super with Multiple inheritance and multiple instances', () => {
   for (const key in packages) {
-    const { createStore, action, state } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state } =
+      packages[key as keyof typeof packages];
     class Counter {
       @state
       count = { sum: 0 };
@@ -716,9 +702,8 @@ test('call super with Multiple inheritance and multiple instances', () => {
 
 test('base with cross-action and cross-module', () => {
   for (const key in packages) {
-    const { createStore, action, state } = packages[
-      key as keyof typeof packages
-    ];
+    const { createStore, action, state } =
+      packages[key as keyof typeof packages];
     class Counter0 {
       @state
       count = { sum: 0 };
@@ -761,5 +746,93 @@ test('base with cross-action and cross-module', () => {
     expect(newState.count).toEqual({ sum: 1 });
     expect(newState1.count).toEqual({ sum: 2 });
     expect(fn.mock.calls.length).toBe(1);
+  }
+});
+
+test('base watch about define `isEqual`', () => {
+  for (const key in packages) {
+    const { createStore, action, state, watch } =
+      packages[key as keyof typeof packages];
+
+    const watchFn0 = jest.fn();
+    const watchFn1 = jest.fn();
+    class Counter {
+      constructor() {
+        watch(this, () => this.count0, watchFn0, {
+          isEqual: (x, y) => x === 1 || x === y,
+        });
+
+        watch(this, () => [this.count0, this.count1], watchFn1, {
+          multiple: true,
+          isEqual: (x, y) => x === 1 || x === y,
+        });
+      }
+
+      @state
+      count0 = 0;
+
+      @action
+      increase0() {
+        this.count0 += 1;
+      }
+
+      @state
+      count1 = 0;
+
+      @action
+      increase1() {
+        this.count1 += 1;
+      }
+    }
+
+    const counter = new Counter();
+
+    const store = createStore({
+      modules: [counter],
+    });
+
+    expect(watchFn0.mock.calls.length).toBe(0);
+    expect(watchFn1.mock.calls.length).toBe(0);
+
+    expect(counter.count0).toBe(0);
+    expect(counter.count1).toBe(0);
+    const subscribeFn = jest.fn();
+    store.subscribe(() => {
+      subscribeFn();
+    });
+    counter.increase0();
+    expect(counter.count0).toBe(1);
+    expect(counter.count1).toBe(0);
+    expect(subscribeFn.mock.calls.length).toBe(1);
+    expect(watchFn0.mock.calls.length).toBe(0);
+    expect(watchFn1.mock.calls.length).toBe(0);
+
+    counter.increase0();
+    expect(counter.count0).toBe(2);
+    expect(counter.count1).toBe(0);
+    expect(subscribeFn.mock.calls.length).toBe(2);
+    expect(watchFn0.mock.calls.length).toBe(1);
+    expect(watchFn1.mock.calls.length).toBe(1);
+
+    counter.increase0();
+    expect(counter.count0).toBe(3);
+    expect(counter.count1).toBe(0);
+    expect(subscribeFn.mock.calls.length).toBe(3);
+    expect(watchFn0.mock.calls.length).toBe(2);
+    expect(watchFn1.mock.calls.length).toBe(2);
+
+    counter.increase1();
+    expect(counter.count0).toBe(3);
+    expect(counter.count1).toBe(1);
+    expect(subscribeFn.mock.calls.length).toBe(4);
+    expect(watchFn0.mock.calls.length).toBe(2);
+    expect(watchFn1.mock.calls.length).toBe(2);
+
+    counter.increase1();
+    expect(counter.count0).toBe(3);
+    expect(counter.count1).toBe(2);
+    expect(subscribeFn.mock.calls.length).toBe(5);
+    expect(watchFn0.mock.calls.length).toBe(2);
+    expect(watchFn1.mock.calls.length).toBe(3);
   }
 });

@@ -62,5 +62,6 @@ export type Watch = <P extends boolean, T extends P extends true ? any[] : any>(
   watcher: (newValue: T, oldValue: T) => void,
   options?: {
     multiple?: P;
+    isEqual?: (x: unknown, y: unknown) => boolean;
   }
 ) => Unsubscribe;

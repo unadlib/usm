@@ -6,7 +6,7 @@ import {
   Service,
 } from './interface';
 import { storeKey, subscriptionsKey } from './constant';
-import { isEqual } from './utils/index';
+import { isEqual as defaultIsEqual } from './utils/index';
 
 const subscribe: Subscribe = (module, listener) => {
   if (typeof module !== 'object') {
@@ -42,7 +42,12 @@ const subscribe: Subscribe = (module, listener) => {
   return unsubscribe;
 };
 
-const watch: Watch = (module, selector, watcher, options = {}) => {
+const watch: Watch = (
+  module,
+  selector,
+  watcher,
+  { multiple = false, isEqual = defaultIsEqual } = {}
+) => {
   if (typeof watcher !== 'function') {
     const className = Object.getPrototypeOf(module).constructor.name;
     throw new Error(
@@ -50,11 +55,11 @@ const watch: Watch = (module, selector, watcher, options = {}) => {
     );
   }
   let oldValue = selector();
-  if (options.multiple) {
+  if (multiple) {
     if (!Array.isArray(oldValue)) {
       const className = Object.getPrototypeOf(module).constructor.name;
       throw new Error(
-        `The 'selector' should be a function that returns an array in the class '${className}'.`,
+        `The 'selector' should be a function that returns an array in the class '${className}'.`
       );
     }
     return subscribe(module, () => {
