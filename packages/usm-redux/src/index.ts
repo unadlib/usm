@@ -5,7 +5,3 @@ export { getStagedState } from './utils/index';
 export * from 'immer';
 export * from './interface';
 export * from './constant';
-
-/**
- * Remove: export enablePatches, getStagedState, setPatchesToggle and constant.
- */
