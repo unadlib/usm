@@ -120,8 +120,21 @@ test('base with { strict: true }', () => {
     const newState = Object.values(store.getState())[0] as Counter;
     expect(newState.count).toEqual({ sum: 1 });
     expect(fn.mock.calls.length).toBe(1);
-    if (key !== 'usmMobx') {
-      expect(() => (counter.count.sum += 1)).toThrow();
+    if (key === 'usm' || key === 'usmRedux') {
+      try {
+        counter.count.sum += 1;
+      } catch (e) {
+        //
+      }
+      expect(counter.count).toEqual({ sum: 1 });
+    } else if (key === 'usmVuex') {
+      try {
+        counter.count.sum += 1;
+      } catch (e) {
+        //
+      }
+      // vuex does not support freeze
+      expect(counter.count).toEqual({ sum: 2 });
     } else {
       const list: string[] = [];
       global.console.warn = (msg: string) => list.push(msg);
