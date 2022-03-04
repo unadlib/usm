@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,8 +20,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
-    - run: pnpm install
-    - run: pnpm build
-    - run: pnpm test
+    - name: Install dependencies
+      run: pnpm install
+    - name: Build and Test
+      run: |
+        pnpm build
+        pnpm test
       env:
         CI: true
