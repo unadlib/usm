@@ -120,8 +120,21 @@ test('base with { strict: true }', () => {
     const newState = Object.values(store.getState())[0] as Counter;
     expect(newState.count).toEqual({ sum: 1 });
     expect(fn.mock.calls.length).toBe(1);
-    if (key !== 'usmMobx') {
-      expect(() => (counter.count.sum += 1)).toThrow();
+    if (key === 'usm' || key === 'usmRedux') {
+      try {
+        counter.count.sum += 1;
+      } catch (e) {
+        //
+      }
+      expect(counter.count).toEqual({ sum: 1 });
+    } else if (key === 'usmVuex') {
+      try {
+        counter.count.sum += 1;
+      } catch (e) {
+        //
+      }
+      // vuex does not support freeze
+      expect(counter.count).toEqual({ sum: 2 });
     } else {
       const list: string[] = [];
       global.console.warn = (msg: string) => list.push(msg);
@@ -138,9 +151,21 @@ test('base with immutable computed', () => {
     const { createStore, action, state, computed } =
       packagesWithImmutable[key as keyof typeof packagesWithImmutable];
     const computedFn = jest.fn();
-    class Counter {
+    class Counter0 {
       @state
       count = { sum: 0 };
+
+      @computed(({ count }: Counter) => [count.sum])
+      get sum() {
+        return this.count.sum + 1;
+      }
+    }
+
+    class Counter {
+      constructor(private counter0: Counter0) {}
+
+      @state
+      count = { sum: this.counter0.sum - 1 };
 
       @action
       increase() {
@@ -154,7 +179,8 @@ test('base with immutable computed', () => {
       }
     }
 
-    const counter = new Counter();
+    const counter0 = new Counter0();
+    const counter = new Counter(counter0);
 
     const store = createStore({
       modules: [counter],
