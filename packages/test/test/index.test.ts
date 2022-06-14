@@ -151,9 +151,21 @@ test('base with immutable computed', () => {
     const { createStore, action, state, computed } =
       packagesWithImmutable[key as keyof typeof packagesWithImmutable];
     const computedFn = jest.fn();
-    class Counter {
+    class Counter0 {
       @state
       count = { sum: 0 };
+
+      @computed(({ count }: Counter) => [count.sum])
+      get sum() {
+        return this.count.sum + 1;
+      }
+    }
+
+    class Counter {
+      constructor(private counter0: Counter0) {}
+
+      @state
+      count = { sum: this.counter0.sum - 1 };
 
       @action
       increase() {
@@ -167,7 +179,8 @@ test('base with immutable computed', () => {
       }
     }
 
-    const counter = new Counter();
+    const counter0 = new Counter0();
+    const counter = new Counter(counter0);
 
     const store = createStore({
       modules: [counter],
