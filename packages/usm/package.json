@@ -28,6 +28,6 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "immer": "^9.0.6"
+    "mutative": "^0.2.2"
   }
 }

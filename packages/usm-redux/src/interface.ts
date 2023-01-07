@@ -1,4 +1,4 @@
-import { Patch } from 'immer';
+import { Patch } from 'mutative';
 import { ReducersMapObject, Reducer, StoreEnhancer } from 'redux';
 import {
   stateKey,
@@ -7,6 +7,8 @@ import {
   bootstrappedKey,
   usm,
   identifierKey,
+  enableAutoFreezeKey,
+  enablePatchesKey,
 } from './constant';
 
 export interface Config {
@@ -24,6 +26,8 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
   name?: string;
   readonly [bootstrappedKey]: boolean;
   readonly [identifierKey]: string;
+  readonly [enableAutoFreezeKey]: boolean;
+  readonly [enablePatchesKey]: boolean;
   readonly [stateKey]: T;
   readonly [storeKey]: Store<T>;
   readonly [subscriptionsKey]: Subscription[];

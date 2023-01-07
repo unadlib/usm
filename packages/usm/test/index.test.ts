@@ -1,4 +1,4 @@
-import { applyPatches } from 'immer';
+import { apply } from 'mutative';
 import { createStore, action, state, computed } from '../index';
 
 test('base', () => {
@@ -55,7 +55,7 @@ test('enablePatches', () => {
       enablePatches: true,
       hook: ({ getState }, action) => {
         const lastState = getState();
-        snapshots.push(applyPatches(lastState, action._patches!));
+        snapshots.push(apply(lastState, action._patches!));
         return action;
       },
     }

@@ -1,7 +1,4 @@
-import produce, {
-  setAutoFreeze,
-  enablePatches as enablePatchesWithImmer,
-} from 'immer';
+import { create } from 'mutative';
 import {
   changeStateKey,
   identifierKey,
@@ -9,6 +6,8 @@ import {
   storeKey,
   bootstrappedKey,
   subscriptionsKey,
+  enableAutoFreezeKey,
+  enablePatchesKey,
 } from './constant';
 import {
   Action,
@@ -19,10 +18,6 @@ import {
   Service,
 } from './interface';
 import { EventEmitter, getStagedState } from './utils/index';
-
-let enablePatches: boolean;
-
-export const getPatchesToggle = () => enablePatches;
 
 export const createStore = (
   options: StoreOptions,
@@ -35,11 +30,7 @@ export const createStore = (
     );
   }
   const enableAutoFreeze = options.strict ?? __DEV__;
-  setAutoFreeze(enableAutoFreeze);
-  enablePatches = config.enablePatches ?? false;
-  if (enablePatches) {
-    enablePatchesWithImmer();
-  }
+  const enablePatches = config.enablePatches ?? false;
   let state: Record<string, any> = {};
   const subscriptions: Subscription[] = [];
   const identifiers = new Set<string>();
@@ -130,7 +121,9 @@ export const createStore = (
         });
       }
       state[identifier] = enableAutoFreeze
-        ? produce({ ...service[stateKey] }, () => {})
+        ? create({ ...service[stateKey] }, () => {}, {
+            enableAutoFreeze,
+          })
         : service[stateKey];
       Object.assign(descriptors, {
         [stateKey]: {
@@ -139,7 +132,8 @@ export const createStore = (
           get(this: typeof service) {
             const stagedState = getStagedState();
             if (stagedState) return stagedState[this[identifierKey]];
-            const currentState = this[storeKey]?.getState()[this[identifierKey]];
+            const currentState =
+              this[storeKey]?.getState()[this[identifierKey]];
             if (enableAutoFreeze && !Object.isFrozen(currentState)) {
               return Object.freeze(currentState);
             }
@@ -153,6 +147,16 @@ export const createStore = (
         configurable: false,
         enumerable: false,
         value: identifier,
+      },
+      [enableAutoFreezeKey]: {
+        configurable: false,
+        enumerable: false,
+        value: enableAutoFreeze,
+      },
+      [enablePatchesKey]: {
+        configurable: false,
+        enumerable: false,
+        value: enablePatches,
       },
       [storeKey]: {
         configurable: false,

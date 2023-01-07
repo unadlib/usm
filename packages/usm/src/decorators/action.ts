@@ -1,9 +1,14 @@
 /* eslint-disable func-names */
-import { produceWithPatches, produce, Patch } from 'immer';
+import { create, Patch } from 'mutative';
 import { Action, Service } from '../interface';
-import { storeKey, identifierKey, usm } from '../constant';
+import {
+  storeKey,
+  identifierKey,
+  usm,
+  enablePatchesKey,
+  enableAutoFreezeKey,
+} from '../constant';
 import { getStagedState, setStagedState } from '../utils/index';
-import { getPatchesToggle } from '../createStore';
 
 export const action = (
   target: object,
@@ -15,10 +20,6 @@ export const action = (
     throw new Error(`${String(key)} decorate error with '@action'.`);
   }
   const value = function (this: Service, ...args: unknown[]) {
-    let time: number;
-    if (__DEV__) {
-      time = Date.now();
-    }
     if (typeof getStagedState() === 'undefined') {
       try {
         const lastState = this[storeKey].getState();
@@ -29,27 +30,21 @@ export const action = (
           setStagedState(draftState);
           fn.apply(this, args);
         };
-        const enablePatches = getPatchesToggle();
+        const enablePatches = this[enablePatchesKey];
+        const enableAutoFreeze = this[enableAutoFreezeKey];
         if (enablePatches) {
-          [state, patches, inversePatches] = produceWithPatches(
-            lastState,
-            recipe
-          );
+          [state, patches, inversePatches] = create(lastState, recipe, {
+            enablePatches: true,
+            enableAutoFreeze,
+          });
         } else {
-          state = produce(lastState, recipe);
+          state = create(lastState, recipe, {
+            enableAutoFreeze,
+          });
         }
         setStagedState(undefined);
-        if (__DEV__) {
-          if (lastState === state) {
-            console.warn(`There are no state updates to method ${fn.name}`);
-          }
-          // performance checking
-          const executionTime = Date.now() - time!;
-          if (executionTime > 100)
-            console.warn(
-              `The execution time of method '${key.toString()}' is ${executionTime} ms, it's recommended to use 'dispatch' API.`
-            );
-          // performance detail: https://immerjs.github.io/immer/docs/performance
+        if (__DEV__ && lastState === state) {
+          console.warn(`There are no state updates to method ${fn.name}`);
         }
         this[storeKey].dispatch({
           type: this[identifierKey],

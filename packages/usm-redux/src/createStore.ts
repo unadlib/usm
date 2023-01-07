@@ -1,7 +1,4 @@
-import produce, {
-  setAutoFreeze,
-  enablePatches as enablePatchesWithImmer,
-} from 'immer';
+import { create } from 'mutative';
 import {
   createStore as createStoreWithRedux,
   combineReducers,
@@ -16,6 +13,8 @@ import {
   identifierKey,
   subscriptionsKey,
   usm,
+  enableAutoFreezeKey,
+  enablePatchesKey,
 } from './constant';
 import { getStagedState } from './utils/index';
 import {
@@ -26,14 +25,6 @@ import {
   Config,
   Service,
 } from './interface';
-
-let enablePatches: boolean;
-
-export const getPatchesToggle = () => enablePatches;
-
-export const setPatchesToggle = (toggle: boolean) => {
-  enablePatches = toggle;
-};
 
 export const createStore = (
   options: StoreOptions,
@@ -50,9 +41,7 @@ export const createStore = (
     );
   }
   const enableAutoFreeze = options.strict ?? __DEV__;
-  enablePatches = config.enablePatches ?? false;
-  if (enablePatches) enablePatchesWithImmer();
-  setAutoFreeze(enableAutoFreeze);
+  const enablePatches = config.enablePatches ?? false;
   const identifiers = new Set<string>();
   const reducers: ReducersMapObject = {};
   const subscriptions: Subscription[] = [];
@@ -121,7 +110,9 @@ export const createStore = (
         });
       }
       const initState = enableAutoFreeze
-        ? produce({ ...service[stateKey] }, () => {})
+        ? create({ ...service[stateKey] }, () => {}, {
+            enableAutoFreeze,
+          })
         : service[stateKey];
 
       const serviceReducers = Object.entries(initState).reduce(
@@ -167,6 +158,16 @@ export const createStore = (
         configurable: false,
         enumerable: false,
         value: identifier,
+      },
+      [enableAutoFreezeKey]: {
+        configurable: false,
+        enumerable: false,
+        value: enableAutoFreeze,
+      },
+      [enablePatchesKey]: {
+        configurable: false,
+        enumerable: false,
+        value: enablePatches,
       },
       [storeKey]: {
         configurable: false,

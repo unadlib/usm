@@ -1,4 +1,4 @@
-import { Patch } from 'immer';
+import type { Patch } from 'mutative';
 import {
   stateKey,
   storeKey,
@@ -6,6 +6,8 @@ import {
   identifierKey,
   bootstrappedKey,
   usm,
+  enableAutoFreezeKey,
+  enablePatchesKey,
 } from './constant';
 
 export interface Config {
@@ -27,6 +29,8 @@ export interface Store<T = Record<string, any>> {
 export interface Service<T extends Record<string, any> = Record<string, any>> {
   name?: string;
   readonly [identifierKey]: string;
+  readonly [enableAutoFreezeKey]: boolean;
+  readonly [enablePatchesKey]: boolean;
   readonly [bootstrappedKey]: boolean;
   readonly [stateKey]: T;
   readonly [storeKey]: Store<T>;

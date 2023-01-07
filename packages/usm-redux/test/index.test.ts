@@ -1,4 +1,4 @@
-import { applyPatches } from 'immer';
+import { apply } from 'mutative';
 import { applyMiddleware } from 'redux';
 import { createStore, action, state } from '../index';
 
@@ -57,7 +57,7 @@ test('enablePatches', () => {
       reduxEnhancer: applyMiddleware(({ getState }) => (next) => (action) => {
         const lastState: any = getState();
         const result = next(action);
-        snapshots.push(applyPatches(lastState, action._patches));
+        snapshots.push(apply(lastState, action._patches));
         return result;
       }),
     }

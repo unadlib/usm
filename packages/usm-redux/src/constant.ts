@@ -4,3 +4,5 @@ export const subscriptionsKey: unique symbol = Symbol('subscriptions');
 export const stateKey: unique symbol = Symbol('state');
 export const bootstrappedKey: unique symbol = Symbol('bootstrapped');
 export const identifierKey: unique symbol = Symbol('identifier');
+export const enableAutoFreezeKey: unique symbol = Symbol('enableAutoFreeze');
+export const enablePatchesKey: unique symbol = Symbol('enablePatches');
