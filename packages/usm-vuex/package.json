@@ -29,9 +29,9 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "vuex": "4.0.0-rc.1"
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "vue": "^3.0.5"
+    "vue": "^3.2.45"
   }
 }
