@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import { array } from 'yargs';
 import { handleWorkspaces, Package } from './workspaces';
 
+// @ts-expect-error
 const projects = array('p').argv.p;
 
 type CompileOption = {
