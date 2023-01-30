@@ -24,8 +24,8 @@ export const action = (
       try {
         const lastState = this[storeKey].getState();
         let state: Record<string, any> | undefined;
-        let patches: Patch[] = [];
-        let inversePatches: Patch[] = [];
+        let patches: Patch<true>[] = [];
+        let inversePatches: Patch<true>[] = [];
         const recipe = (draftState: Record<string, unknown>) => {
           setStagedState(draftState);
           fn.apply(this, args);
@@ -33,7 +33,7 @@ export const action = (
         const enablePatches = this[enablePatchesKey];
         const enableAutoFreeze = this[enableAutoFreezeKey];
         if (enablePatches) {
-          [state, patches, inversePatches] = create(lastState, recipe, {
+           [state, patches, inversePatches] = create(lastState, recipe, {
             enablePatches: true,
             enableAutoFreeze,
           });
