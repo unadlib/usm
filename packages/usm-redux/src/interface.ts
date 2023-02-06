@@ -7,7 +7,7 @@ import {
   bootstrappedKey,
   usm,
   identifierKey,
-  enableAutoFreezeKey,
+  strictKey,
   enablePatchesKey,
 } from './constant';
 
@@ -26,7 +26,7 @@ export interface Service<T extends Record<string, any> = Record<string, any>> {
   name?: string;
   readonly [bootstrappedKey]: boolean;
   readonly [identifierKey]: string;
-  readonly [enableAutoFreezeKey]: boolean;
+  readonly [strictKey]: boolean;
   readonly [enablePatchesKey]: boolean;
   readonly [stateKey]: T;
   readonly [storeKey]: Store<T>;

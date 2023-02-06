@@ -6,7 +6,7 @@ import {
   identifierKey,
   usm,
   enablePatchesKey,
-  enableAutoFreezeKey,
+  strictKey,
 } from '../constant';
 import { getStagedState, setStagedState } from '../utils/index';
 
@@ -31,15 +31,17 @@ export const action = (
           fn.apply(this, args);
         };
         const enablePatches = this[enablePatchesKey];
-        const enableAutoFreeze = this[enableAutoFreezeKey];
+        const strict = this[strictKey];
         if (enablePatches) {
            [state, patches, inversePatches] = create(lastState, recipe, {
             enablePatches: true,
-            enableAutoFreeze,
+            strict,
+            enableAutoFreeze: strict,
           });
         } else {
           state = create(lastState, recipe, {
-            enableAutoFreeze,
+            strict,
+            enableAutoFreeze: strict,
           });
         }
         setStagedState(undefined);

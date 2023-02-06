@@ -6,7 +6,7 @@ import {
   storeKey,
   bootstrappedKey,
   subscriptionsKey,
-  enableAutoFreezeKey,
+  strictKey,
   enablePatchesKey,
 } from './constant';
 import {
@@ -29,7 +29,7 @@ export const createStore = (
       `'createStore' options should be a object with a property 'modules'`
     );
   }
-  const enableAutoFreeze = options.strict ?? __DEV__;
+  const strict = options.strict ?? __DEV__;
   const enablePatches = config.enablePatches ?? false;
   let state: Record<string, any> = {};
   const subscriptions: Subscription[] = [];
@@ -120,9 +120,10 @@ export const createStore = (
           },
         });
       }
-      state[identifier] = enableAutoFreeze
+      state[identifier] = strict
         ? create({ ...service[stateKey] }, () => {}, {
-            enableAutoFreeze,
+            strict,
+            enableAutoFreeze: strict,
           })
         : service[stateKey];
       Object.assign(descriptors, {
@@ -134,7 +135,7 @@ export const createStore = (
             if (stagedState) return stagedState[this[identifierKey]];
             const currentState =
               this[storeKey]?.getState()[this[identifierKey]];
-            if (enableAutoFreeze && !Object.isFrozen(currentState)) {
+            if (strict && !Object.isFrozen(currentState)) {
               return Object.freeze(currentState);
             }
             return currentState;
@@ -148,10 +149,10 @@ export const createStore = (
         enumerable: false,
         value: identifier,
       },
-      [enableAutoFreezeKey]: {
+      [strictKey]: {
         configurable: false,
         enumerable: false,
-        value: enableAutoFreeze,
+        value: strict,
       },
       [enablePatchesKey]: {
         configurable: false,
