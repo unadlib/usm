@@ -1,3 +1,5 @@
+export { current, original, unsafe } from 'mutative';
+
 export { createStore } from './createStore';
 export { subscribe, watch } from './subscribe';
 export { action, computed, state } from './decorators/index';
