@@ -5,6 +5,12 @@
 
 USM is a universal state modular library, supports Redux(4.x), MobX(6.x), Vuex(4.x) and Angular(2.0+).
 
+## Motivation
+
+`usm` provides a generic state model that is class-first, which help us to be OOP at almost no cost and is compatible with the ecology of every state library.
+
+When you don't want to learn the paradigm of any state library, `usm` can help you use any state library. When your project's business code is based on `usm`, the architecture will be more flexible.
+
 ## Support
 
 | Libraries/Frameworks | None | Redux | MobX | Vuex | Angular2+ |
