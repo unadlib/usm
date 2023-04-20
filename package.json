@@ -57,12 +57,12 @@
     "rimraf": "^4.4.0",
     "rollup": "^3.20.0",
     "rollup-plugin-terser": "^7.0.0",
-    "ts-jest": "^29.0.5",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.1",
     "typedoc": "^0.23.28",
     "typedoc-plugin-markdown": "^3.14.0",
-    "typescript": "^5.0.2",
+    "typescript": "^5.0.4",
     "yargs": "^17.6.2"
   },
   "config": {
