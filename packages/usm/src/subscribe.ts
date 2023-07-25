@@ -69,7 +69,10 @@ const watch: Watch = (
         if (!isEqual(newValue[i], oldValue[i])) {
           const lastValues = oldValue;
           oldValue = newValue;
-          watcher(newValue, lastValues);
+          watcher(
+            newValue as Parameters<typeof watcher>[0],
+            lastValues as Parameters<typeof watcher>[1]
+          );
           break;
         }
       }
@@ -80,7 +83,10 @@ const watch: Watch = (
     if (!isEqual(newValue, oldValue)) {
       const lastValue = oldValue;
       oldValue = newValue;
-      watcher(newValue, lastValue);
+      watcher(
+        newValue as Parameters<typeof watcher>[0],
+        lastValue as Parameters<typeof watcher>[1]
+      );
     }
   });
 };
