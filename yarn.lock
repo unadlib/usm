@@ -5146,10 +5146,10 @@ multimatch@5.0.0:
     arrify "^2.0.1"
     minimatch "^3.0.4"
 
-mutative@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/mutative/-/mutative-0.7.0.tgz#f69f2678ac8c47ad4098760f19c2ad12da4f4b78"
-  integrity sha512-oSOC00Ku0abYGZ4Rao4PgWNaDJMIEpHsdyaX71tLPhiQLKSy26v8RYYcM+LVkVL2h1rfzxbcYwUWZks5xiwdNg==
+mutative@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/mutative/-/mutative-0.7.1.tgz#ea64959342bc48612a248b53d99fdd5b7a0d086d"
+  integrity sha512-R5EhjpPbUX9uTPn5GT1Nz6NqGdoeb5PfDy7AO3lKMEOH++XD1cljRM7WGA9JIKF2VZdigGGwrskxBc4RDSmGQQ==
 
 mute-stream@0.0.8, mute-stream@~0.0.4:
   version "0.0.8"
