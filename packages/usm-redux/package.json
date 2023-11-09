@@ -1,6 +1,6 @@
 {
   "name": "usm-redux",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "description": "Universal state model for Redux",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.umd.js",
