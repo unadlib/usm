@@ -260,13 +260,6 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.19.0"
 
-"@babel/runtime@^7.9.2":
-  version "7.21.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.21.0.tgz#5b55c9d394e5fcf304909a8b00c07dc217b56673"
-  integrity sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==
-  dependencies:
-    regenerator-runtime "^0.13.11"
-
 "@babel/template@^7.20.7", "@babel/template@^7.3.3":
   version "7.20.7"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.20.7.tgz#a15090c2839a83b02aa996c0b4994005841fd5a8"
@@ -5146,10 +5139,10 @@ multimatch@5.0.0:
     arrify "^2.0.1"
     minimatch "^3.0.4"
 
-mutative@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mutative/-/mutative-1.0.0.tgz#3efc40dc7c6833cd916afbb491f09060f9689bfd"
-  integrity sha512-UiqQeGPjJo06wTHuMMEc4zpB+eLukw6JdQIC5xzzkNvcrC+wLjkWXyFPECGJu8xn48hIsPBdld//3fsd/4MgDA==
+mutative@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/mutative/-/mutative-1.0.2.tgz#acba4a17bace5029bb2efdb5cbfd2fc56fa150b6"
+  integrity sha512-fNndMP48ydJOLi7xWLX6RDr5kl7kQNuffALHqeIMn9e+TTj4zPzI3nPCQWtNUspmgdrjrgOJBx3n9gffQr1BXw==
 
 mute-stream@0.0.8, mute-stream@~0.0.4:
   version "0.0.8"
@@ -6098,17 +6091,10 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redux@^4.2.0:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/redux/-/redux-4.2.1.tgz#c08f4306826c49b5e9dc901dee0452ea8fce6197"
-  integrity sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-
-regenerator-runtime@^0.13.11:
-  version "0.13.11"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
-  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
+redux@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-5.0.1.tgz#97fa26881ce5746500125585d5642c77b6e9447b"
+  integrity sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==
 
 regexp.prototype.flags@^1.4.3:
   version "1.4.3"
