@@ -54,7 +54,7 @@ test('enablePatches', () => {
     undefined,
     {
       enablePatches: true,
-      reduxEnhancer: applyMiddleware(({ getState }) => (next) => (action) => {
+      reduxEnhancer: applyMiddleware(({ getState }) => (next) => (action: any) => {
         const lastState: any = getState();
         const result = next(action);
         snapshots.push(apply(lastState, action._patches));
