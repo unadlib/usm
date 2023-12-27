@@ -3,7 +3,7 @@ import {
   createStore as createStoreWithRedux,
   combineReducers,
   ReducersMapObject,
-  PreloadedState,
+  Reducer,
   Store as ReduxStore,
 } from 'redux';
 import {
@@ -28,7 +28,7 @@ import {
 
 export const createStore = (
   options: StoreOptions,
-  preloadedState?: PreloadedState<any>,
+  preloadedState?: any,
   config: Config = {}
 ) => {
   const {
@@ -159,11 +159,6 @@ export const createStore = (
         configurable: false,
         enumerable: false,
         value: identifier,
-      },
-      [strictKey]: {
-        configurable: false,
-        enumerable: false,
-        value: strict,
       },
       [strictKey]: {
         configurable: false,
