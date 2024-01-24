@@ -1,6 +1,6 @@
 {
   "name": "usm-mobx",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "description": "Universal state model for MobX",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.umd.js",
