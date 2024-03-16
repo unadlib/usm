@@ -103,7 +103,32 @@ class Counter {
 
 It is used for computing derived data.
 
-- When use `usm` or `usm-redux`, you should use `@computed(depsCallback)`, The return value of the `depsCallback` is an array of dependent value collections that tells the module that its getter will recompute when there is a change in any of the values in the value collections:
+> When use `usm-mobx` or `usm-vuex`, you just use `@computed`, Since it is an observable model, its dependency collection is automatic,
+> And When use `usm` or `usm-redux`, you also use `@computed`, Since it is an signal model, its dependency collection is also automatic.
+
+For example,
+
+```ts
+class Counter {
+  @state
+  count = { sum: 0 };
+
+  @state
+  number = 0;
+
+  @action
+  increase() {
+    this.number += 1;
+  }
+
+  @computed
+  get sum() {
+    return this.count.sum + this.number;
+  }
+}
+```
+
+- If you want to manually control dependencies with `usm` or `usm-redux`, you can use `@computed(depsCallback)`, The return value of the `depsCallback` is an array of dependent value collections that tells the module that its getter will recompute when there is a change in any of the values in the value collections:
 
 For example,
 
@@ -121,31 +146,6 @@ class Counter {
   }
 
   @computed((that) => [that.count.sum, that.number])
-  get sum() {
-    return this.count.sum + this.number;
-  }
-}
-```
-
-- When use `usm-mobx` or `usm-vuex`, you just use `@computed`, Since it is an observable model, its dependency collection is automatic:
-
-For example,
-
-```diff
-class Counter {
-  @state
-  count = { sum: 0 };
-
-  @state
-  number = 0;
-
-  @action
-  increase() {
-    this.number += 1;
-  }
-
-- @computed((that) => [that.count.sum, that.number])
-+ @computed
   get sum() {
     return this.count.sum + this.number;
   }

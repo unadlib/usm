@@ -17,7 +17,8 @@ import {
   Config,
   Service,
 } from './interface';
-import { EventEmitter, getStagedState } from './utils/index';
+import { EventEmitter, getStagedState, isEqual } from './utils/index';
+import { Signal, signal } from './signal';
 
 export const createStore = (
   options: StoreOptions,
@@ -35,12 +36,23 @@ export const createStore = (
   const subscriptions: Subscription[] = [];
   const identifiers = new Set<string>();
   const eventEmitter = new EventEmitter();
+  const signalMaps: Record<string, Record<string, Signal>> = {};
   const store: Store = {
     dispatch: (action: Action) => {
       if (config.hook) {
         action = config.hook(store, action);
       }
+      const oldState = state;
       state = action._state;
+      for (const identifier in state) {
+        for (const key in state[identifier]) {
+          const nextState = state[identifier][key];
+          const currentState = oldState[identifier][key];
+          if (!isEqual(nextState, currentState)) {
+            signalMaps[identifier][key].value = nextState;
+          }
+        }
+      }
       eventEmitter.emit(changeStateKey);
     },
     getState: () => state,
@@ -93,6 +105,8 @@ export const createStore = (
       },
     };
     if (service[stateKey]) {
+      const signalMap: Record<string, Signal> = {};
+      signalMaps[identifier] = signalMap;
       for (const key in service[stateKey]) {
         const descriptor = Object.getOwnPropertyDescriptor(service, key);
         if (typeof descriptor === 'undefined') continue;
@@ -107,12 +121,22 @@ export const createStore = (
         Object.assign(service[stateKey], {
           [key]: initialValue,
         });
+        signalMap[key] = signal(initialValue);
         Object.assign(descriptors, {
           [key]: {
             enumerable: true,
             configurable: false,
             get(this: typeof service) {
-              return this[stateKey][key];
+              const current = this[stateKey]![key];
+              const stagedState = getStagedState();
+              if (
+                !stagedState &&
+                signalMap[key] &&
+                !isEqual(signalMap[key].value, current)
+              ) {
+                signalMap[key].value = current;
+              }
+              return current;
             },
             set(this: typeof service, value: unknown) {
               this[stateKey][key] = value;
