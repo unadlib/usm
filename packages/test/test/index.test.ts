@@ -207,10 +207,10 @@ test('base with immutable computed', () => {
   }
 });
 
-test('base with observable computed', () => {
-  for (const key in packagesWithObservable) {
+test('base with auto computed', () => {
+  for (const key in packages) {
     const { createStore, action, state, computed } =
-      packagesWithObservable[key as keyof typeof packagesWithObservable];
+      packages[key as keyof typeof packages];
     const computedFn = jest.fn();
     class Counter {
       @state

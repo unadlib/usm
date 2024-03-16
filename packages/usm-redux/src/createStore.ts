@@ -16,7 +16,7 @@ import {
   strictKey,
   enablePatchesKey,
 } from './constant';
-import { getStagedState } from './utils/index';
+import { getStagedState, isEqual } from './utils/index';
 import {
   Action,
   StoreOptions,
@@ -25,6 +25,7 @@ import {
   Config,
   Service,
 } from './interface';
+import { Signal, signal } from './signal';
 
 export const createStore = (
   options: StoreOptions,
@@ -90,6 +91,7 @@ export const createStore = (
       },
     };
     if (service[stateKey]) {
+      const signalMap: Record<string, Signal> = {};
       for (const key in service[stateKey]) {
         const descriptor = Object.getOwnPropertyDescriptor(service, key);
         if (typeof descriptor === 'undefined') continue;
@@ -101,7 +103,19 @@ export const createStore = (
             enumerable: true,
             configurable: false,
             get(this: typeof service) {
-              return this[stateKey][key];
+              const current = this[stateKey]![key];
+              const stagedState = getStagedState();
+              if (stagedState) {
+                return current;
+              }
+              if (
+                !stagedState &&
+                signalMap[key] &&
+                !isEqual(signalMap[key].value, current)
+              ) {
+                signalMap[key].value = current;
+              }
+              return signalMap[key].value;
             },
             set(this: typeof service, value: unknown) {
               this[stateKey][key] = value;
@@ -124,8 +138,17 @@ export const createStore = (
               [key]: value,
             });
           }
+          signalMap[key] = signal(value);
+          const current = signalMap[key];
           const reducer = (state = value, action: Action) => {
-            return action._usm === usm ? action._state[identifier][key] : state;
+            if (action._usm === usm) {
+              const nextState = action._state[identifier][key];
+              if (!isEqual(nextState, state)) {
+                current.value = nextState;
+              }
+              return nextState;
+            }
+            return state;
           };
           return Object.assign(serviceReducersMapObject, {
             [key]: reducer,
