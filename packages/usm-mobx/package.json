@@ -1,6 +1,6 @@
 {
   "name": "usm-mobx",
-  "version": "4.5.1",
+  "version": "4.6.0",
   "description": "Universal state model for MobX",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.umd.js",
@@ -29,6 +29,6 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "mobx": "^6.3.3"
+    "mobx": "^6.12.0"
   }
 }
