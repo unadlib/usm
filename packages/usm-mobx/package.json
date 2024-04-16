@@ -29,6 +29,6 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "mobx": "^6.12.0"
+    "mobx": "^6.12.3"
   }
 }

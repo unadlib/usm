@@ -28,6 +28,6 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "mutative": "^1.0.3"
+    "mutative": "^1.0.4"
   }
 }
