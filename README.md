@@ -3,7 +3,7 @@
 ![Node CI](https://github.com/unadlib/usm/workflows/Node%20CI/badge.svg)
 [![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
 
-USM is a universal state modular library, supports Redux(4.x), MobX(6.x), Vuex(4.x) and Angular(2.0+).
+USM is a universal state modular library, supports Redux(5.x), MobX(6.x), Vuex(4.x) and Angular(2.0+).
 
 ## Motivation
 
