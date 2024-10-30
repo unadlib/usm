@@ -13,11 +13,12 @@ When you don't want to learn the paradigm of any state library, `usm` can help y
 
 ## Support
 
-| Libraries/Frameworks                                       | None  |    Redux    |    MobX    |    Vuex    | Angular2+ |
-| :--------------------------------------------------------- | :---: | :---------: | :--------: | :--------: | :-------: |
-| Package Name                                               | `usm` | `usm-redux` | `usm-mobx` | `usm-vuex` |   `usm`   |
-| Status                                                     |  ✅   |     ✅      |     ✅     |     ✅     |    ✅     |
-| Integrated [Mutative](https://github.com/unadlib/mutative) |  ✅   |     ✅      |     🚫     |     🚫     |    ✅     |
+| Libraries/Frameworks                                       |   None    |    Redux    |    MobX    |    Vuex    | Angular2+ |
+| :--------------------------------------------------------- | :-------: | :---------: | :--------: | :--------: | :-------: |
+| Package Name                                               |   `usm`   | `usm-redux` | `usm-mobx` | `usm-vuex` |   `usm`   |
+| Status                                                     |    ✅     |     ✅      |     ✅     |     ✅     |    ✅     |
+| Integrated [Mutative](https://github.com/unadlib/mutative) |    ✅     |     ✅      |     🚫     |     🚫     |    ✅     |
+| State Type                                                 | immutable |  immutable  |  mutable   |  mutable   | immutable |
 
 ## Installation
 
