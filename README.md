@@ -257,3 +257,7 @@ class Counter {
 ```
 
 > `watch` option supports passing in `isEqual` function for custom equal.
+
+## License
+
+USM is [MIT licensed](https://github.com/unadlib/usm/blob/master/LICENSE).
