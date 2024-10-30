@@ -106,8 +106,9 @@ class Counter {
 
 It is used for computing derived data.
 
-> When use `usm-mobx` or `usm-vuex`, you just use `@computed`, Since it is an observable model, its dependency collection is automatic,
-> And When use `usm` or `usm-redux`, you also use `@computed`, Since it is an signal model, its dependency collection is also automatic.
+> When use `usm-mobx` or `usm-vuex`, you just use `@computed`, Since it is an observable model, its dependency collection is automatic.
+
+> When using `usm` or `usm-redux`, you should also use `@computed`. Since it is a signal model, dependency collection is automatic. However, if you are using storage middleware (e.g., [reactant-storage](https://github.com/unadlib/reactant/blob/master/packages/reactant-storage/src/storage.tsx#L138)), you need to manually update the signal state to trigger reactivity.
 
 For example,
 
