@@ -29,7 +29,7 @@
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "mutative": "^1.0.11",
+    "mutative": "^1.1.0",
     "redux": "^5.0.1"
   }
 }
