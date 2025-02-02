@@ -8,7 +8,7 @@ import { rollup } from 'rollup';
 import resolvePlugin from '@rollup/plugin-node-resolve';
 import replacePlugin from '@rollup/plugin-replace';
 import commonjsPlugin from '@rollup/plugin-commonjs';
-import { terser as terserPlugin } from 'rollup-plugin-terser';
+import terserPlugin from '@rollup/plugin-terser';
 import chalk from 'chalk';
 
 type GenerateOption = {
@@ -33,10 +33,7 @@ const generateBundledModules = async ({
   console.log(`Generating bundle:`);
   console.log(chalk.grey(`-> ${outputFile}`));
   const isUmd = format === 'umd';
-  const plugins = [
-    resolvePlugin(),
-    commonjsPlugin(),
-  ];
+  const plugins = [resolvePlugin(), commonjsPlugin()];
   if (production) {
     plugins.push(
       replacePlugin({
