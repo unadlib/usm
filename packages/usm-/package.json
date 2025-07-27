@@ -1,0 +1,35 @@
+{
+  "name": "usm-pinia",
+  "version": "4.8.1",
+  "description": "Universal state model for Pinia",
+  "main": "dist/index.cjs.js",
+  "unpkg": "dist/index.umd.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/unadlib/usm/issues"
+  },
+  "homepage": "https://github.com/unadlib/usm#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unadlib/usm.git",
+    "directory": "packages/usm-pinia"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "keywords": [
+    "USM",
+    "Pinia",
+    "universal state model"
+  ],
+  "author": "unadlib",
+  "license": "MIT",
+  "dependencies": {
+    "pinia": "^3.0.3",
+    "vue": "^3.5.11"
+  }
+}
