@@ -6,8 +6,7 @@ beforeEach(() => {
   setActivePinia(createPinia());
 });
 
-// TODO: fix computed
-test.skip('base functionality', () => {
+test('base functionality', () => {
   const computedFn = jest.fn();
 
   class Counter {
@@ -50,6 +49,7 @@ test.skip('base functionality', () => {
   const newState = Object.values(store.getState())[0] as Counter;
   expect(newState.count).toEqual({ sum: 1 });
   expect(fn.mock.calls.length).toBe(1);
+  expect(counter.sum).toBe(2);
   expect(computedFn.mock.calls.length).toBe(2);
   expect(counter.sum).toBe(2);
   expect(counter.sum).toBe(2);
