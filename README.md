@@ -13,11 +13,11 @@ When you don't want to learn the paradigm of any state library, `usm` can help y
 
 ## Support
 
-| Libraries/Frameworks                                       | None/Angular2+ |    Redux    |    MobX    |    Vuex    |    Pinia    |
-| :--------------------------------------------------------- | :------------: | :---------: | :--------: | :--------: | :---------: |
-| Package Name                                               |     `usm`      | `usm-redux` | `usm-mobx` | `usm-vuex` | `usm-pinia` |
-| Integrated [Mutative](https://github.com/unadlib/mutative) |       ✅       |     ✅      |     🚫     |     🚫     |     🚫      |
-| State Type                                                 |   Immutable    |  Immutable  | Observable | Observable | Observable  |
+| Libraries/Frameworks                                       |              None/Angular2+              |    Redux    |    MobX    |    Vuex    |    Pinia    |
+| :--------------------------------------------------------- | :--------------------------------------: | :---------: | :--------: | :--------: | :---------: |
+| Package Name                                               | [usm](https://www.npmjs.com/package/usm) | [usm-redux](https://www.npmjs.com/package/usm-redux) | [usm-mobx](https://www.npmjs.com/package/usm-mobx) | [usm-vuex](https://www.npmjs.com/package/usm-vuex) | [usm-pinia](https://www.npmjs.com/package/usm-pinia) |
+| Integrated [Mutative](https://github.com/unadlib/mutative) |                    ✅                    |     ✅      |     🚫     |     🚫     |     🚫      |
+| State Type                                                 |                Immutable                 |  Immutable  | Observable | Observable | Observable  |
 
 ## Installation
 
@@ -27,7 +27,7 @@ To install `usm`:
 yarn add usm # npm install --save usm
 ```
 
-**And if you want to use Redux/MobX/Vuex, you just install `usm-redux`/`usm-mobx`/`usm-vuex`/`usm-pinia`.**
+**And if you want to use Redux/MobX/Vuex/Pinia, you just install `usm-redux`/`usm-mobx`/`usm-vuex`/`usm-pinia`.**
 
 ## Usage
 
