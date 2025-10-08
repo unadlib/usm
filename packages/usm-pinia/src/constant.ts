@@ -1,0 +1,10 @@
+export const usm = 'USM-PINIA' as const;
+export const storeKey: unique symbol = Symbol('store');
+export const piniaStoreKey: unique symbol = Symbol('pinia-store');
+export const subscriptionsKey: unique symbol = Symbol('subscriptions');
+export const stateKey: unique symbol = Symbol('state');
+export const identifierKey: unique symbol = Symbol('identifier');
+export const bootstrappedKey: unique symbol = Symbol('bootstrapped');
+export const gettersKey: unique symbol = Symbol('getters');
+export const actionsKey: unique symbol = Symbol('actions');
+export const changeStateKey: unique symbol = Symbol('change-state');

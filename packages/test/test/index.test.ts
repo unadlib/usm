@@ -2,8 +2,9 @@ import * as usm from 'usm';
 import * as usmMobx from 'usm-mobx';
 import * as usmRedux from 'usm-redux';
 import * as usmVuex from 'usm-vuex';
+import * as usmPinia from 'usm-pinia';
 
-const packagesWithObservable = { usmMobx, usmVuex };
+const packagesWithObservable = { usmMobx, usmVuex, usmPinia };
 
 const packagesWithImmutable = { usm, usmRedux };
 
@@ -127,13 +128,13 @@ test('base with { strict: true }', () => {
         //
       }
       expect(counter.count).toEqual({ sum: 1 });
-    } else if (key === 'usmVuex') {
+    } else if (key === 'usmVuex' || key === 'usmPinia') {
       try {
         counter.count.sum += 1;
       } catch (e) {
         //
       }
-      // vuex does not support freeze
+      // vuex/pinia do not support freeze
       expect(counter.count).toEqual({ sum: 2 });
     } else {
       const list: string[] = [];
@@ -785,12 +786,12 @@ test('base watch about define `isEqual`', () => {
     class Counter {
       constructor() {
         watch(this, () => this.count0, watchFn0, {
-          isEqual: (x, y) => x === 1 || x === y,
+          isEqual: (x: unknown, y: unknown) => x === 1 || x === y,
         });
 
         watch(this, () => [this.count0, this.count1], watchFn1, {
           multiple: true,
-          isEqual: (x, y) => x === 1 || x === y,
+          isEqual: (x: unknown, y: unknown) => x === 1 || x === y,
         });
       }
 

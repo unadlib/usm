@@ -15,7 +15,7 @@
     "directory": "packages/test"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=14.0"
   },
   "author": "unadlib",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "usm": "^4.8.2",
     "usm-mobx": "^4.8.2",
     "usm-redux": "^4.8.2",
-    "usm-vuex": "^4.8.2"
+    "usm-vuex": "^4.8.2",
+    "usm-pinia": "^4.8.2"
   }
 }

@@ -19,7 +19,7 @@
     "directory": "packages/usm-mobx"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=14.0"
   },
   "keywords": [
     "USM",

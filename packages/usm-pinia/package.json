@@ -1,7 +1,7 @@
 {
-  "name": "usm-vuex",
+  "name": "usm-pinia",
   "version": "4.8.2",
-  "description": "Universal state model for Vuex",
+  "description": "Universal state model for Pinia",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.umd.js",
   "module": "dist/index.esm.js",
@@ -13,23 +13,26 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/unadlib/usm.git",
-    "directory": "packages/usm-vuex"
+    "directory": "packages/usm-pinia"
   },
   "engines": {
     "node": ">=14.0"
   },
   "keywords": [
     "USM",
-    "Vuex",
+    "Pinia",
     "universal state model"
   ],
   "author": "unadlib",
   "license": "MIT",
   "dependencies": {
-    "vuex": "^4.1.0"
+    "pinia": "^3.0.3"
   },
   "devDependencies": {
     "vue": "^3.5.22"
