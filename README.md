@@ -3,7 +3,7 @@
 ![Node CI](https://github.com/unadlib/usm/workflows/Node%20CI/badge.svg)
 [![npm](https://img.shields.io/npm/v/usm.svg)](https://www.npmjs.com/package/usm)
 
-USM is a universal state modular library, supports Redux(5.x), MobX(6.x), Vuex(4.x) and Angular(2.0+).
+USM is a universal state modular library, supports Redux(5.x), MobX(6.x), Vuex(4.x+), Pinia(2.0+) and Angular(2.0+).
 
 ## Motivation
 
@@ -13,11 +13,11 @@ When you don't want to learn the paradigm of any state library, `usm` can help y
 
 ## Support
 
-| Libraries/Frameworks                                       |   None    |    Redux    |    MobX    |    Vuex    |      Pinia      | Angular2+ |
-| :--------------------------------------------------------- | :-------: | :---------: | :--------: | :--------: | :-------------: | :-------: |
-| Package Name                                               |   `usm`   | `usm-redux` | `usm-mobx` | `usm-vuex` |   `usm-pinia`   |   `usm`   |
-| Integrated [Mutative](https://github.com/unadlib/mutative) |    ✅     |     ✅      |     🚫     |     🚫     | 🚫(coming soon) |    ✅     |
-| State Type                                                 | Immutable |  Immutable  | Observable | Observable |   Observable    | Immutable |
+| Libraries/Frameworks                                       |   None    |    Redux    |    MobX    |    Vuex    |    Pinia    | Angular2+ |
+| :--------------------------------------------------------- | :-------: | :---------: | :--------: | :--------: | :---------: | :-------: |
+| Package Name                                               |   `usm`   | `usm-redux` | `usm-mobx` | `usm-vuex` | `usm-pinia` |   `usm`   |
+| Integrated [Mutative](https://github.com/unadlib/mutative) |    ✅     |     ✅      |     🚫     |     🚫     |     🚫      |    ✅     |
+| State Type                                                 | Immutable |  Immutable  | Observable | Observable | Observable  | Immutable |
 
 ## Installation
 
@@ -27,7 +27,7 @@ To install `usm`:
 yarn add usm # npm install --save usm
 ```
 
-**And if you want to use Redux/MobX/Vuex, you just install `usm-redux`/`usm-mobx`/`usm-vuex`.**
+**And if you want to use Redux/MobX/Vuex, you just install `usm-redux`/`usm-mobx`/`usm-vuex`/`usm-pinia`.**
 
 ## Usage
 
@@ -39,7 +39,7 @@ yarn add usm # npm install --save usm
 
 ```ts
 import { state, action, createStore } from 'usm';
-// You can also use `usm-redux`, `usm-mobx`, or`usm-vuex`.
+// You can also use `usm-redux`, `usm-mobx`, `usm-vuex` or `usm-pinia`.
 
 class Counter {
   @state
@@ -105,7 +105,7 @@ class Counter {
 
 It is used for computing derived data.
 
-> When use `usm-mobx` or `usm-vuex`, you just use `@computed`, Since it is an observable model, its dependency collection is automatic.
+> When use `usm-mobx`, `usm-vuex` or `usm-pinia`, you just use `@computed`, Since it is an observable model, its dependency collection is automatic.
 
 > When using `usm` or `usm-redux`, you should also use `@computed`. Since it is a signal model, dependency collection is automatic. However, if you are using storage middleware (e.g., [reactant-storage](https://github.com/unadlib/reactant/blob/master/packages/reactant-storage/src/storage.tsx#L138)), you need to manually update the signal state to trigger reactivity.
 
@@ -165,7 +165,7 @@ Creates a `usm` store that holds the complete shared state.
   - `modules`(_array_): an array with all modules instances
   - [`strict`] (_boolean_): enable strict mode
 - [`preloadedState`] (_any_): preloaded state
-- [`plugins`/`middleware`] (_any_[]): vuex's plugins or redux's middleware
+- [`plugins`/`middleware`] (_any_[]): vuex's plugins, pinia's plugins or redux's middleware
 
 For example,
 
